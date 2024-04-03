@@ -1,0 +1,27 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\include{../macros}
+\title{Continuous Optimization}
+\author{Chapter 1: Mathematical Preliminaries}
+\date{}
+\begin{document}
+	\maketitle
+	\section{Optimization problems}
+	\begin{equation}\label{eq:problem}
+	\begin{split}
+		\min \;\; &f(x)\\
+		\st&g_i(x) \leq 0 \quad i=1, \dots, m\\
+		& h_j(x) = 0 \quad j=1, \dots, p
+	\end{split}
+	\end{equation}
+\begin{itemize}
+	\item $x \in \Rn$: vector of variables to be chosen ($n$ scalar variables $x_1 , \dots , x_n$)
+	\item $f$: objective function to be minimized
+	\item $g_1,\dots, g_m$: inequality constraint functions to be satisfied
+	\item $h_1,\dots, h_p$: equality constraint functions to be satisfied
+\end{itemize}
+\end{document}

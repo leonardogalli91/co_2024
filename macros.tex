@@ -1,0 +1,76 @@
+
+
+\makeatother
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\Max}{\text{max}}
+\DeclareMathOperator*{\E}{\mathbb{E}}
+\newcommand{\Ei}[1]{\mathbb{E}_{#1}}
+\DeclareMathOperator*{\Eik}{\mathbb{E}_{\mathit{i_k}}}
+\DeclareMathOperator*{\Eikplus}{\mathbb{E}_{\mathit{i_{k+1}}}}
+\newcommand{\Eiplus}[1]{\mathbb{E}_{i_{#1}}}
+\DeclareMathOperator*{\LC}{\text{\textup{LC}}^1}
+\DeclareMathOperator*{\grad}{\mathit{\nabla \!f}}
+\DeclareMathOperator*{\argmax}{arg\;max}
+\DeclareMathOperator*{\gradik}{\mathit{\nabla\!\fik}}
+\DeclareMathOperator*{\Lmax}{\mathit{L_{max}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\st}{\text{s.t.} \;\;\;}
+\newcommand{\Rn}{\mathbb{R}^n}
+\newcommand{\ikplus}{i_{k+1}}
+\newcommand{\wrefi}[2]{w_{r(#1, i_{#2})}}
+\newcommand{\wref}[1]{\wrefi{#1}{#1}}
+\newcommand{\fik}{f_{i_k}}
+\newcommand{\fikofwstar}{\fik(w^*)}
+\newcommand{\fofwstar}{f(w^*)}
+\newcommand{\fii}[1]{f_{i_{#1}}}
+\newcommand{\fikplus}{f_{i_{k+1}}}
+\newcommand{\fiplus}[1]{f_{i_{#1}}}
+\newcommand{\fimax}{f_i^{\text{max}}}
+\newcommand{\fikmax}{\fik^{\text{max}}}
+\newcommand{\bmax}{b_{\text{max}}}
+\newcommand{\fmax}{f^{\text{max}}}
+\newcommand{\fmaxk}[1]{f_{i_{#1}}^{\text{max}}}
+\newcommand{\Lik}{L_{i_k}}
+\newcommand{\Cik}{C_{i_k}}
+\newcommand{\deltak}{\delta^{l_k}}
+\newcommand{\deltakplus}{\delta^{l_k+1}}
+\newcommand{\deltakminus}{\delta^{l_k-1}}
+\newcommand{\etatilde}{\tilde{\eta}_{k,0}}
+\newcommand{\muik}{\mu_{i_k}}
+\newcommand{\etamax}{\eta^{\text{max}}}
+\newcommand{\etamaxx}{\bar{\eta}^{\text{max}}}
+\newcommand{\etamin}{\eta^{\text{min}}}
+\newcommand{\etaminn}{\bar{\eta}^{\text{min}}}
+\newcommand{\minimum}[2]{\min \left\{ #1, #2 \right \} }
+\newcommand{\maximum}[2]{\max \left\{ #1, #2 \right \} }
+\newcommand{\W}[1]{{\scriptscriptstyle W #1}}
+\newcommand{\gradi}[1]{\nabla f_{i_{#1}} (w_{i_{#1}}) }
+\makeatletter
+
+\newtheorem{assumption}{Assumption}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+
+
+\newcommand{\imgS}{.26}
+\newcommand{\dir}{exp1/}
+\newcommand{\model}{mlp}
+\newcommand{\modelname}{mlp}
+
+
+\newcommand{\mlp}{{\texttt{mnist|mlp}}}
+\newcommand{\res}{{\texttt{cifar10|resnet34}}}
+\newcommand{\dense}{{\texttt{cifar10|densenet121}}}
+\newcommand{\ress}{{\texttt{cifar100|resnet34}}}
+\newcommand{\denses}{{\texttt{cifar100|densenet121}}}
+\newcommand{\fashion}{{\texttt{fashion|effb1}}}
+\newcommand{\svhn}{{\texttt{svhn|wrn}}}
+\newcommand{\wiki}{{\texttt{wiki2|encoder}}}
+\newcommand{\ptb}{{\texttt{ptb|xl}}}
+\newcommand{\mushrooms}{{\texttt{mushrooms}}}
+\newcommand{\rcvone}{{\texttt{rcv1}}}
+\newcommand{\ijcnn}{{\texttt{ijcnn}}}
+\newcommand{\weighta}{{\texttt{w8a}}}
