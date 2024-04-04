@@ -77,23 +77,24 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 		& h_j(x) = 0 \quad j=1, \dots, p
 	\end{split}
 \end{equation*}
-\begin{example}[Training of Neural Networks (Unconstrained Optimization)]
-	\par Let $\mathcal{D}=\{(x_i, y_i)\}_{i=1}^{M}$ be a training set of $M$ instances
-	\begin{equation} \label{eq:problem}
-		\min_{w\in \mathbb{R}^n} f(w) = \frac{1}{M}\sum_{i=1}^{M} f_i(w)
-	\end{equation}
+\end{example}
+\begin{example}[Training of Neural Networks (Unconstrained Optimization)] Let us start from describing a single (artificial) neuron. In particular, this unit takes as an input a vector and performs a scalar product with the weights of the neuron. In a second step, this value passes through a thresholding function $\sigma$ called activation function. This idea comes from the natural neurons, that fire only if the potential difference in input is over a certain threshold. A neural network, is a combination of artificial neurons in layers. This model is very powerful, in fact already a wide-enough 2-layer neural network is able to approximate any possible function of the input.
+	\par Neural networks can used in the following way. 
 	\begin{itemize}
-		\item the weights: $w \in \mathbb{R}^{n}$ 
-		\item $M$ instances $\{(x_i, y_i)\}_{i=1}^{M}$
+		\item $\mathcal{D}=\{(x_i, y_i)\}_{i=1}^{M}$ be a training set of $M$ instances
 		\begin{itemize}
 			\item $x_i \in \mathbb{R}^{n_0}$
-			\item $y_i\in\mathbb{R}^{n_D}$
+			\item $y_i\in\mathbb{R}$
 		\end{itemize}
+		\item the weights: $w \in \mathbb{R}^{n}$, 
 		\item the losses: $f_i(w):=\mathcal{L}(h(x_i),y_i)$ %(sofmax)
 		\item the layers: $h(x):=g_D(x) \circ \dots \circ g_1(x)$ 
 		\item the neurons: $g_j(x) := \sigma (W_j x +b_j )$ %(ReLU)
 	\end{itemize}
-\end{example}
+	
+	\begin{equation} \label{eq:problem}
+		\min_{w\in \mathbb{R}^n} f(w) = \frac{1}{M}\sum_{i=1}^{M} f_i(w)
+	\end{equation}
 \end{example}
 
 
