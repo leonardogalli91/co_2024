@@ -78,18 +78,23 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 	\end{split}
 \end{equation*}
 \end{example}
-\begin{example}[Training of Neural Networks (Unconstrained Optimization)] Let us start from describing a single (artificial) neuron. In particular, this unit takes as an input a vector and performs a scalar product with the weights of the neuron. In a second step, this value passes through a thresholding function $\sigma$ called activation function. This idea comes from the natural neurons, that fire only if the potential difference in input is over a certain threshold. A neural network, is a combination of artificial neurons in layers. This model is very powerful, in fact already a wide-enough 2-layer neural network is able to approximate any possible function of the input.
-	\par Neural networks can used in the following way. 
+\begin{example}[Training of Neural Networks (Unconstrained Optimization)] Let us start from describing a single (artificial) neuron. In particular, this unit takes as an input a vector and performs a scalar product with the weights of the neuron. In a second step, this value passes through a thresholding function $\sigma$ called activation function. Inspired by real neurons, also this unit propagates its output only if the weighted sum of its inputs (in the natural neuron, the potential difference)  is over a certain threshold. Neural networks stack various neurons in parallel to build a layer and, in turn, concatenate various layer (deep networks). This model is very expressive, in fact already a wide-enough 2-layer neural network is able to approximate any possible function of the input.
+	\par Neural networks are the most widely used machine learning model and they can be formally defined as follows. 
 	\begin{itemize}
 		\item $\mathcal{D}=\{(x_i, y_i)\}_{i=1}^{M}$ be a training set of $M$ instances
 		\begin{itemize}
-			\item $x_i \in \mathbb{R}^{n_0}$
+			\item $x_i \in \mathbb{R}^{d}$ $d$ is the amount of features of the dataset (e.g., pixels)
 			\item $y_i\in\mathbb{R}$
 		\end{itemize}
-		\item the weights: $w \in \mathbb{R}^{n}$, 
-		\item the losses: $f_i(w):=\mathcal{L}(h(x_i),y_i)$ %(sofmax)
-		\item the layers: $h(x):=g_D(x) \circ \dots \circ g_1(x)$ 
-		\item the neurons: $g_j(x) := \sigma (W_j x +b_j )$ %(ReLU)
+		\item the $j$-th layer applied on a generic input $n_{j-1}$-dimensional input $x$:\\
+		$g_j(x) := \sigma (W_j x +b_j )$, $W_j \in \R^{n_{j-1}\times n_j}$, $b_j \in \R^{n_j}$, $\sigma$ is applied component-wise,\\ e.g., ReLU $\sigma(x)= \begin{cases} 0 & \text{if} \;\;x<0\\ x &\text{otherwise} \end{cases}$ %(ReLU)
+		\item the weights: $w = \begin{pmatrix}
+			\text{vec}(W_1)\\
+			\vdots\\
+			\text{vec}(W_L)
+		\end{pmatrix}\in \mathbb{R}^{n}$
+		\item the network applied on the $i$-th instance: $h_i(w):=g_L \circ \dots \circ g_1(x_i)$ 
+		\item the losses: $f_i(w):=\mathcal{L}(h_i(w),y_i)$, e.g., $\mathcal{L}(h_i(w),y_i)= (h_i(w)-y_i)^2$%(sofmax)
 	\end{itemize}
 	
 	\begin{equation} \label{eq:problem}
