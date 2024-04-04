@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage[left=2.50cm, right=2.50cm, top=2.0cm, bottom=2.0cm]{geometry}
 \include{../macros}
 \title{Continuous Optimization}
 \author{Chapter 1: Mathematical Preliminaries}
@@ -11,6 +12,7 @@
 \begin{document}
 	\maketitle
 	\section{Optimization problems}
+	In this course we will focus on finite-dimensional continuous optimization problems
 	\begin{equation}\label{eq:problem}
 	\begin{split}
 		\min \;\; &f(x)\\
@@ -24,4 +26,75 @@
 	\item $g_1,\dots, g_m$: inequality constraint functions to be satisfied
 	\item $h_1,\dots, h_p$: equality constraint functions to be satisfied
 \end{itemize}
+The feasible set can also be denoted by $S=\{x \in \Rn: g_i(x) \leq 0 \; i=1, \dots, m, \;\; h_j(x) = 0 \; j=1, \dots, p\}$.
+\subsection{Classification}
+Concerning the dimensionality, optimization problems can be 
+\begin{itemize}
+	\item infinite-dimensional: when the space of variables is infinite dimensional, e.g., elements can be vectors of functions of one ore more variables;
+	\item finite-dimensional: when the space of variables is finite-dimensional, e.g., $\Rn.$
+\end{itemize}
+Concerning the granularity of the space, optimization problems can be 
+\begin{itemize}
+	\item discrete: when at least one variable is an integer;
+	\item continuous: when all variables involved are continuous.
+\end{itemize}
+Concerning the hypothesis of linearity, optimization problems are also called
+\begin{itemize}
+\item linear programming: when the objective function is linear and the
+feasible set is defined by a system of linear equalities and inequalities;
+\item nonlinear problems: when the objective function is nonlinear
+and/or at least one constraint is defined by a nonlinear function.
+\end{itemize}
+Concerning the hypothesis of differentiability, we can distinguish between
+\begin{itemize}
+\item smooth optimization: when the functions defining the objective
+and the constraints are continuously differentiable;
+\item nonsmooth optimization problems: when the functions defining the objective and the constraints are continuous, but typically not differentiable in all points of the feasible set. Weaker notions of derivatives are used to solve this problem.
+\item derivative-free optimization: this branch of optimization consider cases in which evaluating the objective function/constraints is very costly, in particular the functions defining the objective and the constraints might not be continuous. A similar field is that of black-box optimization, in which the optimizer assumes to not have any information on the objective function or on the constraints.
+\end{itemize}
+Concerning the hypothesis of convexity, we can distinguish between
+\begin{itemize}
+	\item convex optimization, when the functions defining the objective and the constraints are all convex;
+	\item nonconvex optimization, when the functions defining the objective and the constraints might be nonconvex.
+\end{itemize}
+
+\begin{example}[The transportation problem (Linear Programming)]
+Consider a company producing and selling a certain commodity. The company has a set of $N$ sources, where the commodity is produced and a set of $M$ demand centers where the commodity is sold. At each source $i \in \{1, \dots, N\}$, a given quantity $q_i$ of commodity is available. Each demand center $j \in \{1, \dots, M\}$ requires a given quantity $d_j$. We indicate by $c_{ij}$ the cost per unit of transporting the commodity from source $i$ to demand center $j$.
+
+\par The problem is to determine the quantity to be transported from each source to
+each demand center in such a way that
+\begin{itemize}
+	\item the availability constraints at the sources are satisfied;
+	\item the requirements of the demand centers are satisfied;
+	\item the total transportation cost is minimized.
+\end{itemize}
+To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity transported from source $i$ to demand center $j$. Then the optimization problem is
+
+\begin{equation*}
+	\begin{split}
+		\min \;\; &\sum_{i=1}^{N}\sum_{j=1}^{M}c_{ij}x_{ij}\\
+		\st&\sum_{j=1}^{M}x_{ij} \leq q_i\quad i=1, \dots, m\\
+		& h_j(x) = 0 \quad j=1, \dots, p
+	\end{split}
+\end{equation*}
+\begin{example}[Training of Neural Networks (Unconstrained Optimization)]
+	\par Let $\mathcal{D}=\{(x_i, y_i)\}_{i=1}^{M}$ be a training set of $M$ instances
+	\begin{equation} \label{eq:problem}
+		\min_{w\in \mathbb{R}^n} f(w) = \frac{1}{M}\sum_{i=1}^{M} f_i(w)
+	\end{equation}
+	\begin{itemize}
+		\item the weights: $w \in \mathbb{R}^{n}$ 
+		\item $M$ instances $\{(x_i, y_i)\}_{i=1}^{M}$
+		\begin{itemize}
+			\item $x_i \in \mathbb{R}^{n_0}$
+			\item $y_i\in\mathbb{R}^{n_D}$
+		\end{itemize}
+		\item the losses: $f_i(w):=\mathcal{L}(h(x_i),y_i)$ %(sofmax)
+		\item the layers: $h(x):=g_D(x) \circ \dots \circ g_1(x)$ 
+		\item the neurons: $g_j(x) := \sigma (W_j x +b_j )$ %(ReLU)
+	\end{itemize}
+\end{example}
+\end{example}
+
+
 \end{document}
