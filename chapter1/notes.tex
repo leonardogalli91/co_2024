@@ -101,9 +101,34 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 		\min_{w\in \mathbb{R}^n} f(w) = \frac{1}{M}\sum_{i=1}^{M} f_i(w)
 	\end{equation}
 \end{example}
-\begin{example}[Portfolio Optimization: Convex Quadratic Programming with linear constraints] Portfolio selection theory studies how to allocate an investor’s available capital into a prefixed set of assets with the aims of maximizing the expected return and minimizing the investment risk. Let $n$ be the number of available assets, let $\mu\in \Rn$ be the vector of expected returns of the assets, and let $Q \in \R^{n\times n}$ be a symmetric positive semidefinite matrix whose generic element .qij is the covariance
-	of returns of assets i and j
+\begin{example}[Portfolio Optimization (Convex Quadratic Programming)] Portfolio selection theory studies how to allocate an investor’s available capital into a prefixed set of assets with the aims of maximizing the expected return and minimizing the investment risk. Let $n$ be the number of available assets, let $\mu\in \Rn$ be the vector of expected returns of the assets, and let $Q \in \R^{n\times n}$ be a symmetric positive semidefinite matrix whose generic element $q_{ij}$ is the covariance of returns of assets i and j. We assume that the available (normalized) capital is fully invested. Then, let $x \in \Rn$ be the vector of decision variables, where $x_i$ is the fraction of the available capital to be invested into asset $i$, with $i = 1, \dots, n$. 
+\par By this notation, $\mu^T x$ is the expected return of the portfolio and $x^TQx$ is the covariance of the portfolio which
+can be used as a measure of the risk connected with the investment (diversification of the portfolio). 
+In the traditional Markowitz portfolio selection model \cite{markowits52a}, the optimization problem is stated as the
+following convex quadratic programming problem
+\begin{equation*}
+	\begin{split}
+		\min \;\; &x^TQx\\
+		\st& \mu^Tx\geq \beta \\
+		& e^Tx =1\\
+		& x\geq 0,
+	\end{split}
+\end{equation*}
+where $\beta$ is the desired expected return of the portfolio and $e\in \Rn$ denotes the column vector of all ones.
+\end{example}
+\begin{example}[Shortest Path (Discrete Optimization, not covered by this course)] Let $G=(V,E)$ be a graph with $V$ the set of vertices and $E$ the set of edges (directed, $(i,j)\neq(j,i)$, with $i,j$ being two vertices) with $n=|E|$. Let $c_{ij}\geq0$ be the cost of choosing the edge $(i,j)$, e.g., travel time, travel fee, difference in hight, and let $x_{ij}\in \{0,1\}^{n}$ be the variable telling if we select or not the edge $(i,j)$. Also, let $s$ be the starting node and $d$ the destination, then the optimization problem can be stated as
+\begin{equation*}
+	\begin{split}
+		\min \;\; &c^Tx\\
+		\st& x\geq 0\\
+		& \sum_{j} x_{ij} - \sum_{j} x_{ji} = \begin{cases}1 \quad & i=s\\
+			0 & i\neq s,d\\
+			-1 & i=d
+		\end{cases} \qquad \forall i \in V
+	\end{split}
+\end{equation*}
 	
 \end{example}
-
+\bibliographystyle{plain}
+\bibliography{../biblio}
 \end{document}
