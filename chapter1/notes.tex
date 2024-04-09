@@ -247,7 +247,7 @@ It can be shown that the above definition implies that for any $x \in \Rn$ it ho
 	||Ax||_q \leq ||A||_{p\to q} ||x||_p.
 \end{equation*}
 An induced matrix norm is indeed a norm in the sense that it satisfies the three properties required above. We refer to the matrix norm $||\cdot||_{p,q}$s the $(p, q)$-norm. When $p=q$, we will simply refer to it as an $p$-norm and omit one of the subscripts in its notation.
-\par An important operator norm is the spectral norm, where $p=q=2$. In this case, it can be proved that the operator norm coincide with the maximum singular value of $A \Rmn$ (see below for more details on eigenvalues and singular values)
+\par An important operator norm is the spectral norm, where $p=q=2$. In this case, it can be proved that the operator norm coincide with the maximum singular value of $A \in \Rmn$ (see below for more details on eigenvalues and singular values)
 \begin{equation*}
 	||A||_2 = ||A||_{2\to2} = \sqrt{\lambda_1 (A^TA)} =: \sigma_1 (A).
 \end{equation*}
@@ -267,6 +267,100 @@ This norm is also called the maximum absolute row sum norm.
 	||A||_F = \sqrt{\sum_{i=1}^{m} \sum_{j=1}^{n} A^2_{ij}} = ||\text{vec}(A)||,
 \end{equation*}
 in fact, you can think of this norm as the Euclidean norm of the vector obtained by flattening the matrix $A$ into a vector.
+
+\subsection{Eigenvalues and Eigenvectors}
+Let $A \in \Rnn$. Then a nonzero vector $v \in \Rn$ is called an eigenvector of $A$ if there exists a $\lambda \in \C$ (the complex field) for which
+\begin{equation*}
+	A v = \lambda v
+\end{equation*}
+The scalar $\lambda$ is the eigenvalue corresponding to the eigenvector $v$. In general, real-valued matrices can have complex eigenvalues, but it is well known that all the eigenvalues of symmetric matrices are real. The eigenvalues of a symmetric $n \times n$ matrix $A$ are denoted by
+\begin{equation*}
+	\lambda_1(A)\geq \lambda_2(A) \geq \dots \geq \lambda_n(A),
+\end{equation*}
+where $\lambda_1(A)$ is the maximum eigenvalue and $\lambda_n(A)$ is the minimum.
+\begin{definition}
+	A matrix $U$ is said to be orthogonal when $U^TU =UU^T=\Id$.
+\end{definition}
+One of the most useful results related to eigenvalues is the spectral decomposition theorem, which states that any symmetric matrix $A$ has an orthonormal basis of eigenvectors.
+\begin{theorem}[Spectral Decomposition]
+	Let $A\in \Rnn$ be a symmetric matrix and let $v_1,\dots, v_n$ be the eigenvectors corresponding to the eigenvalues $\lambda_1(A), \dots, \lambda_n(A)$. Then $U= \left(v_1 | \dots | v_n\right)$ is an orthonormal matrix and A can be decomposed as follows 
+	\begin{equation*}
+		A = UDU^T, \quad \with D:=\diag(\lambda_1(A), \dots, \lambda_n(A)).
+	\end{equation*}
+\end{theorem}
+A direct result of the spectral decomposition theorem is that the trace and the determinant of a matrix $A$ can be expressed via its eigenvalues:
+\begin{equation*}
+	\begin{split}
+		\Tr(A) = \sum_{i=1}^n \lambda_i(A)\\
+		\det(A) = \prod_{i=1}^n \lambda_i(A)
+	\end{split}
+\end{equation*}
+Another important consequence of the spectral decomposition theorem is the bounding of the so-called Rayleigh quotient. For a symmetric matrix $A \in \Rnn$, the Rayleigh quotient is defined as
+\begin{equation*}
+	R_A(x) := \frac{x^TAx}{||x||^2} \quad \forall x\neq 0,
+\end{equation*}
+and its upper and lower bounds are given by the following lemma.
+\begin{lemma}
+	Let $A\in \Rnn$ be symmetric. Then
+	\begin{equation*}
+		\lambda_n(A) \leq R_A(x) \leq \lambda_1(A) \quad \forall x\neq 0.
+	\end{equation*}
+\end{lemma}
+%TODO: the proof is a possible exercise
+Moreover, we have the following corollary.
+\begin{lemma}
+	Let $A\in \Rnn$ be symmetric. Then
+	\begin{equation*}
+		\min_{x\neq0} R_A(x) = \lambda_n(A),
+	\end{equation*}
+and the eigenvector(s) of $A$ corresponding to the minimal eigenvalue are the minimizers of this problem. In addition,
+\begin{equation*}
+	\max_{x\neq0} R_A(x) = \lambda_1(A),
+\end{equation*}
+and the eigenvectors of $A$ corresponding to the maximal eigenvalue are maximizers of this problem.
+\end{lemma}
+%TODO: the proof is a possible exercise
+\subsection{Singular values and Singular Vectors}
+Similar objects exist also for non-squared matrices $A \in \Rmn$.
+\begin{theorem}[Singular Value Decomposition] Let $A \in \Rmn$. Then there exist orthogonal matrices $U\in \R^{m\times m}$ and $V\in \Rnn$ and the uniquely defined real values
+\begin{equation*}
+	\sigma_1\geq \sigma_2 \geq \dots \geq \sigma_\ell \geq 0, \quad \with \ell=\min\{m,n\},
+\end{equation*}
+such that 
+\begin{equation*}
+	A = U \Sigma V^T \quad \with \Sigma=\diag(\sigma_1, \dots, \sigma_\ell) \in \Rmn.
+\end{equation*}
+%TODO: notice the dimension of $\Sigma$
+\end{theorem}
+The matrices $U = (u_1, \dots, u_m)$ and $V = (v_1, \dots, v_m)$ are composed respectively of the left and right singular vectors, thus we can decompose $A$ also as follows
+\begin{equation*}
+	A = \sum_{j=1}^{\ell} \sigma_j u_jv_j^T.
+\end{equation*}
+If rank$(A)=r$, then $\sigma_1, \geq \dots, \geq \sigma_r>0$ and $\sigma_{r+1}= \dots=\sigma_\ell=0$ so that the reduced singular value decomposition is
+\begin{equation*}
+	A = \sum_{j=1}^{r} \sigma_j u_jv_j^T.
+\end{equation*}
+Also, note that 
+\begin{equation*}
+	A^T A=(U\Sigma V^T)^T U \Sigma V^T = V \Sigma^T U^T U \Sigma V^T = V \Sigma^T \Sigma V^T = V\diag(\sigma_1^2, \dots, \sigma_\ell^2, 0, \dots, 0) V^T
+\end{equation*}
+and 
+\begin{equation*}
+	A A^T=U\Sigma V^T (U \Sigma V^T)^T = U \Sigma V^T V \Sigma^T U^T = U \Sigma \Sigma^T U^T = U\diag(\sigma_1^2, \dots, \sigma_\ell^2, 0, \dots, 0) U^T,
+\end{equation*}
+%TODO: notice the dimension of the zero padding
+which implies that $\sigma_1^2, \dots, \sigma_\ell^2$ are eigenvalues of $A^T A$ and $AA^T$, 
+$u_1, \dots, u_m$ are eigenvectors of $AA^T$ and $v_1, \dots, v_n$ are eigenvectors of $A^TA$. In other words the SVD can be obtained from the spectral decomposition of $AA^T$ and $A^TA$. In particular, 
+\begin{equation*}
+	\sigma_j = \sigma_j(A) = \sqrt{\lambda_j(A^TA)} = \sqrt{\lambda_j(AA^T)}
+\end{equation*}
+To conclude this section, the following function is called nuclear norm
+\begin{equation*}
+	||A||_* = \sum_{j=1}^{\ell} \sigma_j(A) \quad \with \ell =\min\{m,n\},
+\end{equation*}
+and can actually proved to be a norm for $\Rmn$.
+%TODO: possible exercise, prove that the nuclear norm is indeed a norm
+
 
 \bibliographystyle{plain}
 \bibliography{../biblio}
