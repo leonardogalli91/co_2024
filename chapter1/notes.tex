@@ -77,6 +77,7 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 		& h_j(x) = 0 \quad j=1, \dots, p
 	\end{split}
 \end{equation*}
+%TODO: remark for myself, draw the network
 \end{example}
 \begin{example}[Training of Neural Networks (Unconstrained Optimization)] Let us start from describing a single (artificial) neuron. In particular, this unit takes as an input a vector and performs a scalar product with the weights of the neuron. In a second step, this value passes through a thresholding function $\sigma$ called activation function. Inspired by real neurons, also this unit propagates its output only if the weighted sum of its inputs (in the natural neuron, the potential difference)  is over a certain threshold. Neural networks stack various neurons in parallel to build a layer and, in turn, concatenate various layer (deep networks). This model is very expressive, in fact already a wide-enough 2-layer neural network is able to approximate any possible function of the input.
 	\par Neural networks are the most widely used machine learning model and they can be formally defined as follows. 
@@ -97,11 +98,12 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 		\item the losses: $f_i(w):=\mathcal{L}(h_i(w),y_i)$, e.g., $\mathcal{L}(h_i(w),y_i)= (h_i(w)-y_i)^2$%(sofmax)
 	\end{itemize}
 	
-	\begin{equation} \label{eq:problem}
+	\begin{equation*}
 		\min_{w\in \mathbb{R}^n} f(w) = \frac{1}{M}\sum_{i=1}^{M} f_i(w)
-	\end{equation}
+	\end{equation*}
+%TODO: remark for myself, draw the network
 \end{example}
-\begin{example}[Portfolio Optimization (Convex Quadratic Programming)] Portfolio selection theory studies how to allocate an investor’s available capital into a prefixed set of assets with the aims of maximizing the expected return and minimizing the investment risk. Let $n$ be the number of available assets, let $\mu\in \Rn$ be the vector of expected returns of the assets, and let $Q \in \R^{n\times n}$ be a symmetric positive semidefinite matrix whose generic element $q_{ij}$ is the covariance of returns of assets i and j. We assume that the available (normalized) capital is fully invested. Then, let $x \in \Rn$ be the vector of decision variables, where $x_i$ is the fraction of the available capital to be invested into asset $i$, with $i = 1, \dots, n$. 
+\begin{example}[Portfolio Optimization (Convex Quadratic Programming)] Portfolio selection theory studies how to allocate an investor’s available capital into a prefixed set of assets with the aims of maximizing the expected return and minimizing the investment risk. Let $n$ be the number of available assets, let $\mu\in \Rn$ be the vector of expected returns of the assets, and let $Q \in \Rnn$ be a symmetric positive semidefinite matrix whose generic element $q_{ij}$ is the covariance of returns of assets i and j. We assume that the available (normalized) capital is fully invested. Then, let $x \in \Rn$ be the vector of decision variables, where $x_i$ is the fraction of the available capital to be invested into asset $i$, with $i = 1, \dots, n$. 
 \par By this notation, $\mu^T x$ is the expected return of the portfolio and $x^TQx$ is the covariance of the portfolio which
 can be used as a measure of the risk connected with the investment (diversification of the portfolio). 
 In the traditional Markowitz portfolio selection model \cite{markowits52a}, the optimization problem is stated as the
@@ -127,6 +129,7 @@ where $\beta$ is the desired expected return of the portfolio and $e\in \Rn$ den
 		\end{cases} \qquad \forall i \in V
 	\end{split}
 \end{equation*}
+%TODO: remark for myself, draw the network
 \end{example}
 
 \section{Mathematical Preliminaries}
@@ -195,7 +198,7 @@ Notice that the dot product is not the only inner product in $\Rn$, for instance
 \langle x, y\rangle_w = \sum_{i=1}^{n}w_i x_i y_i.
 \end{equation*}
 \subsection{Vector norms}
-\begin{definition} (Norm)
+\begin{definition} (Vector Norm)
 	A norm $||.||$ on $\Rn$ is a function $||.||:\Rn \to \R$ satisfying the following:
 	\begin{enumerate}
 		\item Nonnegativity: $||x|| \geq 0 \quad \forall x \in \Rn$ and $||x|| = 0 \Leftrightarrow x =0$;
@@ -215,8 +218,8 @@ By computing the limit of the $l_p$-norm with $p\to\infty$ we achieve the $l_{\i
 \begin{equation*}
 	||x||_{\infty} := \max_{i\in[n]} |x_i|.
 \end{equation*}
-where $[n]:=\{1, \dots,n\}$ for any $n \in \N$.\\
-An important inequality connecting the dot product of two vectors and their norms is the Cauchy–Schwarz inequality, which will be used frequently throughout the book.
+where $[n]:=\{1, \dots,n\}$ for any $n \in \N$.
+\par An important inequality connecting the dot product of two vectors and their norms is the Cauchy–Schwarz inequality, which will be used frequently throughout the book.
 \begin{lemma}[Cauchy–Schwarz inequality]
 	For any $x,y \in \Rn$,
 	\begin{equation*}
@@ -225,6 +228,37 @@ An important inequality connecting the dot product of two vectors and their norm
 Equality is satisfied if and only if $x$ and $y$ are linearly dependent.
 \end{lemma}
 \subsection{Matrix norms}
+Similarly to vector norms, we can define the concept of a matrix norm.
+\begin{definition} (Operator/Matrix Norm)
+	A norm $||.||$ on $\Rmn$ is a function $||.||:\Rmn \to \R$ satisfying the following:
+	\begin{enumerate}
+		\item Nonnegativity: $||A|| \geq 0 \quad \forall A \in \Rmn$ and $||A|| = 0 \Leftrightarrow A =0$;
+		\item Positive Homogeneity:  $||\lambda A|| = |\lambda| ||A|| \quad \forall A \in \Rmn$ and $\lambda\in \R$;
+		\item Triangle Inequality: $||A+B|| \leq ||A|| + ||B|| \quad \forall A,B \in \Rmn$.
+	\end{enumerate}
+\end{definition}
+Given a matrix $A\in \Rmn$ and two norms $||.||_p$ and $||.||_q$ on $\Rn$ and $\R^m$, respectively, the induced operator/matrix norm $||A||_{a\to b}$ is defined by
+\begin{equation*}
+	||A||_{p\to q} = \max_{||x||_p=1} ||Ax||_q. 
+\end{equation*}
+%TODO: remark for myself, point their attention to the concordance of the dimension between A and x
+It can be shown that the above definition implies that for any $x \in \Rn$ it holds the inequality
+\begin{equation*}
+	||Ax||_q \leq ||A||_{p\to q} ||x||_p.
+\end{equation*}
+An induced matrix norm is indeed a norm in the sense that it satisfies the three properties required above. We refer to the matrix norm $||\cdot||_{p,q}$s the $(p, q)$-norm. When $p=q$, we will simply refer to it as an $p$-norm and omit one of the subscripts in its notation.
+\par An important operator norm is the spectral norm, where $p=q=2$. In this case, it can be proved that the operator norm coincide with the maximum singular value of $A \Rmn$ (see below for more details on eigenvalues and singular values)
+\begin{equation*}
+	||A||_2 = ||A||_{2\to2} = \sqrt{\lambda_1 (A^TA)} =: \sigma_1 (A).
+\end{equation*}
+The default operator norm for this course will be the spectral norm, so when the subscript is omitted we will implicitly refer to this norm.
+\par When $p=q=1$, the operator norm reduces to the 
+\begin{equation*}
+	||A||_1 = ||A||_{1\to1} = \max_{j\in[n]} \sum_{i=1}^{n}.
+\end{equation*}
+This norm is also called maximum absolute row sum norm.
+\par When $p=q=\infty$,
+
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
