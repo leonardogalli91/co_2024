@@ -252,12 +252,21 @@ An induced matrix norm is indeed a norm in the sense that it satisfies the three
 	||A||_2 = ||A||_{2\to2} = \sqrt{\lambda_1 (A^TA)} =: \sigma_1 (A).
 \end{equation*}
 The default operator norm for this course will be the spectral norm, so when the subscript is omitted we will implicitly refer to this norm.
-\par When $p=q=1$, the operator norm reduces to the 
+\par When $p=q=1$, the operator norm reduces to 
 \begin{equation*}
-	||A||_1 = ||A||_{1\to1} = \max_{j\in[n]} \sum_{i=1}^{n}.
+	||A||_1 = ||A||_{1\to1} = \max_{j\in[n]} \sum_{i=1}^{m} A_{ij}.
 \end{equation*}
-This norm is also called maximum absolute row sum norm.
-\par When $p=q=\infty$,
+This norm is also called maximum absolute column sum norm.
+\par When $p=q=\infty$, the operator norm reduces to 
+\begin{equation*}
+	||A||_\infty = ||A||_{\infty\to\infty} = \max_{j\in[m]} \sum_{i=1}^{n} A_{ij}.
+\end{equation*}
+This norm is also called the maximum absolute row sum norm.
+\par An example of a matrix norm that is not induced by any norm is the Frobenius norm defined by
+\begin{equation*}
+	||A||_F = \sqrt{\sum_{i=1}^{m} \sum_{j=1}^{n} A^2_{ij}} = ||\text{vec}(A)||,
+\end{equation*}
+in fact, you can think of this norm as the Euclidean norm of the vector obtained by flattening the matrix $A$ into a vector.
 
 \bibliographystyle{plain}
 \bibliography{../biblio}
