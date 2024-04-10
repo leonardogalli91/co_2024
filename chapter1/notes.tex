@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{mathtools}
@@ -317,7 +318,7 @@ and its upper and lower bounds are given by the following lemma.
 \end{lemma}
 %TODO: the proof is a possible exercise
 Moreover, we have the following corollary.
-\begin{lemma}
+\begin{corollary}
 	Let $A\in \Rnn$ be symmetric. Then
 	\begin{equation*}
 		\min_{x\neq0} R_A(x) = \lambda_n(A),
@@ -327,7 +328,7 @@ and the eigenvector(s) of $A$ corresponding to the minimal eigenvalue are the mi
 	\max_{x\neq0} R_A(x) = \lambda_1(A),
 \end{equation*}
 and the eigenvectors of $A$ corresponding to the maximal eigenvalue are maximizers of this problem.
-\end{lemma}
+\end{corollary}
 %TODO: the proof is a possible exercise
 \subsection{Singular values and Singular Vectors}
 Similar objects exist also for non-squared matrices $A \in \Rmn$.
@@ -470,7 +471,7 @@ when it exists. In this case, the directional derivative is denoted by $f'(x,d)$
 \begin{definition}[Partial Derivative]
 For any $i\in[n]$, the directional derivative of $f$ at $x$ along the direction $e_i$ is called the $i$-th partial derivative and it is denoted by 
 \begin{equation*}
-	\frac{\partial f}{\partial x_i}(x):=\lim_{t\to 0^+} \frac{f(x+te_i)-f(x)}{t}.
+	\partiali(x):=\lim_{t\to 0^+} \frac{f(x+te_i)-f(x)}{t}.
 \end{equation*}
 \end{definition}
 \begin{definition}[Gradient]
@@ -490,7 +491,7 @@ A function $f$ defined on an open set $S \subseteq \Rn$ is called continuously d
 \begin{equation*}
 	f'(x,d) = \grad(x)^Td \quad \forall x \in S, d\in \Rn.
 \end{equation*}
-The partial derivatives $\frac{\partial f}{\partial x_i}$ are themselves real-valued functions that can be partially differentiated. The second order $(i,j)$-th partial derivative of $f$ at $x\in S$ (if exists) is defined by
+The partial derivatives $\partiali$ are themselves real-valued functions that can be partially differentiated. The second order $(i,j)$-th partial derivative of $f$ at $x\in S$ (if exists) is defined by
 \begin{equation*}
 	\frac{\partial^2 f}{\partial x_i \partial x_j}(x) := \frac{\partial \left(\frac{\partial f}{\partial x_j}\right)}{\partial x_i}.
 \end{equation*}
@@ -550,19 +551,60 @@ Despite our main interest in this section is to discuss minimum and maximum poin
 	\end{enumerate}
 \end{definition}
 The set $S$ on which the optimization of $f$ is performed is also called the feasible set, and any point $x \in S$ is called feasible solution. It is common to refer to a global minimum point as a minimizer or a global minimizer.
-\par Despite they might not be attained, the minimal and maximal value of $f$ over $S$ is the classical notation to refer to the infimum and supremum of $f$ over $S$. These values are always unique, while there might exists many global minima/maxima attaining the same value of $f$, i.e. $f(x^*)$. The sets of all global minimizers/maximizers of $f$ over $S$ are denoted by
+\par Despite they might not be attained, the minimal and maximal value of $f$ over $S$ is the classical notation to refer to the infimum and supremum of $f$ over $S$. These values are always unique, while there might exist many global minima/maxima attaining the same value of $f$, i.e. $f(x^*)$. The sets of all global minimizers/maximizers of $f$ over $S$ are denoted by
 \begin{equation*}
 	\argmin \{f(x): x\in S\}\qquad \argmax \{f(x): x\in S\}.
 \end{equation*}
+A vector $x^* \in S$ is called a global optimum of $f$ over $S$ if it is either a global minimum or a global maximum.
 %\par Observe that maximization problems can be easily transformed in minimization problems
 %$$\min_x f(x) = -\max_x -f(x).$$
 %Thus from now on we will focus on the latter. 
 
+Our main task will usually be to find and study global minimum or maximum points; however, most of the theoretical results only characterize local minima and maxima which are optimal points with respect to a neighborhood of the point of interest. 
+\begin{definition}[Local Minima and Maxima] 
+	Let $f:S\to \R$, then
+	\begin{enumerate}
+		\item $x^* \in S$ is a local minimum point of $f$ over $S$ if there exists $r>0$ for which \\$f(x^*)\leq f(x) \;\;\forall x \in S\cup B(x^*,r)$;
+		\item $x^* \in S$ is a strict local minimum point of $f$ over $S$ if there exists $r>0$ for which \\$f(x^*)< f(x) \;\forall x \in S\cup B(x^*,r),\; x\neq x^*$;
+		\item $x^* \in S$ is a local maximum point of $f$ over $S$ if there exists $r>0$ for which \\ $f(x^*)\geq f(x) \;\forall x \in S\cup B(x^*,r)$;
+		\item $x^* \in S$ is a strict local maximum point of $f$ over $S$ if there exists $r>0$ for which \\ $f(x^*)> f(x) \;\forall x \in S\cup B(x^*,r),\; x\neq x^*$.
+	\end{enumerate}
+\end{definition}
+Notice that a global minimum (maximum) point is also a local minimum (maximum) point.
+\par A well-known result (Fermat's theorem) is that for a one-dimensional function $f$ defined and differentiable
+over an interval $(a, b)$, if a point $x^*\in (a, b)$ is a local optimum, then $f'(x^*) = 0$. The multidimensional extension of this result states that the gradient is zero at local optima. We refer to such an optimality condition as a first order optimality condition, as it is expressed in terms of the first order derivatives.
+\begin{theorem}[First Order Optimality Condition]\label{thm:first_order_optimality}
+	Let $f:S\to \R$ be a function defined on $S\subseteq \Rn$. Suppose that $x^*\in\interior(S)$ is a local optimum and that all partial derivatives of $f$ exist at $x^*$. Then $\grad(x)=0$.
+\end{theorem}
+\begin{proof}
+	Let $i\in [n]$ and consider the one-dimensional function $g(t)=f(x^*+te_i)$. Note that $g$ is differentiable at $t=0$ and by definition $g'(0) = \partiali(x^*)$. Since $x^*$ is a local optimum of $f$, if follows that $t=0$ is a local optimum of $g$, which, by Fermat's Theorem, directly implies that $g'(0) = 0$ and thus also $\partiali(x^*)=0$. Now, since the argument can be repeated for all $i\in[n]$, the result $\nabla f(x^*) = 0$ follows.
+\end{proof}
+Theorem \ref{thm:first_order_optimality} presents a necessary optimality condition: the gradient vanishes at all local optimum points, which are interior points of the domain of the function. However, the reverse claim is not true as there could be points which are not local optimum points, whose gradient is zero. The points in which the gradient vanishes are called stationary points and they are the only candidates for local optima among the points in the interior of the domain of the function.
+\begin{definition}[Stationary Points]
+	Let $f:S\to \R$ be a function defined on a set $S\subseteq \Rn$. Suppose that $x^* \interior(S)$ and that $f$ is differentiable in a neighborhood of $x^*$. Then $x^*$ is called stationary point of $f$ if $\grad(x^*)=0$.
+\end{definition}
+\subsection{Classification of Matrices}
+\begin{definition}[Positive Semidefiniteness]
+	A symmetric matrix $A\in \Rnn$ is positive semidefinite, denoted by $A \succcurlyeq0$, if $x^TAx\geq 0$ for every $x\in \Rn$.
+\end{definition}
+\begin{definition}[Positive Definiteness]
+	A symmetric matrix $A\in \Rnn$ is positive definite, denoted by $A \succ0$, if $x^TAx> 0$ for every $x\in \Rn, x\neq 0$.
+\end{definition}
 
-
-
-
-
+\noindent In this course, a positive definite or semidefinite matrix is always assumed to be symmetric. The same definitions can be given for negative (semi)definite matrices. Notice that a matrix $A$ is negative (semi)definite if and only if $-A$ is positive (semi)definite. A more complicated matrix is instead the following.
+\begin{definition}[Indefiniteness]
+	A symmetric matrix $A\in \Rnn$ is indefinite, denoted by $A \succcurlyeq0$, if there exist $x,y \in \Rn$ such that $x^TAx> 0$ and $y^TAy<0$.
+\end{definition}
+Indefinite matrices are easier to recognize than positive (semi)definite ones. To better characterize the latter, we need to look the eigenvalues of the matrix.
+\begin{theorem}[Eigenvalue characterization theorem]
+	Let $A\in \Rnn$ be a symmetric matrix. Then
+	\begin{enumerate}
+		\item $A$ is positive definite if and only if all its eigenvalues are positive,
+		\item $A$ is positive semidefinite if and only if all its eigenvalues are nonnegative,
+		\item $A$ is indefinite if and only if it has at least one positive eigenvalue and at least one
+		negative eigenvalue.
+	\end{enumerate}
+\end{theorem}
 
 
 
