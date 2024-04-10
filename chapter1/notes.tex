@@ -543,10 +543,36 @@ Despite our main interest in this section is to discuss minimum and maximum poin
 \begin{definition}[Global Minimum and Maximum] 
 	Let $f:S\to \R$, then
 	\begin{enumerate}
-		\item $x^* \in S$ is a global minimum point of $f$ over $S$ if 
+		\item $x^* \in S$ is a global minimum point of $f$ over $S$ if $f(x^*)\leq f(x) \;\forall x \in S$;
+		\item $x^* \in S$ is a strict global minimum point of $f$ over $S$ if $f(x^*)< f(x) \;\forall x \in S,\; x\neq x^*$;
+		\item $x^* \in S$ is a global maximum point of $f$ over $S$ if $f(x^*)\geq f(x) \;\forall x \in S$;
+		\item $x^* \in S$ is a strict global maximum point of $f$ over $S$ if $f(x^*)> f(x) \;\forall x \in S,\; x\neq x^*$.
 	\end{enumerate}
-	
 \end{definition}
+The set $S$ on which the optimization of $f$ is performed is also called the feasible set, and any point $x \in S$ is called feasible solution. It is common to refer to a global minimum point as a minimizer or a global minimizer.
+\par Despite they might not be attained, the minimal and maximal value of $f$ over $S$ is the classical notation to refer to the infimum and supremum of $f$ over $S$. These values are always unique, while there might exists many global minima/maxima attaining the same value of $f$, i.e. $f(x^*)$. The sets of all global minimizers/maximizers of $f$ over $S$ are denoted by
+\begin{equation*}
+	\argmin \{f(x): x\in S\}\qquad \argmax \{f(x): x\in S\}.
+\end{equation*}
+%\par Observe that maximization problems can be easily transformed in minimization problems
+%$$\min_x f(x) = -\max_x -f(x).$$
+%Thus from now on we will focus on the latter. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
