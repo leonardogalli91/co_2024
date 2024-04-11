@@ -524,14 +524,14 @@ Let $f\in \Cii(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B
 	f(y) = f(x)+ \grad (x)^T(y-x) +\frac{1}{2}(y-x)^T\hess(x)(y-x) +  o(||y-x||^2).
 \end{equation*}
 \end{theorem}
-\begin{theorem}[Mean Value Theorem]
+\begin{theorem}[Mean Value Theorem]\label{thm:mvt}
 	Let $f\in \C(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B(x,r)\subseteq S$. Then for any $y\in B(x,r)$, there exists a $c\in [x,y]$ such that 
 	\begin{equation*}
 		f(y) = f(x)+ \grad (c)^T(y-x).
 	\end{equation*}
 \end{theorem}
 %TODO: draw the one dimensiona MVT
-\begin{theorem}
+\begin{theorem}\label{thm:mvt2}
 	Let $f\in \Cii(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B(x,r)\subseteq S$. Then for any $y\in B(x,r)$, there exists a $c\in [x,y]$ such that 
 	\begin{equation*}
 		f(y) = f(x)+ \grad (x)^T(y-x) +\frac{1}{2}(y-x)^T\hess(c)(y-x).
@@ -573,6 +573,7 @@ Our main task will usually be to find and study global minimum or maximum points
 Notice that a global minimum (maximum) point is also a local minimum (maximum) point.
 \par A well-known result (Fermat's theorem) is that for a one-dimensional function $f$ defined and differentiable
 over an interval $(a, b)$, if a point $x^*\in (a, b)$ is a local optimum, then $f'(x^*) = 0$. The multidimensional extension of this result states that the gradient is zero at local optima. We refer to such an optimality condition as a first order optimality condition, as it is expressed in terms of the first order derivatives.
+\subsection{First Order Optimality Conditions}
 \begin{theorem}[First Order Optimality Condition]\label{thm:first_order_optimality}
 	Let $f:S\to \R$ be a function defined on $S\subseteq \Rn$. Suppose that $x^*\in\interior(S)$ is a local optimum and that all partial derivatives of $f$ exist at $x^*$. Then $\grad(x)=0$.
 \end{theorem}
@@ -581,7 +582,7 @@ over an interval $(a, b)$, if a point $x^*\in (a, b)$ is a local optimum, then $
 \end{proof}
 Theorem \ref{thm:first_order_optimality} presents a necessary optimality condition: the gradient vanishes at all local optimum points, which are interior points of the domain of the function. However, the reverse claim is not true as there could be points which are not local optimum points, whose gradient is zero. The points in which the gradient vanishes are called stationary points and they are the only candidates for local optima among the points in the interior of the domain of the function.
 \begin{definition}[Stationary Points]
-	Let $f:S\to \R$ be a function defined on a set $S\subseteq \Rn$. Suppose that $x^* \interior(S)$ and that $f$ is differentiable in a neighborhood of $x^*$. Then $x^*$ is called stationary point of $f$ if $\grad(x^*)=0$.
+	Let $f:S\to \R$ be a function defined on a set $S\subseteq \Rn$. Suppose that $x^* \in \interior(S)$ and that $f$ is differentiable in a neighborhood of $x^*$. Then $x^*$ is called stationary point of $f$ if $\grad(x^*)=0$.
 \end{definition}
 \subsection{Classification of Matrices}
 \begin{definition}[Positive Semidefiniteness]
@@ -605,10 +606,54 @@ Indefinite matrices are easier to recognize than positive (semi)definite ones. T
 		negative eigenvalue.
 	\end{enumerate}
 \end{theorem}
+\subsection{Second Order Optimality Conditions}
+\begin{theorem}[Necessary Second Order Optimality Condition]\label{thm:second_order_optimality}
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in\Cii(S)$ and that $x^*$ is a stationary point. Then the following hold:
+\begin{itemize}
+	\item[(a)] If $x^*$ is a local minimizer of $f$ over $S$, then $\hess (x^*)\succcurlyeq 0$;
+	\item[(b)] If $x^*$ is a local maximizer of $f$ over $S$, then $\hess (x^*)\preccurlyeq 0$ 	
+\end{itemize}
+\end{theorem}
+%TODO: notice that x^* needs to be a stationary point, everything builds on that 
+\begin{proof}
+	(a) Since $x^*$ is a local minimizer, there exists a ball $B(x^*,r)\subseteq U$ for which $f(x) \geq f(x^*) \forall x\in B(x^*,r)$. Let $d\in \Rn$ be a nonzero vector. For any $0<\alpha<\frac{r}{||d||}$ we have $x_\alpha^* :=x^* + \alpha d \in B(x^*, r)$, which means that for any such $\alpha$
+	\begin{equation}\label{eq:x_alpha}
+		f(x^*)\leq f(x_\alpha^*).
+	\end{equation}
+On the other hand from Theorem \ref{thm:mvt2} it follows that there exists a vector $z_\alpha \in [x^*,x_\alpha^*]$ such that 
+\begin{equation*}
+	f(x_\alpha^*)- f(x^*) =\grad (x^*)^T(x_\alpha^*-x^*) +\frac{1}{2}(x_\alpha^*-x^*)^T\hess(z_\alpha)(x_\alpha^*-x^*).
+\end{equation*}
+Since $x^*$ is a stationary point of $f$, and by the definition of $x_\alpha^*$, the latter equation reduces to 
+\begin{equation*}
+	f(x_\alpha^*)- f(x^*) = \frac{\alpha^2}{2} d^T\hess(z_\alpha) d,
+\end{equation*}
+which combined with \eqref{eq:x_alpha} yields that for any $\alpha \in (0, \frac{r}{||d||})$ the inequality $d^T \hess(z_\alpha) d\geq 0$ holds. Finally, using the fact that $z_\alpha \to x^*$ as $\alpha\to 0^+$, and the continuity of the Hessian, we obtain that $d^T \hess(x^*) d\geq 0$. Since the latter inequality holds for any $d \in\Rn$, the desired result is established. 
+\par The proof of (b) follows directly from employing the result of part $(a)$ on the function $-f$.
+\end{proof}
+
+\begin{theorem}[Sufficient Second Order Optimality Condition]\label{thm:suff_second_order_optimality}
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in\Cii(S)$ and that $x^*$ is a stationary point. Then the following hold:
+	\begin{itemize}
+		\item[(a)] If $\hess (x^*)\succ 0$, then $x^*$ is a strict local minimizer of $f$ over $S$;
+		\item[(b)] If  $\hess (x^*)\prec 0$, then $x^*$ is a strict local maximizer of $f$ over $S$.
+	\end{itemize}
+\end{theorem}
+%TODO: possible exercise
+%TODO: notice that x^* is strict in this case
+
+\begin{definition}[Saddle Points]
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in C(S)$. A stationary point $x^*$ is a saddle point of $f$ over $S$ when it is neither a local minimizer nor a local maximizer of $f$ over $S$.
+\end{definition}
+
+\begin{theorem}[Sufficient Condition for a Saddle Point]
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in\Cii(S)$ and that $x^*$ is a stationary point. If $\hess(x^*)$ is an indefinite matrix, then $x^*$ is a saddle point for $f$ over $S$.
+\end{theorem}
+%TODO: possible exercise
 
 
 
-
+\subsection{Sufficient Conditions for Existence of Optima}
 
 
 
