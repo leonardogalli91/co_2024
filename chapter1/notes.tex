@@ -654,10 +654,37 @@ which combined with \eqref{eq:x_alpha} yields that for any $\alpha \in (0, \frac
 
 
 \subsection{Sufficient Conditions for Existence of Optima}
+Another important issue is the one of deciding on whether a function actually has a
+global minimizer or maximizer. This is the issue of existence. A very well known result is due to Weierstrass, stating that a continuous function attains its minimum and maximum over a compact set.
 
-
-
-
+\begin{theorem}[Weierstrass]
+	Let $f$ be a continuous function defined over a nonempty and compact set $C \subseteq \Rn$. Then there exists a global minimum point of $f$ over $C$ and a global maximum point of $f$ over $C$.
+\end{theorem}
+When the underlying set is not compact, the Weierstrass theorem does not guarantee
+the attainment of the solution, but certain properties of the function f can imply the existence of the solution even in the noncompact setting. One example of such a property is coerciveness.
+\begin{definition}[Coerciveness]
+	Let $f$ be a continuous function defined over $\Rn$. The function is said to be coercive when 
+	\begin{equation*}
+		\lim_{||x||\to \infty} f(x) = \infty.
+	\end{equation*}
+\end{definition}
+\begin{theorem}[Existence under Coerciveness]
+	Let $f: \Rn \to \R$ be a continuous and coercive function and let $S \subseteq \Rn$ be a nonempty closed set. Then $f$ has a global minimum point over $S$.
+\end{theorem}
+\begin{proof}
+	Let $x_0\in S$ be an arbitrary point. Since the function is coercive, it follows that there exists a $M>0$ such that
+	\begin{equation}\label{eq:any_x}
+		f(x)>f(x_0) \; \text{ for any $x$ such that} ||x||>M.
+	\end{equation}
+Since any global minimizer $x^*$ of $f$ over $S$ satisfies $f(x^*) \leq f(x_0)$, it follows from \eqref{eq:any_x} that  the set of global minimizers of $f$ over $S$ is the same as the set of global minimizers of $f$ over $S\cap B(0,M)$. The set $S\cap B(0,M)$ is compact and nonempty and thus by the Weierstrass theorem, there exists a global minimizer of $f$ over $S\cap B(0,M)$ and hence also over $S$.
+\end{proof}
+\begin{remark}
+	At a first sight, this result seems asymmetric, what about global maximizers? Maximization problems can be easily transformed in minimization problems
+	$$\min_x f(x) = -\max_x -f(x).$$
+\end{remark}
+\begin{example}
+	
+\end{example}
 
 
 \bibliographystyle{plain}
