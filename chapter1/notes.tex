@@ -29,7 +29,7 @@
 	\item $h_1,\dots, h_p$: equality constraint functions to be satisfied
 \end{itemize}
 The feasible set can also be denoted by $S=\{x \in \Rn: g_i(x) \leq 0 \; i=1, \dots, m, \;\; h_j(x) = 0 \; j=1, \dots, p\}$.
-\subsection{Classification}
+\subsection{Taxonomy}
 Concerning the dimensionality, optimization problems can be 
 \begin{itemize}
 	\item infinite-dimensional: when the space of variables is infinite dimensional, e.g., elements can be vectors of functions of one ore more variables;
@@ -59,6 +59,11 @@ Concerning the hypothesis of convexity, we can distinguish between
 	\item convex optimization, when the functions defining the objective and the constraints are all convex;
 	\item nonconvex optimization, when the functions defining the objective and the constraints might be nonconvex.
 \end{itemize}
+Concerning the uncertainties in the model, we can distinguish between
+\begin{itemize}
+	\item stochastic optimization, when the uncertainties (i.e., random variables) are maintained in the model and their quantification (e.g., expectation, variance) is exploited in optimization algorithm;
+	\item deterministic optimization, when there are no uncertainties, or we assume that this is the case.
+\end{itemize}
 
 \begin{example}[The transportation problem (Linear Programming)]
 Consider a company producing and selling a certain commodity. The company has a set of $N$ sources, where the commodity is produced and a set of $M$ demand centers where the commodity is sold. At each source $i \in \{1, \dots, N\}$, a given quantity $q_i$ of commodity is available. Each demand center $j \in \{1, \dots, M\}$ requires a given quantity $d_j$. We indicate by $c_{ij}$ the cost per unit of transporting the commodity from source $i$ to demand center $j$.
@@ -75,8 +80,9 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 \begin{equation*}
 	\begin{split}
 		\min \;\; &\sum_{i=1}^{N}\sum_{j=1}^{M}c_{ij}x_{ij}\\
-		\st&\sum_{j=1}^{M}x_{ij} \leq q_i\quad i=1, \dots, m\\
-		& h_j(x) = 0 \quad j=1, \dots, p
+		\st&\sum_{j=1}^{M}x_{ij} \leq q_i\quad i=1, \dots, N\\
+		\st&\sum_{j=1}^{M}x_{ij} = d_j\quad j=1, \dots, M\\
+		& x_{ij} \geq 0 \quad \quad i=1, \dots, N\;\;j=1, \dots, M.
 	\end{split}
 \end{equation*}
 %TODO: remark for myself, draw the network
@@ -101,7 +107,7 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 	\end{itemize}
 	
 	\begin{equation*}
-		\min_{w\in \mathbb{R}^n} f(w) = \frac{1}{M}\sum_{i=1}^{M} f_i(w)
+		\min_{w\in \mathbb{R}^n} f(w) = \frac{1}{M}\sum_{i=1}^{M} f_i(w).
 	\end{equation*}
 %TODO: remark for myself, draw the network
 \end{example}
@@ -128,7 +134,7 @@ where $\beta$ is the desired expected return of the portfolio and $e\in \Rn$ den
 		& \sum_{j} x_{ij} - \sum_{j} x_{ji} = \begin{cases}1 \quad & i=s\\
 			0 & i\neq s,d\\
 			-1 & i=d
-		\end{cases} \qquad \forall i \in V
+		\end{cases} \qquad \forall i \in V.
 	\end{split}
 \end{equation*}
 %TODO: remark for myself, draw the network
