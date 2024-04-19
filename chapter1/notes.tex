@@ -270,12 +270,12 @@ An induced matrix norm is indeed a norm in the sense that it satisfies the three
 The default operator norm for this course will be the spectral norm, so when the subscript is omitted we will implicitly refer to this norm.
 \par When $p=q=1$, the operator norm reduces to 
 \begin{equation*}
-	||A||_1 = ||A||_{1\to1} = \max_{j\in[n]} \sum_{i=1}^{m} A_{ij}.
+	||A||_1 = ||A||_{1\to1} = \max_{j\in[n]} \sum_{i=1}^{m} |A_{ij}|.
 \end{equation*}
 This norm is also called maximum absolute column sum norm.
 \par When $p=q=\infty$, the operator norm reduces to 
 \begin{equation*}
-	||A||_\infty = ||A||_{\infty\to\infty} = \max_{j\in[m]} \sum_{i=1}^{n} A_{ij}.
+	||A||_\infty = ||A||_{\infty\to\infty} = \max_{i\in[m]} \sum_{j=1}^{n} |A_{ij}|.
 \end{equation*}
 This norm is also called the maximum absolute row sum norm.
 \par An example of a matrix norm that is not induced by any norm is the Frobenius norm defined by
