@@ -388,34 +388,34 @@ The closed ball with center $c\in \Rn$ and radius $r \in \R$ is denoted by $B[c,
 B[c,r] := \{x\in\Rn: ||x-c||\leq r\}
 \end{equation*}
 \end{definition}
-The ball $B(c, r)$ for some arbitrary $r>0$ is also referred to as a neighborhood of $c$. The first topological notion we define is that of an interior point of a set. These points have their neighborhood contained in the set.
+\noindent The ball $B(c, r)$ for some arbitrary $r>0$ is also referred to as a neighborhood of $c$. The first topological notion we define is that of an interior point of a set. These points have their neighborhood contained in the set.
 \begin{definition}[Interior Points] Given a set $S \subseteq\Rn$, a point $c\in S$ is an interior point of $S$ if there exists $r>0$ for which $B(c,r) \subseteq S$.
 \end{definition}
-The set of all interior points of a given set $S$ is called the interior of the set and is denoted by $\interior(S)$:
+\noindent The set of all interior points of a given set $S$ is called the interior of the set and is denoted by $\interior(S)$:
 \begin{equation*}
-	\interior(S) :=\{x\in S: B(x,r)\subseteq S \text{for some } r>0\}.
+	\interior(S) :=\{x\in S: B(x,r)\subseteq S \text{ for some } r>0\}.
 \end{equation*}
 \begin{example}
 	Here are some examples 
 	\begin{equation*}
 		\begin{split}
 			\interior(\Rn_+) &= \Rn_{++},\\
-			\interior(B(c,r)) &= B(c,r) \quad \with c \in \Rn, r \in \Rn_{++},\\
+			\interior(B[c,r]) &= B(c,r) \quad \with c \in \Rn, r \in \R_{++},\\
 			\interior([x,y]) &= (x,y)\quad \with x,y \in \Rn, x\neq y.
 		\end{split}
 	\end{equation*}
 \end{example}
 \begin{definition}[Open Set]
-	An open set is a set that contains only interior points. In other words $S\subseteq \Rn$ is an open set if $\forall x \in S$ there exists $r>0$ such that $B(x,r)\subseteq U$.
+	An open set is a set that contains only interior points. In other words, $S\subseteq \Rn$ is an open set if $\,\forall x \in S$ there exists $r>0$ such that $B(x,r)\subseteq S$.
 \end{definition}
-Examples of open sets are $\Rn$, open balls, open line segments, and the positive orthant $\Rn_{++}$. A known result is that a union of any number of open sets is an open set and the intersection of a finite number of open sets is open.
+\noindent Examples of open sets are $\Rn$, open balls, open line segments, and the positive orthant $\Rn_{++}$. A known result is that a union of any number of open sets is an open set and the intersection of a finite number of open sets is open.
 \begin{definition}[Closed Set]
 	A set $S\subseteq\Rn$ is said to be closed if it contains all the limits of convergent sequences of points in $S$, that is $S$ is closed if for every sequence of points $\{x_k\} \subseteq S$ satisfying $\displaystyle\lim_{k\to \infty} x_k\!=\! x^*$, it holds that $x^*\in S$.
 \end{definition}
-Examples of closed sets are the closed balls, closed lines segments and the nonnegative orthant $\R_+$. The space $\Rn$ is both closed and open. An important and useful result states that level sets, as well as contour sets, of
+\noindent Examples of closed sets are the closed balls, closed lines segments and the nonnegative orthant $\R_+$. The space $\Rn$ is both closed and open. An important and useful result states that level sets, as well as contour sets, of
 continuous functions are closed.
 \begin{proposition}
-	Let $f$ be a continuous function over a closed set $S\in\Rn$. Then for any $\alpha \R$, the following sets are closed
+	Let $f$ be a continuous function over a closed set $S\in\Rn$. Then for any $\alpha \in \R$, the following sets are closed
 	\begin{equation*}
 		\begin{split}
 			Lev(f, \alpha) :=\{x\in S: f(x)\leq \alpha\}\\
@@ -424,15 +424,15 @@ continuous functions are closed.
 	\end{equation*}
 \end{proposition}
 \begin{definition}[Boundary Points]
-	Given a set $S\subseteq \Rn$, a boundary point of $S$ is a point $x\Rn$ such that any neighborhood of $x$ contains at least one point in $S$ and at least one point in its complement $S^c$.
+	Given a set $S\subseteq \Rn$, a boundary point of $S$ is a point $x\in \Rn$ such that any neighborhood of $x$ contains at least one point in $S$ and at least one point in its complement $S^c$.
 \end{definition}
-The set of all boundary points of a set $S$ is denoted by $\bd(S)$ and is called the boundary of $S$.
+\noindent The set of all boundary points of a set $S$ is denoted by $\bd(S)$ and is called the boundary of $S$.
 \begin{example}
 	Some examples of boundary sets are 
 	\begin{equation*}
 		\begin{split}
-			\bd(B(c,r))&= \bd(B[c,r]) = \{x\Rn: ||x-c||=r\} \quad \with c \in \Rn, r \in \Rn_{++},\\
-			\bd(\Rn_{++}) &= \bd(\Rn_+) = \{x\in \Rn_+: \E x_i = 0\},\\
+			\bd(B(c,r))&= \bd(B[c,r]) = \{x\in \Rn: ||x-c||=r\} \quad \with c \in \Rn, r \in \R_{++},\\
+			\bd(\Rn_{++}) &= \bd(\Rn_+) = \{x\in \Rn_+: \exists x_i = 0\},\\
 			\bd(\Rn) &= \emptyset.
 		\end{split}
 	\end{equation*}
@@ -452,7 +452,7 @@ Another equivalent definition of $\cl(U)$ is given by the smallest closet set co
 	\begin{equation*}
 		\begin{split}
 			\cl(\Rn_{++}) &= \Rn_+,\\
-			\cl(B(c,r)) &= B[c,r] \quad \with c \in \Rn, r \in \Rn_{++},\\
+			\cl(B(c,r)) &= B[c,r] \quad \with c \in \Rn, r \in \R_{++},\\
 			\cl((x,y)) &= [x,y]\quad \with x,y \in \Rn, x\neq y.
 		\end{split}
 	\end{equation*}
@@ -465,7 +465,7 @@ Another equivalent definition of $\cl(U)$ is given by the smallest closet set co
 \begin{definition}[Compactness]
 	A set $S$ is compact when it is bounded and closed.
 \end{definition}
-Examples of compact sets are closed balls and line segments. The positive orthant is not compact since it is unbounded, and open balls are not compact since they are not closed.
+\noindent Examples of compact sets are closed balls and line segments. The positive orthant is not compact since it is unbounded, and open balls are not compact since they are not closed.
 \subsection{Differentiability}
 \begin{definition}[Directional Derivative]
 	Given a function $f$ defined on a set $S\subseteq \Rn$, a point $x\in \interior(S)$ and a direction $d\in \Rn$, with $d\neq0$, the directional derivative of $f$ at $x$ along $d$ is the below limit
@@ -481,7 +481,7 @@ For any $i\in[n]$, the directional derivative of $f$ at $x$ along the direction 
 \end{equation*}
 \end{definition}
 \begin{definition}[Gradient]
-	If all partial derivatives of a function $f$ exist at a point $x\Rn$, then the gradient of $f$ at $x$ is defined by the column vector consisting of all partial derivatives of $f$:
+	If all partial derivatives of a function $f$ exist at a point $x\in\Rn$, then the gradient of $f$ at $x$ is defined by the column vector consisting of all partial derivatives of $f$:
 	\begin{equation*}
 		\grad (x) := \begin{pmatrix}
 			\frac{\partial f}{\partial x_1}(x)\\
@@ -491,7 +491,7 @@ For any $i\in[n]$, the directional derivative of $f$ at $x$ along the direction 
 		\end{pmatrix}
 	\end{equation*}
 \end{definition}
-A function $f$ defined on an open set $S \subseteq \Rn$ is called continuously differentiable (or smooth) over $S$, and we write $f\in \C(S)$, if all the partial derivatives exist and are continuous on $S$
+\noindent A function $f$ defined on an open set $S \subseteq \Rn$ is called continuously differentiable (or smooth) over $S$, and we write $f\in \C(S)$, if all the partial derivatives exist and are continuous on $S$.
 %TODO: notice this definition can be extended to nonopen sets
 \par An important formula to compute the directional derivative is the following
 \begin{equation*}
@@ -501,7 +501,7 @@ The partial derivatives $\partiali$ are themselves real-valued functions that ca
 \begin{equation*}
 	\frac{\partial^2 f}{\partial x_i \partial x_j}(x) := \frac{\partial \left(\frac{\partial f}{\partial x_j}\right)}{\partial x_i}.
 \end{equation*}
-A function $f$ defined on an open set $S \Rn$ is called twice continuously differentiable over $S$, and we write $f\in \Cii(S)$, if all the second order partial derivatives exist and are continuous over $S$. When $f$ is twice continuously differentiable, the second order partial derivatives are symmetric, meaning that for any $i\neq j$ and any $x\in S$
+A function $f$ defined on an open set $S \subseteq \Rn$ is called twice continuously differentiable over $S$, and we write $f\in \Cii(S)$, if all the second order partial derivatives exist and are continuous over $S$. When $f$ is twice continuously differentiable, the second order partial derivatives are symmetric, meaning that for any $i\neq j$ and any $x\in S$
 \begin{equation*}
 	\frac{\partial^2}{\partial x_i \partial x_j} (x) = \frac{\partial^2}{\partial x_j \partial x_i} (x).
 \end{equation*}
@@ -516,13 +516,13 @@ A function $f$ defined on an open set $S \Rn$ is called twice continuously diffe
 	.
 	\end{equation*}
 \end{definition}
-In the following we list a few important theorems that are consequence of Taylor's approximation theorem and that might be useful in the rest of the course. 
-\begin{theorem}[Linear Approximation]
+\noindent In the following we list a few important theorems that are consequence of Taylor's approximation theorem and that might be useful in the rest of the course. 
+\begin{theorem}[Linear Approximation]\label{thm:linear_approx}
 	Let $f\in \C(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B(x,r)\subseteq S$. Then for any $y\in B(x,r)$, we have 
 	\begin{equation*}
 		f(y) = f(x)+ \grad (x)^T(y-x) + o(||y-x||),
 	\end{equation*}
-where $o(\cdot):\R_+\to \R$ is a one dimensional function satisfying $\frac{o(t)}{t} \to 0$ as $t\to0^+$.
+where $o(\cdot):\R_+\to \R_+$ is a one dimensional function satisfying $\frac{o(t)}{t} \to 0$ as $t\to0^+$.
 \end{theorem}
 \begin{theorem}[Quadratic Approximation]
 Let $f\in \Cii(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B(x,r)\subseteq S$. Then for any $y\in B(x,r)$, we have 
@@ -657,6 +657,21 @@ which combined with \eqref{eq:x_alpha} yields that for any $\alpha \in (0, \frac
 \end{theorem}
 %TODO: possible exercise
 
+\begin{theorem}[Sufficient Condition for a Global Minimizer]
+	Let $f:\Rn\to \R$ be $f\in\Cii(\Rn)$ and $\hess (x)\succcurlyeq0$ for any $x\in \Rn$. Let $x^*$ be a stationary point of $f$. Then $x^*$ is a global minimizer of $f$. 
+\end{theorem}
+\begin{proof}
+	By the Mean Value Theorem (Theorem \ref{thm:mvt}), it follows that for any $x\in\Rn$, there exists a vector $z_x\in[x^*,x]$ for which 
+	\begin{equation*}
+		f(x) - f(x^*) = \frac{1}{2}(x-x^*)^T\hess (z_x)(x-x^*).
+	\end{equation*}
+Since $\hess (x) \succcurlyeq 0$, we have that $f(x)\geq f(x^*)$, concluding the proof.
+\end{proof}
+
+\begin{remark}
+At a first sight, this result seems asymmetric, what about global maximizers? Maximization problems can be easily transformed in minimization problems
+$$\min_x f(x) = -\max_x -f(x).$$
+\end{remark}
 
 
 \subsection{Sufficient Conditions for Existence of Optima}
@@ -684,14 +699,6 @@ the attainment of the solution, but certain properties of the function f can imp
 	\end{equation}
 Since any global minimizer $x^*$ of $f$ over $S$ satisfies $f(x^*) \leq f(x_0)$, it follows from \eqref{eq:any_x} that  the set of global minimizers of $f$ over $S$ is the same as the set of global minimizers of $f$ over $S\cap B(0,M)$. The set $S\cap B(0,M)$ is compact and nonempty and thus by the Weierstrass theorem, there exists a global minimizer of $f$ over $S\cap B(0,M)$ and hence also over $S$.
 \end{proof}
-\begin{remark}
-	At a first sight, this result seems asymmetric, what about global maximizers? Maximization problems can be easily transformed in minimization problems
-	$$\min_x f(x) = -\max_x -f(x).$$
-\end{remark}
-\begin{example}
-	
-\end{example}
-
 
 \bibliographystyle{plain}
 \bibliography{../biblio}
