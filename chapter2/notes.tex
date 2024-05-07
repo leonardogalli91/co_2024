@@ -95,6 +95,42 @@ and we thus come to the conclusion that the lower bound is attained at $d=-\frac
 \begin{equation*}
 \grad(x_k)^Td_k = -\grad(x_k)^T\grad(x_k) = -||\grad(x)||^2.
 \end{equation*}
+\noindent To define an implementable method, the second important choice we have to make is the selection of the step size $t$. In particular, this will be clearer once we provide the Descent Lemma below, which require the gradient to be Lipschitz continuous. 
+\begin{definition}[Lipschitz Continuous Gradient]
+	$\grad(x)$ is said to be Lipschitz continuous if 
+	\begin{equation*}
+		|| \grad(x) -\grad(y)|| \leq L ||x-y|| \quad \forall x,y \in \Rn.
+	\end{equation*}
+The class of functions with Lipschitz continuous gradient with constant $L$ is denoted by $\LC(\Rn)$.
+\end{definition}
+\begin{theorem}
+	Let $f\in\Cii(\Rn)$. Then the following two claims are equivalent:
+	\begin{itemize}
+		\item[(a)] $f\in \LC(\Rn)$
+		\item[(b)] $||\hess(x)||\leq L \quad \forall x\in \Rn$.
+	\end{itemize}
+\begin{proof}
+	$(b)\Rightarrow (a)$. Suppose that $||\hess(x)||\leq L \quad \forall x\in \Rn$. By the fundamental theorem of calculus we have $\forall x,y \in \Rn$
+	\begin{equation*}
+		\begin{split}
+			\grad(y)=\grad(x) + \int_{0}^{1} \hess(x+t(y-x)) (y-x) dt = \grad(x) + \left(\int_{0}^{1} \hess(x+t(y-x)) dt  \right) \cdot (y-x)
+		\end{split}
+	\end{equation*}
+Thus, 
+\begin{equation*}
+	\begin{split}
+		||\grad(y)-\grad(x)|| &= \left \| \left(\int_{0}^{1} \hess(x+t(y-x)) dt  \right) \cdot (y-x)\right \|\\
+		&\leq \left\|\int_{0}^{1} \hess(x+t(y-x)) dt  \right\| \cdot \|(y-x) \|\\
+		& \leq \left(\int_{0}^{1}|| \hess(x+t(y-x))|| dt  \right)\cdot \|(y-x) \|\\
+		& \leq L \|(y-x) \|
+	\end{split}
+\end{equation*}
+	$(a)\Rightarrow (b)$. Exercise.
+\end{proof}
+\end{theorem}
+\begin{theorem}[Descent Lemma]
+	
+\end{theorem}
 
 \bibliographystyle{plain}
 \bibliography{../biblio}
