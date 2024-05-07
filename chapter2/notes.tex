@@ -2,9 +2,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{mathtools}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \usepackage[left=2.50cm, right=2.50cm, top=2.0cm, bottom=2.0cm]{geometry}
 \include{../macros}
 \title{Continuous Optimization}
@@ -12,10 +14,88 @@
 \date{}
 \begin{document}
 	\maketitle
-	In this chapter we consider the unconstrained minimization problem
+	\section{Descent Direction Methods}
+	\noindent In this chapter we consider the unconstrained minimization problem
 	\begin{equation*}
-		\min_{x\in\Rn} \;\; f(x)
+		\min_{x\in\Rn} \;\; f(x).
 	\end{equation*}
+The iterative algorithms that we will consider in this chapter take the form
+\begin{equation*}
+	x_{k+1} = x_k +t_k d_k \quad k=0,1, \dots,
+\end{equation*}
+where $d_k$ is the so-called direction and $t_k$ is the step size. We will limit ourselves to descent
+directions, whose definition is now given.
+\begin{definition}
+	Let $f:\Rn\to\R$ with $f\in\C(\Rn)$. A vector $0\neq d\in \Rn$ is called a descent direction of $f$ if the directional derivative $f'(x,d)$ is negative, i.e., 
+	\begin{equation*}
+		f'(x,d)= \grad(x)^T d < 0.
+	\end{equation*}
+\end{definition}
+In particular, by taking small enough steps, descent directions lead to a decrease of the objective function.
+\begin{lemma}[descent property of descent directions]
+	Let $f:\Rn\to\R$ with $f\in\C(\Rn)$ and let $x\in \Rn$. Suppose that $d$ is a descent direction of $f$ at $x$. Then, there exists $\epsilon>0$ such that 
+	\begin{equation*}
+		f(x+td) < f(x) \quad \forall \, t \in (0,\epsilon].
+	\end{equation*} 
+\end{lemma}
+\begin{proof}
+	Since $f'(x,d)<0$, it follows from the definition of the directional derivative that 
+	\begin{equation*}
+		\lim_{t\to 0^+}\frac{f(x+td)-f(x)}{t} = f'(x,d) <0.
+	\end{equation*}
+Therefore, there exists an $\epsilon>0$ such that 
+\begin{equation*}
+	\frac{f(x+td)-f(x)}{t}<0,
+\end{equation*}
+for any $t\in(0,\epsilon)$
+\end{proof}
+\begin{algorithm}[H]\label{alg}
+	\caption{Schematic Descent Directions Method}
+	
+	\KwIn{$x_0\in \Rn$}
+	
+	$k = 0$
+	
+	\While{Termination criterion is not satisfied}{
+				
+			Pick a descent direction $d_k$
+			
+			Find a step size $t_k$ satisfying $f(x_k+t_kd_k)<f(x_k)$
+			
+			$x_{k+1} = x_k+t_kd_k$
+			
+			$k = k+1$
+		}
+\end{algorithm}
+\noindent Various are still unspecified.
+\section{Gradient Method}
+\noindent The most important choice in the algorithm above concerns the selection of the descent direction. One obvious choice is to pick the steepest (normalized) direction, i.e., $d_k =-\grad(x_k)/||\grad(x_k)||$. In fact, this direction minimizes the directional derivatives between all normalized directions. 
+\begin{lemma}
+	Let $f:\Rn\to\R$ with $f\in\C(\Rn)$ and let $x\in\Rn$ be non-stationary (i.e., $\grad(x)\neq0$). Then the optimal solution of the problem
+	\begin{equation*}
+		\begin{split}
+			\min \;\; &f'(x,d),\\
+			\st& ||d||=1.
+		\end{split}
+	\end{equation*}
+is $d=-\frac{\grad(x)}{||d||}$.
+\end{lemma}
+\begin{proof}
+	As $f\in \C(\Rn)$ and by Cauchy-Schwarz, we have 
+	\begin{equation*}
+		f'(x,d)=\grad(x)^Td \geq -||\grad(x)||\cdot ||d|| = -||\grad(x)||.
+	\end{equation*}
+Thus, $-||\grad(x)||$ is a lower bound for the optimal value of the problem. On the other hand, by plugging  $d = -\grad(x)/||\grad(x)||$ in the objective function we get 
+\begin{equation*}
+	f'\left(x,-\frac{\grad(x)}{||\grad(x)||}\right)=-\grad(x)^T\left(\frac{\grad(x)}{||\grad(x)||}\right)= -||\grad(x)||,
+\end{equation*}
+and we thus come to the conclusion that the lower bound is attained at $d=-\frac{\grad(x)}{||d||}$.
+\end{proof}
+\noindent Thus, the gradient method selects $d_k = -\grad(x_k)$ which is obviously a descent direction, i.e., 
+\begin{equation*}
+\grad(x_k)^Td_k = -\grad(x_k)^T\grad(x_k) = -||\grad(x)||^2.
+\end{equation*}
+
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}

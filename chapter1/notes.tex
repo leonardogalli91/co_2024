@@ -556,12 +556,12 @@ Despite our main interest in this section is to discuss minimum and maximum poin
 		\item $x^* \in S$ is a strict global maximum point of $f$ over $S$ if $f(x^*)> f(x) \;\forall x \in S,\; x\neq x^*$.
 	\end{enumerate}
 \end{definition}
-The set $S$ on which the optimization of $f$ is performed is also called the feasible set, and any point $x \in S$ is called feasible solution. It is common to refer to a global minimum point as a minimizer or a global minimizer.
-\par Despite they might not be attained, the minimal and maximal value of $f$ over $S$ is the classical notation to refer to the infimum and supremum of $f$ over $S$. These values are always unique, while there might exist many global minima/maxima attaining the same value of $f$, i.e. $f(x^*)$. The sets of all global minimizers/maximizers of $f$ over $S$ are denoted by
+The set $S$ on which the optimization of $f$ is performed is also called the \textbf{feasible set}, and any point $x \in S$ is called \textbf{feasible solution}. It is common to refer to a global minimum point as a \textbf{minimizer} or a global minimizer.
+\par Despite they might not be attained, the \textbf{minimal} and \textbf{maximal} value of $f$ over $S$ is the classical notation to refer to the infimum and supremum of $f$ over $S$. These values are always \textbf{unique}, while there might exist many global minima/maxima attaining the same value of $f$, i.e. $f(x^*)$. The sets of all global minimizers/maximizers of $f$ over $S$ are denoted by
 \begin{equation*}
 	\argmin \{f(x): x\in S\}\qquad \argmax \{f(x): x\in S\}.
 \end{equation*}
-A vector $x^* \in S$ is called a global optimum of $f$ over $S$ if it is either a global minimum or a global maximum.
+A vector $x^* \in S$ is called a global \textbf{optimum} of $f$ over $S$ if it is either a global minimum or a global maximum.
 %\par Observe that maximization problems can be easily transformed in minimization problems
 %$$\min_x f(x) = -\max_x -f(x).$$
 %Thus from now on we will focus on the latter. 
@@ -577,7 +577,7 @@ Our main task will usually be to find and study global minimum or maximum points
 	\end{enumerate}
 \end{definition}
 Notice that a global minimum (maximum) point is also a local minimum (maximum) point.
-\par A well-known result (Fermat's theorem) is that for a one-dimensional function $f$ defined and differentiable
+\par A well-known result (\textbf{Fermat's theorem}) is that for a one-dimensional function $f$ defined and differentiable
 over an interval $(a, b)$, if a point $x^*\in (a, b)$ is a local optimum, then $f'(x^*) = 0$. The multidimensional extension of this result states that the gradient is zero at local optima. We refer to such an optimality condition as a first order optimality condition, as it is expressed in terms of the first order derivatives.
 \subsection{First Order Optimality Conditions}
 \begin{theorem}[First Order Optimality Condition]\label{thm:first_order_optimality}
@@ -586,7 +586,7 @@ over an interval $(a, b)$, if a point $x^*\in (a, b)$ is a local optimum, then $
 \begin{proof}
 	Let $i\in [n]$ and consider the one-dimensional function $g(t)=f(x^*+te_i)$. Note that $g$ is differentiable at $t=0$ and by definition $g'(0) = \partiali(x^*)$. Since $x^*$ is a local optimum of $f$, if follows that $t=0$ is a local optimum of $g$, which, by Fermat's Theorem, directly implies that $g'(0) = 0$ and thus also $\partiali(x^*)=0$. Now, since the argument can be repeated for all $i\in[n]$, the result $\nabla f(x^*) = 0$ follows.
 \end{proof}
-Theorem \ref{thm:first_order_optimality} presents a necessary optimality condition: the gradient vanishes at all local optimum points, which are interior points of the domain of the function. However, the reverse claim is not true as there could be points which are not local optimum points, whose gradient is zero. The points in which the gradient vanishes are called stationary points and they are the only candidates for local optima among the points in the interior of the domain of the function.
+Theorem \ref{thm:first_order_optimality} presents a necessary optimality condition: the gradient vanishes at all local optimum points, which are interior points of the domain of the function. However, the \textbf{reverse claim is not true} as there could be points which are not local optimum points, whose gradient is zero. The points in which the gradient vanishes are called \textbf{stationary points} and they are the only candidates for local optima among the points in the interior of the domain of the function.
 \begin{definition}[Stationary Points]
 	Let $f:S\to \R$ be a function defined on a set $S\subseteq \Rn$. Suppose that $x^* \in \interior(S)$ and that $f$ is differentiable in a neighborhood of $x^*$. Then $x^*$ is called stationary point of $f$ if $\grad(x^*)=0$.
 \end{definition}
@@ -600,9 +600,9 @@ Theorem \ref{thm:first_order_optimality} presents a necessary optimality conditi
 
 \noindent In this course, a positive definite or semidefinite matrix is always assumed to be symmetric. The same definitions can be given for negative (semi)definite matrices. Notice that a matrix $A$ is negative (semi)definite if and only if $-A$ is positive (semi)definite. A more complicated matrix is instead the following.
 \begin{definition}[Indefiniteness]
-	A symmetric matrix $A\in \Rnn$ is indefinite, denoted by $A \succcurlyeq0$, if there exist $x,y \in \Rn$ such that $x^TAx> 0$ and $y^TAy<0$.
+	A symmetric matrix $A\in \Rnn$ is indefinite, if there exist $x,y \in \Rn$ such that $x^TAx> 0$ and $y^TAy<0$.
 \end{definition}
-Indefinite matrices are easier to recognize than positive (semi)definite ones. To better characterize the latter, we need to look the eigenvalues of the matrix.
+Indefinite matrices are easier to recognize than positive (semi)definite ones, as matrices that contain positive and negative values on the diagonal are indefinite. To better characterize the latter, we need to look the eigenvalues of the matrix.
 \begin{theorem}[Eigenvalue characterization theorem]
 	Let $A\in \Rnn$ be a symmetric matrix. Then
 	\begin{enumerate}
@@ -622,7 +622,7 @@ Indefinite matrices are easier to recognize than positive (semi)definite ones. T
 \end{theorem}
 %TODO: notice that x^* needs to be a stationary point, everything builds on that 
 \begin{proof}
-	(a) Since $x^*$ is a local minimizer, there exists a ball $B(x^*,r)\subseteq U$ for which $f(x) \geq f(x^*) \forall x\in B(x^*,r)$. Let $d\in \Rn$ be a nonzero vector. For any $0<\alpha<\frac{r}{||d||}$ we have $x_\alpha^* :=x^* + \alpha d \in B(x^*, r)$, which means that for any such $\alpha$
+	(a) Since $x^*$ is a local minimizer, there exists a ball $B(x^*,r)\subseteq U$ for which $f(x) \geq f(x^*)\; \forall x\in B(x^*,r)$. Let $d\in \Rn$ be a nonzero vector. For any $0<\alpha<\frac{r}{||d||}$ we have $x_\alpha^* :=x^* + \alpha d \in B(x^*, r)$, which means that for any such $\alpha$
 	\begin{equation}\label{eq:x_alpha}
 		f(x^*)\leq f(x_\alpha^*).
 	\end{equation}
@@ -658,7 +658,7 @@ which combined with \eqref{eq:x_alpha} yields that for any $\alpha \in (0, \frac
 %TODO: possible exercise
 
 \begin{theorem}[Sufficient Condition for a Global Minimizer]
-	Let $f:\Rn\to \R$ be $f\in\Cii(\Rn)$ and $\hess (x)\succcurlyeq0$ for any $x\in \Rn$. Let $x^*$ be a stationary point of $f$. Then $x^*$ is a global minimizer of $f$. 
+	Let $f:\Rn\to \R$ with $f\in\Cii(\Rn)$ and $\hess (x)\succcurlyeq0$ for any $x\in \Rn$. Let $x^*$ be a stationary point of $f$. Then $x^*$ is a global minimizer of $f$. 
 \end{theorem}
 \begin{proof}
 	By the Mean Value Theorem (Theorem \ref{thm:mvt}), it follows that for any $x\in\Rn$, there exists a vector $z_x\in[x^*,x]$ for which 
@@ -676,12 +676,12 @@ $$\min_x f(x) = -\max_x -f(x).$$
 
 \subsection{Sufficient Conditions for Existence of Optima}
 Another important issue is the one of deciding on whether a function actually has a
-global minimizer or maximizer. This is the issue of existence. A very well known result is due to Weierstrass, stating that a continuous function attains its minimum and maximum over a compact set.
+global minimizer or maximizer. This is the issue of \textbf{existence}. A very well known result is due to Weierstrass, stating that a continuous function attains its minimum and maximum over a compact set.
 
 \begin{theorem}[Weierstrass]
 	Let $f$ be a continuous function defined over a nonempty and compact set $C \subseteq \Rn$. Then there exists a global minimum point of $f$ over $C$ and a global maximum point of $f$ over $C$.
 \end{theorem}
-When the underlying set is not compact, the Weierstrass theorem does not guarantee
+\noindent When the underlying set is not compact, the Weierstrass theorem does not guarantee
 the attainment of the solution, but certain properties of the function f can imply the existence of the solution even in the noncompact setting. One example of such a property is coerciveness.
 \begin{definition}[Coerciveness]
 	Let $f$ be a continuous function defined over $\Rn$. The function is said to be coercive when 
@@ -695,9 +695,9 @@ the attainment of the solution, but certain properties of the function f can imp
 \begin{proof}
 	Let $x_0\in S$ be an arbitrary point. Since the function is coercive, it follows that there exists a $M>0$ such that
 	\begin{equation}\label{eq:any_x}
-		f(x)>f(x_0) \; \text{ for any $x$ such that} ||x||>M.
+		f(x)>f(x_0) \; \text{ for any $x$ such that } ||x||>M.
 	\end{equation}
-Since any global minimizer $x^*$ of $f$ over $S$ satisfies $f(x^*) \leq f(x_0)$, it follows from \eqref{eq:any_x} that  the set of global minimizers of $f$ over $S$ is the same as the set of global minimizers of $f$ over $S\cap B(0,M)$. The set $S\cap B(0,M)$ is compact and nonempty and thus by the Weierstrass theorem, there exists a global minimizer of $f$ over $S\cap B(0,M)$ and hence also over $S$.
+Since any global minimizer $x^*$ of $f$ over $S$ satisfies $f(x^*) \leq f(x_0)$, it follows from \eqref{eq:any_x} that  the set of global minimizers of $f$ over $S$ is the same as the set of global minimizers of $f$ over $S\cap B[0,M]$. The set $S\cap B[0,M]$ is compact and nonempty and thus by the Weierstrass theorem, there exists a global minimizer of $f$ over $S\cap B[0,M]$ and hence also over $S$.
 \end{proof}
 
 \bibliographystyle{plain}
