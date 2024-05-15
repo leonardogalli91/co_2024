@@ -211,4 +211,18 @@ which concludes the proof.
 %TODO: how to remove the min?
 %\bibliographystyle{plain}
 %\bibliography{../biblio}
+\subsection{Line search methods}
+The gradient method as defined above can only be implemented when we can compute the Lipschitz function $L$, on the other hand, we would like to have a general method that can be applied on any unconstrained optimization problem. An alternative for selecting the step size is provided by line search methods. Consider a direction $d_k$, one option would be to exactly minimize along the direction $d_k$, i.e., \textbf{exact line search}
+\begin{equation*}
+	t_k \in \argmin_{t>0} f(x_k+t d_k).
+\end{equation*}
+However, this approach is not always viable and it might be sometimes costly. Another option is instead that of accepting a step that will make our function value decrease "sufficiently", namely to apply an inexact line search.
+
+and now let us write the linear approximation of $f$ along $d_k$ as a function of the step size $t_k$, i.e.,
+\begin{equation*}
+	f(x_k +t_k d_k) = f
+\end{equation*}
+\begin{center}
+	\includegraphics[width=0.5\linewidth]{lines}
+\end{center}
 \end{document}
