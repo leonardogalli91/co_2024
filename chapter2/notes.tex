@@ -212,17 +212,60 @@ which concludes the proof.
 %\bibliographystyle{plain}
 %\bibliography{../biblio}
 \subsection{Line search methods}
-The gradient method as defined above can only be implemented when we can compute the Lipschitz function $L$, on the other hand, we would like to have a general method that can be applied on any unconstrained optimization problem. An alternative for selecting the step size is provided by line search methods. Consider a direction $d_k$, one option would be to exactly minimize along the direction $d_k$, i.e., \textbf{exact line search}
+The gradient method as defined above can only be employed when we know or we can compute the Lipschitz constant $L$, on the other hand, we would like to have a general method that can be applied on any unconstrained optimization problem. An alternative for selecting the step size is provided by line search methods. Consider a direction $d_k$, one option would be to exactly minimize along the direction $d_k$, i.e., \textbf{exact line search}
 \begin{equation*}
 	t_k \in \argmin_{t>0} f(x_k+t d_k).
 \end{equation*}
-However, this approach is not always viable and it might be sometimes costly. Another option is instead that of accepting a step that will make our function value decrease "sufficiently", namely to apply an inexact line search.
-
-and now let us write the linear approximation of $f$ along $d_k$ as a function of the step size $t_k$, i.e.,
+However, this approach is not always viable and even when it is, it might be costly. Another option is instead that of accepting a step that will make the function value decrease "sufficiently", namely to apply an \textbf{inexact line search}. In particular, the first line search proposed in the literature is called Armijo line search and it requires the following
+\begin{equation}\label{eq:armijo}
+	f(x_k +t_k d_k) \leq f(x_k) + \alpha t_k\grad(x_k)^Td_k.
+\end{equation}
+Notice that if we define $\phi(t)=f(x_k+td_k)$ we can rewrite the inequality above as
 \begin{equation*}
-	f(x_k +t_k d_k) = f
+\phi(t_k) \leq \phi(0) + \alpha t_k \phi'(0) \qquad \with \alpha \in (0,1).
 \end{equation*}
-\begin{center}
+As depicted in Figure 1, the condition requires that the new function value $\phi(t_k)$ stays below the line passing for $(0,\phi(0))$ and with $\alpha\phi'(0)$ as inclination. Notice that as $\phi'(0)<0$ and $\alpha<1$, the line $y=\phi(0) +\alpha t_k \phi'(0)$ is not as inclined as the tangent in 0. The way for selecting a step $t_k$ that satisfies \eqref{eq:armijo} is suggested by the figure.
+\begin{figure}
+	\centering
 	\includegraphics[width=0.5\linewidth]{lines}
-\end{center}
+	\caption{The figure represents the Armijo line search condition (the notation in this figure is different from the text, replace $\alpha$ in the figure with $t$ from the text.)}
+\end{figure}
+In particular, the method is called backtracking and it is described below.
+\begin{algorithm}[H]\label{alg:armijo}
+	\caption{Backtracking on Armijo line search}
+	
+	\KwIn{Pick $s>0$, $\alpha,\beta \in(0,1)$.}
+	
+	$i=0$	
+	
+	\Do{$f(x_k +t_k d_k) > f(x_k) + \alpha t_k \grad(x_k)^Td_k$}{
+		
+		$t_k = s \beta^i$
+		
+		$i=i+1$
+	}
+	
+\end{algorithm}
+Let us first show that this method terminates in a finite amount of steps
+\begin{lemma}
+	Let $f\in \C(\Rn)$, $x\in \Rn$ and $d\in \Rn$ be a descent direction. Then Algorithm \ref{eq:armijo} terminates in a finite amount of steps with a $t_k>0$ that satisfies \eqref{eq:armijo}. Moreover, one of the following holds
+	\begin{itemize}
+		\item[(a)] $t_k=s$
+		\item[(b)] $t_k\leq \beta s$ such that $f(x_k +\frac{t_k}{\beta} d_k) > f(x_k) + \alpha \frac{t_k}{\beta} \grad(x_k)^Td_k$
+	\end{itemize}
+\begin{proof}
+	Let us first prove that the algorithm terminates in a finite amount of steps. By contradiction there are no finite value of $i$ for which \eqref{eq:armijo} is satisfied, that is 
+	\begin{equation*}
+		\frac{f(x_k +s \beta^i d_k)- f(x_k)}{s \beta^i} > \alpha \grad(x_k)^Td_k.
+	\end{equation*}
+Given $\beta<1$ we have that $\lim_{i\to \infty} \beta^i =0$ and thus, with $i\to \infty$ the LHS of the inequality above is the directional derivative of $f$ along $d_k$. In particular, we get
+\begin{equation*}
+	\grad(x_k)^Td_k \geq \alpha\grad(x_k)^Td_k,
+\end{equation*}
+which is a contradiction, as $\grad(x_k)^Td_k<0$ and $\alpha <1$.
+Following the steps of the algorithm, either the first guess $s$ is accepted or $t_k\leq s\beta$. In the second case, given $t_k$ the outcome of the algorithm, the step size before the last backtracking ($\frac{t_k}{\beta}$) was surely not accepted, from which (b) follows.
+\end{proof}
+	
+\end{lemma}
+
 \end{document}
