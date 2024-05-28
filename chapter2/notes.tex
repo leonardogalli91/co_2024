@@ -26,12 +26,12 @@ The iterative algorithms that we will consider in this chapter take the form
 where $d_k$ is the so-called direction and $t_k$ is the step size. We will limit ourselves to descent
 directions, whose definition is now given.
 \begin{definition}
-	Let $f:\Rn\to\R$ with $f\in\C(\Rn)$. A vector $0\neq d\in \Rn$ is called a descent direction of $f$ if the directional derivative $f'(x,d)$ is negative, i.e., 
+	Let $f:\Rn\to\R$ with $f\in\C(\Rn)$ and $x\in \Rn$. A vector $0\neq d\in \Rn$ is called a descent direction of $f$ at $x$ if the directional derivative $f'(x,d)$ is negative, i.e., 
 	\begin{equation*}
 		f'(x,d)= \grad(x)^T d < 0.
 	\end{equation*}
 \end{definition}
-In particular, by taking small enough steps, descent directions lead to a decrease of the objective function.
+\noindent In particular, by taking small enough steps, descent directions lead to a decrease of the objective function.
 \begin{lemma}[descent property of descent directions]
 	Let $f:\Rn\to\R$ with $f\in\C(\Rn)$ and let $x\in \Rn$. Suppose that $d$ is a descent direction of $f$ at $x$. Then, there exists $\epsilon>0$ such that 
 	\begin{equation*}
@@ -175,7 +175,7 @@ At this point we can write down the Gradient Method in terms of an implementable
 	
 	$k = 0$
 	
-	\While{$\|\grad(x_k)\|\leq \epsilon$}{
+	\While{$\|\grad(x_k)\|> \epsilon$}{
 		
 		$x_{k+1} = x_k - \frac{1}{L} \grad(x_k)$
 		
@@ -248,7 +248,7 @@ In particular, the method is called backtracking and it is described below.
 \end{algorithm}
 \noindent Let us first show that this method terminates in a finite amount of steps
 \begin{lemma} \label{lemma:finite_termination}
-	Let $f\in \C(\Rn)$, $x\in \Rn$ and $d\in \Rn$ be a descent direction. Then Algorithm \ref{eq:armijo} terminates in a finite amount of steps with a $t_k>0$ that satisfies \eqref{eq:armijo}. Moreover, one of the following holds
+	Let $f\in \LC(\Rn)$, $x\in \Rn$ and $d\in \Rn$ be a descent direction. Then Algorithm \ref{alg:armijo} terminates in a finite amount of steps with a $t_k>0$ that satisfies \eqref{eq:armijo}. Moreover, one of the following holds
 	\begin{itemize}
 		\item[(a)] $t_k=s$
 		\item[(b)] $t_k\leq \beta s$ such that $f(x_k +\frac{t_k}{\beta} d_k) > f(x_k) + \alpha \frac{t_k}{\beta} \grad(x_k)^Td_k$
@@ -274,7 +274,7 @@ which combined with $(b)$ with $d_k=-\grad(x_k)$ implies
 \begin{equation*}
 	\frac{t_k}{\beta}\left(1-\frac{L t_k}{2\beta}\right) < \alpha\frac{t_k}{\beta}
 \end{equation*}
-ans consequently $t_k>\frac{2(1-\alpha)\beta}{L}$, which together with $(a)$ concludes the proof.
+and consequently $t_k>\frac{2(1-\alpha)\beta}{L}$, which together with $(a)$ concludes the proof.
 \end{proof}
 \noindent We can now provide a version of the GD method that is independent from $L$.\\
 \begin{algorithm}[H]\label{alg:gd_armijo}
@@ -284,7 +284,7 @@ ans consequently $t_k>\frac{2(1-\alpha)\beta}{L}$, which together with $(a)$ con
 	
 	$k = 0$
 	
-	\While{$\|\grad(x_k)\|\leq \epsilon$}{
+	\While{$\|\grad(x_k)\|> \epsilon$}{
 		
 		$t_k \leftarrow$ Armijo Line Search (Algorithm \ref{alg:armijo})
 		
@@ -299,7 +299,7 @@ ans consequently $t_k>\frac{2(1-\alpha)\beta}{L}$, which together with $(a)$ con
 \end{equation*}
 \noindent Moreover, the asymptotic convergence of Algorithm \ref{alg:gd_armijo} can also be proven if we assume $f\in \C(\Rn)$ instead of $f\in \LC(\Rn)$ (Exercise).
 \subsubsection{Nonmonotone line search}
-Until now we focused on methods that always ensures/requires a decrease of the objective function at every iteration. In fact, looking at the proof of Theorem \ref{thm:GD_convergence}, we strongly rely on \eqref{eq:decrease}. In some case, however, this requirement is too tight and a few methods (e.g., Newton \cite{grippo86a}, Barziai-Borwein \cite{raydan97a}) remarkably enjoy some additional freedom. In fact, it is still possible to prove convergence also when the objective function does not decrease at every step, but every $M>0 \;(\in\N)$ steps. In particular, we can consider the following nonmonotone condition, originally proposed in \cite{grippo86a}, 
+Until now we focused on methods that always ensures/requires a decrease of the objective function at every iteration. In fact, looking at the proof of Theorem \ref{thm:GD_convergence}, we strongly rely on \eqref{eq:decrease}. In some case, however, this requirement is too tight and a few methods (e.g., Newton \cite{grippo86a}, Barziai-Borwein \cite{raydan97a}) get great (numerical) advantages from some additional freedom. In fact, it is still possible to prove convergence also when the objective function does not decrease at every step, but every $M>0 \;(\in\N)$ steps. In particular, we can consider the following nonmonotone condition, originally proposed in \cite{grippo86a}, 
 \begin{equation}\label{eq:grippo}
 	f(x_k +t_k d_k) \leq \max_{0\leq j \leq \min\{k,M\}} f(x_{k-j}) + \alpha t_k\grad(x_k)^Td_k.
 \end{equation}
@@ -376,10 +376,55 @@ Thus, we rewrite \eqref{eq:armijo} as
 	\end{equation*}
 	From convergence of $\{f(x_{r(k)})\}$ and Lipschitz continuity, it follows that
 	$$ \displaystyle\lim_{k\to \infty} f(x_k) = \displaystyle\lim_{k\to \infty}  f(x_{R(k)}) = \displaystyle\lim_{k\to \infty} f(x_{r(k+W+1)}) = f^*,$$
-	which complete proof of $(b)$. Thesis $(c)$ follows from $(b)$ and the fact that $t_k \geq \min\left \{s, \frac{2(1-\alpha)\beta}{L}\right \}$. 
+	which complete proof of $(b)$. Thesis $(c)$ follows from $(b)$, \eqref{eq:lemma_condition} and the fact that $t_k \geq \min\left \{s, \frac{2(1-\alpha)\beta}{L}\right \}$. 
 \end{proof}
 
-%notice that epsilon_k
+\subsection{Barzilai-Borwein Method}
+%\subsubsection{The Quadratic Case}
+Let us first consider a quadratic objective function, 
+\begin{equation}\label{eq:quadratic}
+	f(x) = x^TQx + c^Tx + b,
+\end{equation}
+where $x,c\in\Rn$, $b\in \R$, $Q\in \Rnn$ is symmetric and positive definite. In this case, we get the following result for GD.
+\begin{proposition}[Finite convergence of GD in the quadratic case]
+	Let $\lambda_1\geq \lambda_2, \dots,\lambda_n$ be the eigenvalue of the Hessian of the quadratic function \eqref{eq:quadratic}. Then, GD defined by the iteration
+	\begin{equation}\label{eq:eigengrad}
+		x_{k+1} = x_k -\frac{1}{\lambda_k} \grad(x_k) \quad \with k=1, \dots, n,
+	\end{equation}
+	determines in at maximum $n$ iterations the minimizer of $x_k$. 
+\end{proposition}
+\begin{proof}
+	As gradient of \eqref{eq:quadratic} is $\grad(x)=Qx+c$, we get
+	\begin{equation*}
+		\grad(x_{k+1}) = Qx_{k+1} +c = Qx_k +c -\frac{1}{\lambda_k} Q \grad(x_k) = \left(I -\frac{1}{\lambda_k}Q\right)\grad(x_k)
+	\end{equation*}
+Repeating the application of the above formula, we get 
+\begin{equation*}
+	\grad(x_k) = \left(\prod_{j=1}^{k-1}(I-\frac{1}{\lambda_j}Q)\right)\grad(x_1)
+\end{equation*}
+Let ${u_h \in \Rn: h=1, \dots, n}$ be the set of eigenvectors of $Q$, associated to the eigenvalues $\lambda_h$, in particular they form a basis of $\Rn$, meaning that we can represent $\grad(x_1)$ as a linear combination of these vectors, i.e.,  
+\begin{equation*}
+	\grad(x_1) = \sum_{h=1}^{n} \beta_h u_h,\quad\with \beta_h\in\R. 
+\end{equation*}
+Thus, for $k\geq 2$, we get 
+\begin{equation*}
+	\grad(x_k) = \left(\prod_{j=1}^{k-1}(I-\frac{1}{\lambda_j}Q)\right) \left(\sum_{h=1}^{n} \beta_h u_h\right),
+\end{equation*}
+and consequently, setting $k=n+1$, from $Iu_h = u_h$ and $Qu_h=\lambda_hu_h$, we have
+\begin{equation*}
+	\grad(x_{n+1}) = \sum_{h=1}^{n} \beta_h \left(\prod_{j=1}^{n}(1-\frac{1}{\lambda_j}\lambda_h)\right) u_h=0,
+\end{equation*}
+from which we get that GD converges in at most $n$ steps.
+\end{proof}
+Unfortunately, the eigenvalues of $Q$ are usually not available and obtaining them is roughly as expensive as applying $GD$ on \eqref{eq:quadratic}. For this reason we consider instead of \eqref{eq:eigengrad} to approximate them on the fly via the Rayleigh quotient
+\begin{equation*}
+	R_Q(x) := \frac{x^TQx}{||x||^2} \quad \forall x\neq 0,
+\end{equation*}
+given that 
+\begin{equation*}
+	\lambda_n(Q) \leq R_Q(x) \leq \lambda_1(Q) \quad \with \forall x\neq 0. 
+\end{equation*}
+In particular, if the image of $Q$ is small (i.e., the interval $[\lambda_n(Q),\lambda_1(Q)]$ is small), $R_Q(x)$ approximates the eigenvalues of $Q$.
 
 \bibliographystyle{plain}
 \bibliography{../biblio}
