@@ -422,9 +422,76 @@ Unfortunately, the eigenvalues of $Q$ are usually not available and obtaining th
 \end{equation*}
 given that 
 \begin{equation*}
-	\lambda_n(Q) \leq R_Q(x) \leq \lambda_1(Q) \quad \with \forall x\neq 0. 
+	\lambda_n(Q) \leq R_Q(x) \leq \lambda_1(Q) \quad \forall x\neq 0. 
 \end{equation*}
-In particular, if the image of $Q$ is small (i.e., the interval $[\lambda_n(Q),\lambda_1(Q)]$ is small), $R_Q(x)$ approximates the eigenvalues of $Q$. Moreover, we can compute $R_Q(x)$ without 
+In particular, if the image of $Q$ is small (i.e., the interval $[\lambda_n(Q),\lambda_1(Q)]$ is small), $R_Q(x)$ approximates the eigenvalues of $Q$. Moreover, we can compute $R_Q(x)$ without directly involving $Q$ if we select $x$ in a smart way. In particular, given two points $x,y\in\Rn,$ we get 
+\begin{equation*}
+	\grad(x) = Qx-c \quad \text{and}\quad \grad(y) = Qy-c \quad \Rightarrow \quad \grad(y) - \grad(x) = Q(y-x).
+\end{equation*} 
+Thus, with $x=x_{k-1}$ and $y=x_k$, and calling 
+\begin{equation*}
+	y_k:= \grad(x_k) - \grad(x_{k-1})  \quad \text{and} \quad s_k= x_k -x_{k-1}
+\end{equation*}
+we get $y_k = Qs_k$ and consequently
+\begin{equation*}
+	R_Q(s_k) = \frac{s_k^TQs_k}{||s_k||^2} =  \frac{s_k^Ty_k}{||s_k||^2}=: \mu_k^{BB1},
+\end{equation*}
+where BB stands for Barzilai-Borwein method, but also $s_k=Q^{-1}y_k$ and consequently
+\begin{equation*}
+	R_{Q^{-1}}(y_k) = \frac{y_k^TQ^{-1}y_k}{||y_k||^2} =  \frac{s_k^Ty_k}{||y_k||^2}=: \mu_k^{BB2}.
+\end{equation*}
+Recalling \eqref{eq:eigengrad} we get two algorithms
+\begin{equation}\label{eq:bb1}
+	x_{k+1} = x_k -\frac{1}{\mu_k^{BB1}} \grad(x_k) 
+\end{equation}
+and 
+\begin{equation}\label{eq:bb2}
+	x_{k+1} = x_k -\frac{1}{\mu_k^{BB2}} \grad(x_k).
+\end{equation}
+In particular, for \eqref{eq:bb1}, and equivalently for \eqref{eq:bb2}, we get the following
+\begin{proposition}
+	Given $\{x_k\}_k$ the sequence generate by Algorithm \eqref{eq:bb1} to solve \eqref{eq:quadratic}, with $Q$ symmetric and positive definite, with $\lambda_n<2\lambda_1$, we get 
+	\begin{equation*}
+		\| \grad(x_k)\|\leq \delta^k \|\grad(x_0)\| \quad \with \delta=\frac{\lambda_n}{\lambda_1}-1.
+	\end{equation*}
+\end{proposition}
+\begin{proof}
+Exercise.
+\end{proof}
+\noindent Beyond this result, the same type of convergence (with a constant $\delta<1$) can be proved also without assuming $\lambda_n<2\lambda_1$. %TODO type of convergence
+\subsubsection{Barzilai-Borwein in the Non-Quadratic Case}
+In the non quadratic case, applying the fundamental theorem of calculus to $\grad(x)$, we get that
+\begin{equation*}
+\grad(x_k)=\grad(x_{k-1}) + \int_{0}^{1} \hess(x_k+t(x_k-x_{k-1})) (x_k-x_{k-1}) dt
+\end{equation*} 
+from which we obtain
+\begin{equation*}
+	\mu_k^{BB1} = \frac{(\grad(x_k)-\grad(x_{k-1}))^T(x_k-x_{k-1})}{\|x_k - x_{k-1}\|^2} = \frac{\int_{0}^{1}(x_k-x_{k-1})^T \hess(x_k+t(x_k-x_{k-1})) (x_k-x_{k-1}) dt }{\|x_k - x_{k-1}\|^2}.
+\end{equation*}
+Thus, $\mu_k^{BB1}$ is the mean of the Rayleigh quotient over the Hessians computed on the segment $[x_k, x_{k-1}]$. On the other hand, if $f$ is not quadratic $\mu_k^{BB1}$ might not be positive or extremely large/small, it is thus necessary to ensure $\nu\leq \mu_k^{BB1}\leq 1/\nu$, with $\epsilon$ a fixed constant (e.g., $\nu=10^{-8}$). Notice that also in the quadratic case, the BB method \eqref{eq:bb1} might not ensure a monotone decrease of the objective function. On the other hand, while in the quadratic case this is not an issue, in the non-quadratic one, there are counter-examples showing that \eqref{eq:bb1} might not converge. The solution is thus to employ a line search, that to maintain the method as close to the original as possible, should be nonmonotone. 
+\begin{algorithm}[H]\label{alg:bb}
+	\caption{Nonmonotone Barzilai-Borwein Method}
+	
+	\KwIn{Pick $x_0\in \Rn$ arbitrarly, $\epsilon=10^{-4},\nu=10^{-8}, \alpha=0.1, \beta=0.5$.}
+	
+	$k = 0$
+	
+	\While{$\|\grad(x_k)\|> \epsilon$}{
+		
+		$\mu_k^{BB1} = \frac{(\grad(x_k)-\grad(x_{k-1}))^T(x_k-x_{k-1})}{\|x_k - x_{k-1}\|^2}$
+		
+		project $\mu_k^{BB1}$ into $[\nu,\frac{1}{\nu}]$ and call it $\tilde{\mu}_k^{BB1}$
+		
+		$t_k \leftarrow$ Nonmonotone Line Search(s, $\alpha$, $\beta$) with $s=\tilde{\mu}_k^{BB1}$
+		
+		$x_{k+1} = x_k - t_k \grad(x_k)$
+		
+		$k = k+1$
+	}
+\end{algorithm}
+
+
+
 
 \bibliographystyle{plain}
 \bibliography{../biblio}
