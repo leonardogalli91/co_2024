@@ -14,7 +14,7 @@
 \date{}
 \begin{document}
 	\maketitle
-	\section{Stationarity}
+\section{Definitions}
 	In this chapter we will consider constrained optimization problems with the following shape
 	\begin{equation}\label{eq:problem}
 		\begin{split}
@@ -37,8 +37,44 @@ A function $f:C\to \R$ defined on a convex set $C$ is said to be strictly convex
 	f(\lambda x_1 +(1-\lambda) x_2) < \lambda f(x_1) +(1-\lambda) f(x_2).
 \end{equation*}
 \end{definition}
-Also, a function is called concave if $-f$ is convex and strictly concave if $-f$ is strictly convex.
+\noindent A function is called concave if $-f$ is convex and strictly concave if $-f$ is strictly convex.
+\section{First Order Characterizations of Convex Functions}
+\begin{theorem}[Gradient inequality for convex functions]\label{eq:gradient_ineq}
+	Let $f\in \C(C)$, where $C$ is convex. Then f is convex over $C$ if and only if
+	\begin{equation*}
+		f(x) +\grad(x)^T(y-x)\leq f(y) \quad \forall x, y\in C.
+	\end{equation*}
+\end{theorem}
+\begin{proof}
+	Exercise.
+\end{proof}
+\begin{proposition}[Sufficiency of stationarity under convexity]
+	Let $f\in \C(C)$, where $C\subseteq\Rn$ is convex. Suppose that $\nabla f(x^*)=0$ for some $x^*\in C$. Then $x^*$ is a global minimizer of $f$ over $C$.
+\end{proposition}
 
+
+\section{Stationarity}
+
+\begin{definition}[Stationary points of convex constrained problems]
+	Let $f\in \C(C)$, where $C$ is closed and convex. Then $x^*$ is a stationary point of \eqref{eq:problem} if $\grad(x^*)(x-x^*)\geq 0 \; \forall x\in C.$ 
+\end{definition}
+\noindent In words, this means that there are no feasible descent directions of $f$ at $x^*$. This suggests that stationarity is in fact a necessary condition for a local minimum of \eqref{eq:problem}.
+\begin{theorem}[Stationarity as necessary optimality condition]\label{thm:stationarity}
+	Let $f\in \C(C)$, where $C$ is closed and convex and let $x^*$ be a local minimum of \eqref{eq:problem}. Then $x^*$ is a stationary point of \eqref{eq:problem}.
+\end{theorem}
+\begin{proof}
+	Let $x^*$ be a local minimum of $f$ and assume by contradiction that is not a stationary point of \eqref{eq:problem}. Then there exists $x\in C$ such that $\grad(x^*)(x-x^*)< 0$. Therefore, $f'(x,d)<0$, where $d=x-x^*$. Hence, by Lemma 1.1 of Chapter 2, there exists $\epsilon\in(0,1)$ such that $f(x^*+td)<f(x^*)\;\forall t\in(0,\epsilon).$ Since $C$ is convex, we have that $x+td = (1-t)x^*+tx\in C$, leading to the conclusion that $x^*$ is not a local optimum of \eqref{eq:problem}, which is a contradiction.
+\end{proof}
+
+\begin{theorem}[Stationarity as necessary optimality condition]
+	Let $f\in \C(C)$, where $C$ is closed and convex and $f$ is also convex. Let $x^*$ be a local minimum of \eqref{eq:problem}. Then $x^*$ is a stationary point of \eqref{eq:problem} iff $x^*$ is a optimal solution of \eqref{eq:problem}.
+\end{theorem}
+\begin{proof}
+	The necessity of the stationarity condition follows from Theorem \ref{thm:stationarity}. To prove the sufficiency, assume that $x^*$ is a stationary point of \eqref{eq:problem} and let $x\in C$. Then
+	\begin{equation*}
+		s
+	\end{equation*}
+\end{proof}
 
 \bibliographystyle{plain}
 \bibliography{../biblio}
