@@ -1,0 +1,45 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage[left=2.50cm, right=2.50cm, top=2.0cm, bottom=2.0cm]{geometry}
+\include{../macros}
+\title{Continuous Optimization}
+\author{Chapter 3: Constrained Optimization}
+\date{}
+\begin{document}
+	\maketitle
+	\section{Stationarity}
+	In this chapter we will consider constrained optimization problems with the following shape
+	\begin{equation}\label{eq:problem}
+		\begin{split}
+			\min \;\; &f(x)\\
+			\st& x \in C
+		\end{split}
+	\end{equation}
+\begin{definition}[Convex Set]
+	A set $C$ is said to be convex if given $x_1,x_2\in C$ and $\lambda\in [0,1]$, then $\lambda x_1 +(1-\lambda) x_2 \in C.$
+\end{definition}
+\begin{definition}[Convex Function]
+A function $f:C\to \R$ defined on a convex set $C$ is said to be convex if given $x_1,x_2\in C$ and $\lambda\in [0,1]$, then 
+\begin{equation*}
+	f(\lambda x_1 +(1-\lambda) x_2) \leq \lambda f(x_1) +(1-\lambda) f(x_2).
+\end{equation*}
+\end{definition}
+\begin{definition}[Strictly Convex Function]
+A function $f:C\to \R$ defined on a convex set $C$ is said to be strictly convex if given $x_1,x_2\in C$ and $\lambda\in [0,1]$, then 
+\begin{equation*}
+	f(\lambda x_1 +(1-\lambda) x_2) < \lambda f(x_1) +(1-\lambda) f(x_2).
+\end{equation*}
+\end{definition}
+Also, a function is called concave if $-f$ is convex and strictly concave if $-f$ is strictly convex.
+
+
+\bibliographystyle{plain}
+\bibliography{../biblio}
+\end{document}
