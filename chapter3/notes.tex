@@ -38,21 +38,39 @@ A function $f:C\to \R$ defined on a convex set $C$ is said to be strictly convex
 \end{equation*}
 \end{definition}
 \noindent A function is called concave if $-f$ is convex and strictly concave if $-f$ is strictly convex.
-\section{First Order Characterizations of Convex Functions}
-\begin{theorem}[Gradient inequality for convex functions]\label{eq:gradient_ineq}
+\section{Characterizations of Convex Functions}
+\begin{theorem}[Gradient characterization of convex functions]\label{thm:gradient_ineq}
 	Let $f\in \C(C)$, where $C$ is convex. Then f is convex over $C$ if and only if
-	\begin{equation*}
+	\begin{equation}\label{eq:grad_ineq}
 		f(x) +\grad(x)^T(y-x)\leq f(y) \quad \forall x, y\in C.
-	\end{equation*}
+	\end{equation}
 \end{theorem}
 \begin{proof}
 	Exercise.
 \end{proof}
-\begin{proposition}[Sufficiency of stationarity under convexity]
+\begin{proposition}[Sufficiency of stationarity under convexity]\label{prop:stationarity}
 	Let $f\in \C(C)$, where $C\subseteq\Rn$ is convex. Suppose that $\nabla f(x^*)=0$ for some $x^*\in C$. Then $x^*$ is a global minimizer of $f$ over $C$.
 \end{proposition}
-
-
+\begin{proof}
+	Let $z\in C$. Plugging $x=x^*$ and $y=z$ in Theorem \ref{thm:gradient_ineq} we obtain that 
+	\begin{equation*}
+		f(z)\geq f(x^*) +\grad(x^*)^T(z-x^*),
+	\end{equation*}
+which implies that $f(z)\geq f(x^*) $ because $\grad(x^*)=0$.
+\end{proof}
+We note that Proposition \ref{prop:stationarity} establishes only the sufficiency of the stationarity condition $\grad(x^*) = 0$ for guaranteeing that $x^*$ is a global optimal solution. When $C$is not the
+entire space, this condition is not necessary, in fact it might be that the points for which $\grad(\cdot)=0$ are not in $C$. On the other hand, when $C=\Rn$ and $f$ is convex, $\grad(x^*) = 0$ is both sufficient and necessary condition for $x^*$ to be a global minimum.
+We can now establish the conditions under which a twice continuously differentiable function $f$ is convex.
+\begin{theorem}[Second order characterization of convexity]
+	Let $f\in \Cii(C)$, where $C\subseteq\Rn$ is convex and open. Thus, we have that $f$ is convex iff $\hess(x)\succcurlyeq0\quad \forall x\in C.$
+\end{theorem}
+\begin{proof}
+	Suppose that $\hess(x) \succcurlyeq 0$ for all $x \in C$. We will prove \eqref{eq:grad_ineq} which is enough to establish convexity. Let $x,y\in C$, then by the Mean Value Theorem$^2$ we get that there exists $z\in[x,y]$ (and hence $z\in C$) for which 
+	\begin{equation}\label{eq:mvt2_app}
+		f(y) = f(x)+ \grad (x)^T(y-x) +\frac{1}{2}(y-x)^T\hess(z)(y-x).
+	\end{equation}
+Since $\hess(z) \succcurlyeq 0$, it follows that $(y-x)^T\hess(z)(y-x)\geq0$, which implies \eqref{eq:grad_ineq}.
+\end{proof}
 \section{Stationarity}
 
 \begin{definition}[Stationary points of convex constrained problems]
