@@ -51,7 +51,7 @@ we can provide the following very useful result by Jensen's.
 	\end{equation}
 \end{theorem}
 \begin{proof}
-	We will prove \eqref{eq:jensen} by induction on $k$. For $k=1$ the result is obvious ($f(x_1)\leq f(x_1)\;\;\forall x_1 \in C$). We now assume that \eqref{eq:jensen} holds for $k$ and we will prove that is also holds for $k+1$. Suppose we have $x_1, x_2, \dots, x_{k+1} \in C$ and $\lambda\in \Delta_{k+1}$, we will show that $f(z)\leq \sum_{i=1}^{k+1} \lambda_i f(x_i)$ with $z=\sum_{i=1}^{k+1} \lambda_i x_i$. If $\lambda_{k+1} =1$, then $z=x_{k+1}$ and \eqref{eq:jensen} is obvious. If $\lambda_{k+1}<1$, then
+	We will prove \eqref{eq:jensen} by induction on $k$. For $k=1$ the result is obvious ($f(x_1)\leq f(x_1)\;\;\forall x_1 \in C$). We now assume that \eqref{eq:jensen} holds for $k$ and we will prove that it also holds for $k+1$. Suppose we have $x_1, x_2, \dots, x_{k+1} \in C$ and $\lambda\in \Delta_{k+1}$, we will show that $f(z)\leq \sum_{i=1}^{k+1} \lambda_i f(x_i)$ with $z=\sum_{i=1}^{k+1} \lambda_i x_i$. If $\lambda_{k+1} =1$, then $z=x_{k+1}$ and \eqref{eq:jensen} is obvious. If $\lambda_{k+1}<1$, then
 	\begin{equation*}
 		\begin{split}
 			f(z)& = f\left(\sum_{i=1}^k \lambda_i x_i + \lambda_{k+1}x_{k+1} \right)\\
@@ -59,7 +59,7 @@ we can provide the following very useful result by Jensen's.
 			&\leq (1-\lambda_{k+1})f(v) + \lambda_{k+1} f(x_{k+1}),
 		\end{split}
 	\end{equation*}
-with $v= \frac{\lambda_i}{1-\lambda_{k+1}} x_i$. Since $\sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} = \frac{1-\lambda_{k+1}}{1-\lambda_{k+1}} = 1,$ it follows that $v$ is a convex combination of $k$ points from $C$, hence by the induction hypotesis we have that $f(v)\leq \sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} f(x_i)$, which combined with the equality above yields
+with $v= \sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} x_i$. Since $\sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} = \frac{1-\lambda_{k+1}}{1-\lambda_{k+1}} = 1,$ it follows that $v$ is a convex combination of $k$ points from $C$, hence by the induction hypotesis we have that $f(v)\leq \sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} f(x_i)$, which combined with the equality above yields
 \begin{equation*}
 	f(z) \leq \sum_{i=1}^{k+1} \lambda_i f(x_i).
 \end{equation*}
@@ -84,7 +84,7 @@ with $v= \frac{\lambda_i}{1-\lambda_{k+1}} x_i$. Since $\sum_{i=1}^k\frac{\lambd
 	\end{equation*}
 which implies that $f(z)\geq f(x^*) $ because $\grad(x^*)=0$.
 \end{proof}
-We note that Proposition \ref{prop:stationarity} establishes only the sufficiency of the stationarity condition $\grad(x^*) = 0$ for guaranteeing that $x^*$ is a global optimal solution. When $C$is not the
+We note that Proposition \ref{prop:stationarity} establishes only the sufficiency of the stationarity condition $\grad(x^*) = 0$ for guaranteeing that $x^*$ is a global optimal solution. When $C$ is not the
 entire space, this condition is not necessary, in fact it might be that the points for which $\grad(\cdot)=0$ are not in $C$. On the other hand, when $C=\Rn$ and $f$ is convex, $\grad(x^*) = 0$ is both sufficient and necessary condition for $x^*$ to be a global minimum.
 We can now establish the conditions under which a twice continuously differentiable function $f$ is convex.
 \begin{theorem}[Second order characterization of convexity]
@@ -102,26 +102,26 @@ To prove the opposite direction, assume that $f$ is convex over $C$. Let $x\in C
 \end{equation*}
 In addition, by the quadratic approximation theorem (Theorem 2.4 from Chapter 1), we have that 
 \begin{equation*}
-	f(x+\lambda y) = f(x) + \lambda \grad(x)^Ty + \frac{\lambda^2}{2}y^t\hess(x)y + o(\lambda^2||y||^2),
+	f(x+\lambda y) = f(x) + \lambda \grad(x)^Ty + \frac{\lambda^2}{2}y^T\hess(x)y + o(\lambda^2||y||^2),
 \end{equation*}
 which combined with the above inequality gives 
 \begin{equation*}
-	\frac{\lambda^2}{2}y^t\hess(x)y + o(\lambda^2||y||^2) \geq 0 \quad \forall \lambda\in (0,\epsilon).
+	\frac{\lambda^2}{2}y^T\hess(x)y + o(\lambda^2||y||^2) \geq 0 \quad \forall \lambda\in (0,\epsilon).
 \end{equation*}
 Dividing the latter inequality by $\lambda^2$ and taking the limit for $\lambda\to 0^+$, we have 
 \begin{equation*}
-	\frac{\lambda^2}{2}y^t\hess(x)y \geq 0 \quad \forall y \in \Rn,
+	y^T\hess(x)y \geq 0 \quad \forall y \in \Rn,
 \end{equation*}
 which concludes the proof.
 \end{proof}
 The same theorem works with positive definiteness and strict convexity, meaning also that the minimum in this case is unique.
 
 \section{Optimization over convex problems}
-From now on, we consider \eqref{eq:problem} where $f$ and $C$ are convex. As a direct consequence of the convexity of $f$ we have the following two theorems.
+From now on, we consider \eqref{eq:problem} where $f$ and $C$ are convex. As a direct consequence of the convexity of $f$ we have the following two theorems. Notice that the following result is not a direct consequence of Proposition \ref{prop:stationarity} as the local (and global) minimum, might be on the boundary of the set and not be stationary (in the sense of unconstrained optimization).
 \begin{theorem}[global=local in convex optimization] Let $f:C\to\R$ be a convex function over a convex set $C\subseteq \Rn$. Let $x^*\in C$ be a local minimum of $f$ over $C$. Then $x^*$ is a global minimum of $f$ over $C$.	
 \end{theorem}
 \begin{proof}
-	Since $x^*$ is a local minimum of $f$ over $C$ there exists $r$ such that $f(x)\geq f(x^*)$ for any $x\in C \cap B[x^*,r]$. Now let $y\in C$ with $y\neq x^*$. We want to show that $f(y) \geq f(x^*)$. Let $\lambda\in(0,1]$ be such that $x^*+\lambda (y-x^*)$. Let $\lambda\in(0,1]$ be such that $x^*+\lambda(y-x^*)\in B[x^*,r]$, for instance $\lambda=\frac{r}{||y-x^*||}$. Now, since $x^*+\lambda (y-x^*) \in C$, it follows that $f(x^*)\leq f(x^*+\lambda (y-x^*))$, and hence, by convexity of $f$, also 
+	Since $x^*$ is a local minimum of $f$ over $C$ there exists $r$ such that $f(x)\geq f(x^*)$ for any $x\in C \cap B[x^*,r]$. Now let $y\in C$ with $y\neq x^*$. We want to show that $f(y) \geq f(x^*)$. Let $\lambda\in(0,1]$ be such that $x^*+\lambda(y-x^*)\in B[x^*,r]$, for instance $\lambda=\frac{r}{||y-x^*||}$. Now, since $x^*+\lambda (y-x^*) \in B[x^*,r]\cap C$, it follows that $f(x^*)\leq f(x^*+\lambda (y-x^*))$, and hence, by convexity of $f$, also 
 	\begin{equation*}
 		f(x^*)\leq f(x^*+\lambda (y-x^*)) \leq (1-\lambda)f(x^*) +\lambda f(y)
 	\end{equation*}
