@@ -127,7 +127,7 @@ From now on, we consider \eqref{eq:problem} where $f$ and $C$ are convex. As a d
 	\end{equation*}
 Thus, $\lambda f(x^*) \leq \lambda f(y)$, which concludes the proof.
 \end{proof}
-\begin{theorem}[Convexity of the optimal set in convex optimization]
+\begin{theorem}[Convexity of the optimal set in convex optimization]\label{thm:unique}
 	Let $f:C\to \R$ be a convex function with $C\subseteq \Rn$ convex. Then, the set of optimal solutions of the problem \eqref{eq:problem}, which we denote by $X^*$ is convex. Moreover, if $f$ is strictly convex over $C$, then there exists at most one optimal solution.
 \end{theorem}
 \begin{proof}
@@ -140,7 +140,10 @@ which is a contradiction to the fact that $f^*$ is the optimal value.
 \subsection{Stationarity}
 Note that the following definition and the following theorem are given also for the more general case in which $f$ is not convex.
 \begin{definition}[Stationary points of convex constrained problems]
-	Let $f\in \C(C)$, where $C$ is closed and convex. Then $x^*$ is a stationary point of \eqref{eq:problem} if $\grad(x^*)(x-x^*)\geq 0 \; \forall x\in C.$ 
+	Let $f\in \C(C)$, where $C$ is closed and convex. Then $x^*$ is a stationary point of \eqref{eq:problem} if
+	\begin{equation}\label{eq:stationarity}
+	 \grad(x^*)(x-x^*)\geq 0 \; \forall x\in C.
+\end{equation}
 \end{definition}
 \noindent In words, this means that there are no feasible descent directions of $f$ at $x^*$. This suggests that stationarity is in fact a necessary condition for a local minimum of \eqref{eq:problem}.
 \begin{theorem}[Stationarity as necessary optimality condition of a convex constrained problem]\label{thm:stationarity}
@@ -150,7 +153,7 @@ Note that the following definition and the following theorem are given also for 
 	Let $x^*$ be a local minimum of $f$ and assume by contradiction that is not a stationary point of \eqref{eq:problem}. Then there exists $x\in C$ such that $\grad(x^*)(x-x^*)< 0$. Therefore, $f'(x,d)<0$, where $d=x-x^*$. Hence, by Lemma 1.1 of Chapter 2, there exists $\epsilon\in(0,1)$ such that $f(x^*+td)<f(x^*)\;\forall t\in(0,\epsilon).$ Since $C$ is convex, we have that $x+td = (1-t)x^*+tx\in C$, leading to the conclusion that $x^*$ is not a local optimum of \eqref{eq:problem}, which is a contradiction.
 \end{proof}
 
-\begin{theorem}[Stationarity as necessary and sufficient optimality condition for a convex problem]
+\begin{theorem}[Stationarity as necessary and sufficient optimality condition for a convex problem]\label{thm:convex_stationarity}
 	Let $f\in \C(C)$, where $C$ is closed and convex and $f$ is also convex. Let $x^*$ be a local minimum of \eqref{eq:problem}. Then $x^*$ is a stationary point of \eqref{eq:problem} iff $x^*$ is a optimal solution of \eqref{eq:problem}.
 \end{theorem}
 \begin{proof}
@@ -160,7 +163,104 @@ Note that the following definition and the following theorem are given also for 
 	\end{equation*}
 which concludes the proof.
 \end{proof}
-
+\noindent Unfortunately, \eqref{eq:stationarity} is not an easy condition to check, we need something else.
+\subsection{Orthogonal Projection}
+We can instead characterize stationary points by using the projection operator.
+Given a nonempty closed convex set $C$, the orthogonal projection operator $P_C:\Rn \to C$ is defined by 
+\begin{equation}\label{eq:projection}
+	P_C(x) = \argmin\left\{||x-y||^2: y\in C\right\}
+\end{equation}
+The orthogonal projection operator with input $x$ returns the vector in $C$ that is closest
+to $x$. Note that the orthogonal projection operator is defined as a solution of a convex
+optimization problem, specifically, a minimization of a convex quadratic function subject to a convex feasibility set. The first orthogonal projection theorem states that the orthogonal projection operator is in fact well-defined, meaning that the optimization problem in \eqref{eq:projection} has a unique optimal solution.
+\begin{theorem}[First Projection Theorem]
+	Let $C$ be a nonempty closed convex set. Then problem \eqref{eq:projection} has a unique optimal solution.
+\end{theorem}
+\begin{proof}
+	As $C$ is closed and $||x-y||^2$ is coercive, we have that the problem admits at least one solution. Moreover, $||x-y||^2$ is strictly convex as the objective function is quadratic with
+	positive definite matrix. %TODO
+	Thus, from Theorem \ref{thm:unique} we get that \eqref{eq:projection} has a unique solution.
+\end{proof}
+The second projection theorem, provides an useful characterization of the projection operator. Geometrically it states that for a given closed and convex set $C$, $x \in \Rn$, and for any $y\in C$, the angle between $x-P_C (x)$ and $y-P_C (x)$ is obtuse.
+This phenomenon is illustrated in Figure \ref{fig:second_projection}.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{second_projection}.
+	\caption{The orthogonal projection operator.} \label{fig:second_projection}
+\end{figure}
+\begin{theorem}[Second Projection Theorem]\label{thm:second_projection}
+	Let $C$ be a nonempty closed convex set. Then $z=P_C(x)$ iff 
+	\begin{equation}\label{eq:second_projection}
+		(x-z)^T(y-z) \leq 0\quad \forall \,y\in C.
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	$z=P_C(x)$ iff it is the optimal solution of \eqref{eq:projection} iff (by Theorem \ref{thm:convex_stationarity})
+	\begin{equation*}
+		\grad(z)^T(y-z)\geq 0 \quad \forall\,y\in C,
+	\end{equation*}
+which concludes the proof as $\grad(z) = x-z.$
+\end{proof}
+Another important property of the orthogonal projection operator is given in the
+following theorem, which also establishes the so-called nonexpansiveness property of $P_C$.
+\begin{theorem}[Nonexpansiveness of the projection operator]
+	Let $C$ be a closed and convex set. Then, for any $v,w\in \Rn$
+	\begin{itemize}
+		\item[a)] 
+		\begin{equation}\label{eq:nonexpansiveness_1}
+			(P_C(v)-P_C(w))^T(v-w)\geq ||P_C(v)-P_C(w)||^2
+		\end{equation}
+		\item[b)]
+		\begin{equation}\label{eq:nonexpansiveness_2}
+			 ||P_C(v)-P_C(w)||\leq ||v-w||.
+		\end{equation}
+	\end{itemize}
+\end{theorem}
+\begin{proof}
+	From Theorem \ref{thm:second_projection} we have that for any $x \in \Rn$ and $y\in C$
+	\begin{equation*}
+		(x-P_C(x))^T(y-P_C(x)) \leq 0.
+	\end{equation*}
+Replacing $x=v$ and $y=P_C(w)$ we have
+\begin{equation*}
+	(v-P_C(v))^T(P_C(w)-P_C(v)) \leq 0.
+\end{equation*}
+Replacing, instead, $x=w$ and $y=P_C(v)$
+\begin{equation*}
+	(w-P_C(w))^T(P_C(v)-P_C(w)) \leq 0.
+\end{equation*}
+Now, summing the two inequalities we get
+\begin{equation*}
+	(P_C(w)-P_C(v))^T(v-w+P_C(w)-P_C(v)) \leq 0,
+\end{equation*}
+and hence, 
+\begin{equation*}
+	(P_C(v)-P_C(w))^T(v-w) \geq ||P_C(w)-P_C(v)||^2.
+\end{equation*}
+To prove \eqref{eq:nonexpansiveness_2}, we note that if $P_C(v) = P_C(w)$ inequality is trivial. Thus, we assume $P_C(v) \neq P_C(w)$. Then by Cauchy-Schwartz, we have 
+\begin{equation*}
+	(P_C(v)-P_C(w))^T(v-w) \leq ||P_C(v)-P_C(w)|| \cdot||v-w||,
+\end{equation*}
+which combined with \eqref{eq:nonexpansiveness_1} gives 
+\begin{equation*}
+	||P_C(v)-P_C(w)||^2 \leq ||P_C(v)-P_C(w)|| \cdot||v-w||,
+\end{equation*}
+which concludes the proof as $P_C(v) \neq P_C(w)$.
+\end{proof}
+Coming back to stationarity, let us provide the alternative characterization of a stationary point through the projection operator. 
+\begin{theorem}
+	Let $f\in C^1(C)$ with $C$ closed and convex and let $s>0$. $x^*$ is a stationary point of the problem \eqref{eq:problem} iff 
+	\begin{equation}\label{eq:stationary_projection}
+		x^*=P_C(x^*-s\grad(x^*)).
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	By the second projection theorem (Theorem \ref{thm:second_projection}), we get that $x^*=P_C(x^*-s\grad(x^*))$ iff
+	\begin{equation*}
+		(x^*-s\grad(x^*) -x^*)^T(x-x^*)\leq 0, 
+	\end{equation*}
+which concludes the proof, as $x^*$ is a stationary point when $\grad(x^*)^T(x-x^*)\geq0$
+\end{proof}
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
