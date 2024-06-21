@@ -261,6 +261,26 @@ Coming back to stationarity, let us provide the alternative characterization of 
 	\end{equation*}
 which concludes the proof, as $x^*$ is a stationary point when $\grad(x^*)^T(x-x^*)\geq0$
 \end{proof}
+\subsection{Projected Gradient Method}
+The characterization of stationary points through equation \eqref{eq:stationary_projection} directly suggest a new algorithm for solving convex constrained optimization methods.\\
+\begin{algorithm}[H]\label{alg}
+	\caption{Projected Gradient Method}
+	
+	\KwIn{$x_0\in \Rn$, $\epsilon>0$}
+	
+	$k = 0$
+	
+	\While{$||x_{k-1}-x_k||> \epsilon$}{
+		
+		Pick a step size $t_k$ with a line search procedure
+		
+		$x_{k+1} = P_C(x_k-t_k\grad(x_k)$
+		
+		$k = k+1$
+	}
+\end{algorithm}
+
+The convergence of this algorithm follows a similar path a
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
