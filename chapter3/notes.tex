@@ -150,7 +150,7 @@ Note that the following definition and the following theorem are given also for 
 	Let $f\in \C(C)$, where $C$ is closed and convex and let $x^*$ be a local minimum of \eqref{eq:problem}. Then $x^*$ is a stationary point of \eqref{eq:problem}.
 \end{theorem}
 \begin{proof}
-	Let $x^*$ be a local minimum of $f$ and assume by contradiction that is not a stationary point of \eqref{eq:problem}. Then there exists $x\in C$ such that $\grad(x^*)(x-x^*)< 0$. Therefore, $f'(x,d)<0$, where $d=x-x^*$. Hence, by Lemma 1.1 of Chapter 2, there exists $\epsilon\in(0,1)$ such that $f(x^*+td)<f(x^*)\;\forall t\in(0,\epsilon).$ Since $C$ is convex, we have that $x+td = (1-t)x^*+tx\in C$, leading to the conclusion that $x^*$ is not a local optimum of \eqref{eq:problem}, which is a contradiction.
+	Let $x^*$ be a local minimum of $f$ and assume by contradiction that is not a stationary point of \eqref{eq:problem}. Then there exists $x\in C$ such that $\grad(x^*)(x-x^*)< 0$. Therefore, $f'(x,d)<0$, where $d=x-x^*$. Hence, by Lemma 1.1 of Chapter 2, there exists $\epsilon\in(0,1)$ such that $f(x^*+td)<f(x^*)\;\forall t\in(0,\epsilon).$ Since $C$ is convex, we have that $x^*+td = (1-t)x^*+tx\in C$, leading to the conclusion that $x^*$ is not a local optimum of \eqref{eq:problem}, which is a contradiction.
 \end{proof}
 
 \begin{theorem}[Stationarity as necessary and sufficient optimality condition for a convex problem]\label{thm:convex_stationarity}
@@ -170,16 +170,15 @@ Given a nonempty closed convex set $C$, the orthogonal projection operator $P_C:
 \begin{equation}\label{eq:projection}
 	P_C(x) = \argmin\left\{||x-y||^2: y\in C\right\}
 \end{equation}
-The orthogonal projection operator with input $x$ returns the vector in $C$ that is closest
+The orthogonal projection operator with input $x$ returns the vector in $C$ that is the closest (in $\ell_2$-norm)
 to $x$. Note that the orthogonal projection operator is defined as a solution of a convex
 optimization problem, specifically, a minimization of a convex quadratic function subject to a convex feasibility set. The first orthogonal projection theorem states that the orthogonal projection operator is in fact well-defined, meaning that the optimization problem in \eqref{eq:projection} has a unique optimal solution.
 \begin{theorem}[First Projection Theorem]
 	Let $C$ be a nonempty closed convex set. Then problem \eqref{eq:projection} has a unique optimal solution.
 \end{theorem}
 \begin{proof}
-	As $C$ is closed and $||x-y||^2$ is coercive, we have that the problem admits at least one solution. Moreover, $||x-y||^2$ is strictly convex as the objective function is quadratic with
-	positive definite matrix. %TODO
-	Thus, from Theorem \ref{thm:unique} we get that \eqref{eq:projection} has a unique solution.
+	As $C$ is closed and $||x-y||^2$ is coercive, we have that the problem admits at least one solution (by Theorem 3.8 of Chapter 1). Moreover, $||x-y||^2$ is strictly convex as the objective function is quadratic with
+	positive definite Hessian (the identity). Thus, from Theorem \ref{thm:unique} we get that \eqref{eq:projection} has a unique solution.
 \end{proof}
 The second projection theorem, provides an useful characterization of the projection operator. Geometrically it states that for a given closed and convex set $C$, $x \in \Rn$, and for any $y\in C$, the angle between $x-P_C (x)$ and $y-P_C (x)$ is obtuse.
 This phenomenon is illustrated in Figure \ref{fig:second_projection}.
@@ -237,7 +236,7 @@ and hence,
 \begin{equation*}
 	(P_C(v)-P_C(w))^T(v-w) \geq ||P_C(w)-P_C(v)||^2.
 \end{equation*}
-To prove \eqref{eq:nonexpansiveness_2}, we note that if $P_C(v) = P_C(w)$ inequality is trivial. Thus, we assume $P_C(v) \neq P_C(w)$. Then by Cauchy-Schwartz, we have 
+To prove \eqref{eq:nonexpansiveness_2}, we note that if $P_C(v) = P_C(w)$, the inequality is trivial. Thus, we assume $P_C(v) \neq P_C(w)$. Then by Cauchy-Schwartz, we have 
 \begin{equation*}
 	(P_C(v)-P_C(w))^T(v-w) \leq ||P_C(v)-P_C(w)|| \cdot||v-w||,
 \end{equation*}
@@ -324,9 +323,37 @@ This generalized sufficient decrease property allows us to prove similar results
 	\begin{equation*}
 		f(x_{k+1}) \leq f(x_k)+\grad(x_k)^T(x_{k+1}-x_k) +\frac{L}{2}||x_{k+1}-x_k||^2.
 	\end{equation*}
-Let $x^*$ be a global minimum of \eqref{eq:problem}, then the above inequality together with \eqref{eq:grad_ineq} implies that
+Let $x^*$ be a global minimum of \eqref{eq:problem}, then the gradient characterization of convexity \eqref{eq:grad_ineq} implies that $f(x_k)\leq f(x^*)+\grad(x_k)^T(x_k-x^*)$, which together with the previous inequality implies that
+\begin{equation}\label{eq:intermediate}
+	f(x_{k+1}) \leq f(x^*)+\grad(x_k)^T(x_k-x^*)+\grad(x_k)^T(x_{k+1}-x_k) +\frac{L}{2}||x_{k+1}-x_k||^2.
+\end{equation}
+By the second projection theorem \eqref{eq:second_projection} applied on the projected point $x_{k+1}$, we have that 
 \begin{equation*}
-	a
+\left(x_k -t\grad(x_k) -x_{k+1}\right)^T\left(x^*-x_{k+1}\right)\leq 0
+\end{equation*}
+so that 
+\begin{equation*}
+	\grad(x_k)^T\left(x_{k+1}-x^*\right) \leq \frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right).
+\end{equation*}
+Therefore, from the above inequality, \eqref{eq:intermediate} and $t\leq \frac{1}{L}$, we get
+\begin{equation*}
+	\begin{split}
+		f(x_{k+1}) &\leq f(x^*)+\grad(x_k)^T(x_k-x^*)+\grad(x_k)^T(x_{k+1}-x_k) +\frac{L}{2}||x_{k+1}-x_k||^2\\
+		& = f(x^*)+\grad(x_k)^T(x_{k+1}-x^*) +\frac{L}{2}||x_{k+1}-x_k||^2\\
+		&\leq f(x^*)+\frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right)+\frac{L}{2}||x_{k+1}-x_k||^2\\
+		&\leq f(x^*)+\frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right)+\frac{1}{2t}||x_{k+1}-x_k||^2\\
+		&= f(x^*)+\frac{1}{2t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*+x_k - x^*\right)\\
+		&= f(x^*)+\frac{1}{2t}(x_k-x^*)^T\left(x_{k+1}-x^*+x_k - x^*\right) + \frac{1}{2t}(x^*-x_{k+1})^T\left(x_{k+1}-x^*+x_k - x^*\right)\\
+		&= f(x^*)+\frac{1}{2t}\left(||x_k-x^*\|^2 -\|x_{k+1}-x^*\|^2\right)
+	\end{split}
+\end{equation*}
+establishing part (a). To achieve (b), we sum the inequalities (a) for $k=0,1, \dots, n-1$ and obtain
+\begin{equation*}
+	||x_n-x^*\|^2 -\|x_0-x^*\|^2 \leq 2t \sum_{k=0}^{n-1} \left(f(x^*)-f(x_{k+1})\right) \leq 2tn(f(x^*)-f(x_n)),
+\end{equation*}
+where in the last inequality we used the fact that $f(x_{k+1})\leq f(x_k)$, which, in turn, is a consequence of the Descent Lemma and the fact that $t\in(0, \frac{1}{L})$. Thus, 
+\begin{equation*}
+	f(x_n) -f(x^*) \leq \frac{||x_0-x^*\|^2 -\|x_n-x^*\|^2}{2tn}\leq \frac{||x_0-x^*\|^2}{2tn}.
 \end{equation*}
 \end{proof}
 
