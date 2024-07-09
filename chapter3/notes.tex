@@ -8,7 +8,9 @@
 \usepackage{mathtools}
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \usepackage[left=2.50cm, right=2.50cm, top=2.0cm, bottom=2.0cm]{geometry}
+
 \include{../macros}
+
 \title{Continuous Optimization}
 \author{Chapter 3: Constrained Optimization}
 \date{}
@@ -142,7 +144,7 @@ Note that the following definition and the following theorem are given also for 
 \begin{definition}[Stationary points of convex constrained problems]
 	Let $f\in \C(C)$, where $C$ is closed and convex. Then $x^*$ is a stationary point of \eqref{eq:problem} if
 	\begin{equation}\label{eq:stationarity}
-	 \grad(x^*)(x-x^*)\geq 0 \; \forall x\in C.
+	 \grad(x^*)^T(x-x^*)\geq 0 \; \forall x\in C.
 \end{equation}
 \end{definition}
 \noindent In words, this means that there are no feasible descent directions of $f$ at $x^*$. This suggests that stationarity is in fact a necessary condition for a local minimum of \eqref{eq:problem}.
@@ -265,15 +267,13 @@ The characterization of stationary points through equation \eqref{eq:stationary_
 \begin{algorithm}[H]\label{alg}
 	\caption{Projected Gradient (PG) Method}
 	
-	\KwIn{$x_0\in \Rn$, $\epsilon>0$}
+	\KwIn{$x_0\in \Rn$, $\epsilon>0$, $t\in (0,\frac{L}{2})$}
 	
 	$k = 0$
 	
 	\While{$||x_{k-1}-x_k||> \epsilon$}{
-		
-		Pick a constant step size $t\in (0,\frac{L}{2})$
-		
-		$x_{k+1} = P_C(x_k-t_k\grad(x_k)$
+				
+		$x_{k+1} = P_C(x_k-t\grad(x_k)$
 		
 		$k = k+1$
 	}
@@ -310,7 +310,7 @@ This generalized sufficient decrease property allows us to prove similar results
 	\begin{itemize}
 		\item[(a)] for any $k\geq0$ and $x^*\in X^*$
 		\begin{equation*}
-			2t(f(x_{k+1}) -f^*) \leq ||x_k-x^*||^2 - ||x_{k+1}-x^*||,
+			2t(f(x_{k+1}) -f^*) \leq ||x_k-x^*||^2 - ||x_{k+1}-x^*||^2,
 		\end{equation*}
 		\item[(b)] for any $n\geq 0$:
 		\begin{equation*}
@@ -331,7 +331,11 @@ By the second projection theorem \eqref{eq:second_projection} applied on the pro
 \begin{equation*}
 \left(x_k -t\grad(x_k) -x_{k+1}\right)^T\left(x^*-x_{k+1}\right)\leq 0
 \end{equation*}
-so that 
+if and only if
+\begin{equation*}
+\grad(x_k)^T\left(x_{k+1}-x^*\right)+ \frac{1}{t}\left(x_k -x_{k+1}\right)^T\left(x^*-x_{k+1}\right)\leq0
+\end{equation*}
+if and only if
 \begin{equation*}
 	\grad(x_k)^T\left(x_{k+1}-x^*\right) \leq \frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right).
 \end{equation*}
@@ -343,7 +347,9 @@ Therefore, from the above inequality, \eqref{eq:intermediate} and $t\leq \frac{1
 		&\leq f(x^*)+\frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right)+\frac{L}{2}||x_{k+1}-x_k||^2\\
 		&\leq f(x^*)+\frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right)+\frac{1}{2t}||x_{k+1}-x_k||^2\\
 		&= f(x^*)+\frac{1}{2t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*+x_k - x^*\right)\\
+		&= f(x^*)+\frac{1}{2t}(x_k-x_{k+1}+x^*-x^*)^T\left(x_{k+1}-x^*+x_k - x^*\right)\\
 		&= f(x^*)+\frac{1}{2t}(x_k-x^*)^T\left(x_{k+1}-x^*+x_k - x^*\right) + \frac{1}{2t}(x^*-x_{k+1})^T\left(x_{k+1}-x^*+x_k - x^*\right)\\
+		&= f(x^*)+\frac{1}{2t}\left(||x_k-x^*||^2+(x_k-x^*)^T(x_{k+1}-x^*)-(x_k-x^*)^T(x_{k+1}-x^*) -||x_{k+1}-x^*||^2\right)\\
 		&= f(x^*)+\frac{1}{2t}\left(||x_k-x^*\|^2 -\|x_{k+1}-x^*\|^2\right)
 	\end{split}
 \end{equation*}
@@ -357,6 +363,60 @@ where in the last inequality we used the fact that $f(x_{k+1})\leq f(x_k)$, whic
 \end{equation*}
 \end{proof}
 
+
+
+
+\section{KKT Conditions}
+In this chapter we will derive the necessary optimality conditions, i.e., Karush-Kunh-Tucker conditions, for the most general case where $C$ is possibly nonconvex. In particular, we consider problems of the following shape
+\begin{equation}\label{eq:last_problem}
+\begin{split}
+\min \;\; &f(x)\\
+\st& g_i(x)\leq 0, \quad i=0, \dots, m,
+\end{split}
+\end{equation}
+where $f,g_i\in \C(\R)$ but possibly not convex. Notice that this class of problems is very general, as equality constraints can be included observing that $h(x)=0$ can be replaced by 2 inequalities $h(x)\leq0$ and $-h(x)\leq 0$. From now on $C:=\{x\in\Rn: g_i(x)\leq 0, \; i\in [m] \}$. 
+\begin{definition}[Feasible Descent Direction] A vector $d$ is called feasible descent direction at $x\in C$ if $\grad(x)^Td<0$ and there exists $\epsilon>0$ such that $x+td\in C$ for all $t\in [0,\epsilon].$
+
+\end{definition}
+Obviously, a necessary local optimality condition of a point x is that it does not have
+any feasible descent directions.
+\begin{lemma} Let $x^*$ be a local optimum of \eqref{eq:last_problem}, then there are no feasible descent directions at $x^*.$
+\end{lemma}
+\begin{proof}
+The proof goes by contradiction and follows directly from the definition of feasible descent direction and directional derivative.
+\end{proof}
+\begin{definition}[Active Constraints] Let $g_i(x)\leq 0, \; i\in [m] $ be a set of inequalities. The active constraints at $\bar{x}$ are the constraints satisfied as equalities at $\bar{x}$. The set of active constraints is denoted by $I(x):=\{i\in[m]: g_i(x)=0\}.$
+\end{definition}
+
+\begin{lemma}
+Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem} and let $I(x^*)$ be the set of active constraints at $x^*$. Then, there does not exists a vector $d\in\Rn$ such that 
+\begin{align*}
+&\grad(x^*)^Td<0,\\
+&\nabla g_i (x^*)^Td<0,\quad i \in I(x^*).
+\end{align*}
+\end{lemma}
+\begin{proof}
+Suppose by contradiction that $d$ satisfies the system of inequalities above. Then it follows that there exists $\epsilon_1>0$ such that $f(x^*+td)<f(x^*)$ and $g_i(x+td)<g(x^*)=0$ for any $t\in (0,\epsilon_1)$ and $i\in I(x^*)$. For any $i\not \in I(x^*)$, we have $g_i(x^*)<0$ and hence, by continuity of $g_i$ it follows that there exists $\epsilon_2>0$ such that $g_i(x^*+td)<0$ for any $t\in (0,\epsilon_2)$ and $i\not \in I$. We can thus conclude that 
+\begin{align*}
+&\grad(x^*+td)^Td<f(x^*),\\
+&\nabla g_i (x^*+td)^Td<0,\quad i \in [m],
+\end{align*}
+for all $t\in (0,\min\{\epsilon_1,\epsilon_2\})$, which is a contradiction to the local optimality of $x^*$.
+\end{proof}
+We have thus shown that a necessary optimality condition for local optimality is the infeasibility of a certain system of strict inequalities. On the other hand, similarly to the stationarity condition, this system is difficult to use in practice. We will state now the Fritz-John conditions.
+\begin{theorem}[Fritz-John Conditions]
+Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}. Then there exists multipliers $\lambda_0,\dots, \lambda_1, \dots, \lambda_m$ such that they are not all zeros and such that 
+\begin{equation}\label{eq:fritzjohn}
+\begin{split}
+\lambda_0\grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*) &= 0,\\
+\lambda_ig_i(x^*)&=0 \quad i=1, \dots, m.
+\end{split}
+\end{equation}
+\end{theorem}
+\noindent In order to prove this theorem we need a rather large digression into the Alternative Theorems. We begin with a very simple yet powerful result on convex sets, namely the separation theorem between a point and a closed convex set. This result will be the basis for all the optimality conditions that will be discussed later on.
+\begin{theorem}[Strict Separation Theorem]
+	
+\end{theorem}
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
