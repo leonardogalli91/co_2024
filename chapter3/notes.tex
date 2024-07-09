@@ -366,8 +366,8 @@ where in the last inequality we used the fact that $f(x_{k+1})\leq f(x_k)$, whic
 
 
 
-\section{KKT Conditions}
-In this chapter we will derive the necessary optimality conditions, i.e., Karush-Kunh-Tucker conditions, for the most general case where $C$ is possibly nonconvex. In particular, we consider problems of the following shape
+\section{Constrained nonconvex optimization}
+In this chapter we will derive the necessary optimality conditions, i.e., Karush-Kunh-Tucker (KKT) conditions, for the most general case where $C$ is possibly nonconvex. In particular, we consider problems of the following shape
 \begin{equation}\label{eq:last_problem}
 \begin{split}
 \min \;\; &f(x)\\
@@ -378,7 +378,7 @@ where $f,g_i\in \C(\R)$ but possibly not convex. Notice that this class of probl
 \begin{definition}[Feasible Descent Direction] A vector $d$ is called feasible descent direction at $x\in C$ if $\grad(x)^Td<0$ and there exists $\epsilon>0$ such that $x+td\in C$ for all $t\in [0,\epsilon].$
 
 \end{definition}
-\noindent Obviously, a necessary local optimality condition of a point x is that it does not have
+\noindent Obviously, a necessary local optimality condition of a point $x$ is that it does not have
 any feasible descent directions.
 \begin{lemma} Let $x^*$ be a local optimum of \eqref{eq:last_problem}, then there are no feasible descent directions at $x^*.$
 \end{lemma}
@@ -389,7 +389,7 @@ The proof goes by contradiction and follows directly from the definition of feas
 \end{definition}
 
 \begin{lemma}
-Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem} and let $I(x^*)$ be the set of active constraints at $x^*$. Then, there does not exists a vector $d\in\Rn$ such that 
+Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem} and let $I(x^*)$ be the set of active constraints at $x^*$. Then, there does not exist a vector $d\in\Rn$ such that 
 \begin{align*}
 &\grad(x^*)^Td<0,\\
 &\nabla g_i (x^*)^Td<0,\quad i \in I(x^*).
@@ -418,7 +418,9 @@ Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}. Then there 
 	\includegraphics[width=0.5\linewidth]{separation}.
 	\caption{Strict separation of point from a closed and convex set.} \label{fig:separtation}
 \end{figure}
-\noindent In order to prove this theorem we need a rather large digression into the Alternative Theorems. We begin with a very simple yet powerful result on convex sets, namely the separation theorem between a point and a closed convex set. This result will be the basis for all the optimality conditions that will be discussed later on.
+\noindent In order to prove this theorem we need a rather large digression into the Alternative Theorems. 
+\subsection{Alternative Theorems}
+We begin with a very simple yet powerful result on convex sets, namely the separation theorem between a point and a closed convex set. This result will be the basis for all the optimality conditions that will be discussed later on.
 \begin{theorem}[Strict Separation Theorem]\label{thm:separation}
 	Let $C$ be a closed and convex set and let $y\not \in C$. Then there exists $p\in \Rn \setminus \{0\}$ and $\alpha\in \Rn$ such that
 	\begin{equation*}
@@ -487,7 +489,7 @@ or to
 \end{equation*}
 Let us now prove that $Ap \leq 0$ (notice that this means component-wise). By contradiction, if there was an index $i\in \{1,2, \dots,m\}$ such that $(Ap)_i>0$, then for $y=\beta e_i$ we would have that $(Ap)^Ty = \beta (Ap)_i$ which is an expression that goes to $\infty$ as $\beta\to \infty$, and, thus, cannot be bounded by a constant $\alpha$. At this point we have found a system for which $Ap\leq 0$ and $p^Tc=c^Tp>0$, which contradicts the implication $M$.
 \end{proof}
-\noindent In order to prove Gordon's alternative theorem, we are going to use Farkas' lemma in the following formulation
+\noindent In order to prove Gordon's alternative theorem, we are going to use Farkas' lemma in the following formulation.
 \begin{lemma}[Farkas' lemma, first formulation]\label{lemma:Farkas}
 	Let $c\in \Rn$ and $A\in \Rmn.$ Then exactly one of the following system has a solution:
 	\begin{itemize}
@@ -511,6 +513,56 @@ Let us now prove that $Ap \leq 0$ (notice that this means component-wise). By co
 	\hline
 \end{tabular}\\[1\baselineskip]
 In particular, this means that the two formulations are equivalent as the first formulation (Lemma \ref{lemma:Farkas}) states that exactly one between $I$ and $II$ has solutions while the second formulation (Lemma \ref{lemma:farkas}) states that $M$ and $N$ are equivalent.
+
+\begin{theorem}[Gordon's Alternative Theorem]
+	Let $A\in\Rmn$. Then exactly one of the following statements has a solution:
+	\begin{itemize}
+		\item[M.] $Ax<0$.
+		\item[N.] $p\neq 0, A^Tp = 0, p\geq 0$.
+	\end{itemize}
+\end{theorem}
+\begin{proof}
+	Suppose that the system $M$ has a solution. We will prove that $N$ is infeasible. Assume by contradiction that $B$ is feasible, meaning that there exists $p\neq0$ satisfying $A^Tp=0, p\geq0$. Multiplying the equality $A^Tp=0$ from the left by $x^T$ yields 
+	\begin{equation*}
+		(Ax)^Tp=0
+	\end{equation*}
+which is impossible since $Ax<0$ and $0\neq p\geq0$.
+\par Now suppose that the system $M$ does not have a solution. Note that the system $M$ is equivalent to 
+\begin{align*}
+	Ax+se&\leq 0\\
+	s&>0, s\in \R. 
+\end{align*}
+The latter system can be rewritten as 
+\begin{equation*}
+	\tilde{A}\begin{pmatrix}
+		x\\
+		s
+	\end{pmatrix}\leq 0, \qquad c^T\begin{pmatrix}
+	x\\
+	s
+\end{pmatrix}>0,
+\end{equation*}
+where $\tilde{A}=(A e)$ and $c=e_{n+1}$. The infeasibility of $M$ is thus equivalent to the infeasibility of the system 
+\begin{equation*}
+\tilde{A}w\leq 0, \quad c^Tw>0,\quad w\in \R^{n+1}.
+\end{equation*}
+By Farkas' lemma, there exists $z\in \R^{m}_+$ such that 
+\begin{equation*}
+	\begin{pmatrix}
+		A^T\\
+		e^T
+	\end{pmatrix}z = c,
+\end{equation*}
+that is, there exists $z\in \R^m_+$ such that 
+\begin{equation*}
+	A^Tz=0, \qquad e^Tz=1.
+\end{equation*}
+Since $ e^Tz=1$ it follows in particular that $z\neq 0$, and we have thus shown the existence of $0\neq z \in \R^m_+$ such that $A^Tz=0$, that is $N$ is feasible.
+
+\subsection{KKT Conditions}
+Before stating and proving the KKT conditions, 
+
+\end{proof}
 
 \bibliographystyle{plain}
 \bibliography{../biblio}
