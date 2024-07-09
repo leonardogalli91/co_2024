@@ -378,7 +378,7 @@ where $f,g_i\in \C(\R)$ but possibly not convex. Notice that this class of probl
 \begin{definition}[Feasible Descent Direction] A vector $d$ is called feasible descent direction at $x\in C$ if $\grad(x)^Td<0$ and there exists $\epsilon>0$ such that $x+td\in C$ for all $t\in [0,\epsilon].$
 
 \end{definition}
-Obviously, a necessary local optimality condition of a point x is that it does not have
+\noindent Obviously, a necessary local optimality condition of a point x is that it does not have
 any feasible descent directions.
 \begin{lemma} Let $x^*$ be a local optimum of \eqref{eq:last_problem}, then there are no feasible descent directions at $x^*.$
 \end{lemma}
@@ -413,10 +413,105 @@ Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}. Then there 
 \end{split}
 \end{equation}
 \end{theorem}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{separation}.
+	\caption{Strict separation of point from a closed and convex set.} \label{fig:separtation}
+\end{figure}
 \noindent In order to prove this theorem we need a rather large digression into the Alternative Theorems. We begin with a very simple yet powerful result on convex sets, namely the separation theorem between a point and a closed convex set. This result will be the basis for all the optimality conditions that will be discussed later on.
-\begin{theorem}[Strict Separation Theorem]
-	
+\begin{theorem}[Strict Separation Theorem]\label{thm:separation}
+	Let $C$ be a closed and convex set and let $y\not \in C$. Then there exists $p\in \Rn \setminus \{0\}$ and $\alpha\in \Rn$ such that
+	\begin{equation*}
+		p^Ty>\alpha \qquad \text{and} \qquad p^Tx\leq \alpha \;\;\forall x\in C.
+	\end{equation*}
 \end{theorem}
+\begin{proof}
+By the second projection theorem, the vector $\bar{x}=P_C(y)\in C$ satisfies
+\begin{equation*}
+	(y-\bar{x})^T(x-\bar{x}) \leq 0 \;\; \forall x\in C
+\end{equation*}
+which is the same as 
+\begin{equation*}
+	(y-\bar{x})^T x \leq (y-\bar{x})^T \bar{x} \;\; \forall x\in C.
+\end{equation*}
+Denote $p=y-x\neq 0$ (since $y\not \in C$) and $\alpha= (y-\bar{x})^T \bar{x}$. Then we have that $p^Tx\leq \alpha\;\forall x\in C$. On the other hand,
+\begin{equation*}
+	p^Ty = (y-\bar{x})^Ty = (y-\bar{x})^T(y-\bar{x}) + (y-\bar{x})^T\bar{x} = ||y-\bar{x}||^2 + \alpha > \alpha,
+\end{equation*}
+and the result is established.
+\end{proof}
+\noindent Now, before going on with two more alternative theorems, we need to show that the conic hull of a fine set is closed and convex.
+\begin{definition}[Conic Hull] Let $S\subseteq \Rn$. Then the conic hull of $S$, denoted by $\cone(S)$,
+	is the set comprising all the conic combinations of vectors from S:
+	\begin{equation*}
+		\cone(S):=\left\{\sum_{i=1}^k \lambda_i x_i: x_1,\dots, x_k\in S, \lambda\in \R^k_+, k \in \N\right\}
+	\end{equation*}
+\end{definition}
+\begin{lemma}\label{lemma:cone}
+	Let $a_1, a_2, \dots a_k\in \Rn$. Then $\cone(\{a_1, \dots, a_k\})$ is closed and convex.
+\end{lemma}
+\begin{proof}
+	Exercise.
+\end{proof}
+\noindent We can now go on with the next alternative theorem.
+\begin{lemma}[Farkas' lemma, second formulation]\label{lemma:farkas}
+	Let $c\in \Rn$ and $A\in \Rmn.$ Then the following two claims are equivalent:
+	\begin{itemize}
+		\item[M.] The implication $Ax\leq 0 \Rightarrow c^Tx\leq 0$ holds true. 
+		\item[N.] There exists $y\in \Rn_+$ such that $A^Ty=c.$
+	\end{itemize}
+\end{lemma}
+\begin{proof}
+	Suppose that system $N$ is feasible. To see that the implication $M$ holds, suppose that $Ax\leq 0$ for some $x\in \Rn$. Then, multiplying this inequality from the left by $y^T$ (a valid operation since $y\geq0$) yields 
+	\begin{equation*}
+		y^TAx\leq 0,
+	\end{equation*}
+which concludes the thesis by noticing that $c^T=y^TA$. 
+\par The reverse direction is not so obvious. Suppose that the implication $M$ is satisfied, and
+let us show that system $N$ is feasible. Suppose in contradiction that system $N$ is infeasible,
+and consider the following set
+\begin{equation*}
+	S=\{x\in\Rn: x= A^Ty \; y\in \Rn_+\},
+\end{equation*}
+which is closed and convex thanks to Lemma \ref{lemma:cone}. The infeasibility of B means that $c\not \in S$. By Theorem \ref{thm:separation}, it follows that there exists a vector $p\in \Rn \setminus \{0\}$ and $\alpha\in \R$ such that $p^Tc>\alpha$ and 
+\begin{equation}\label{eq:farkas_final}
+	p^Tx\leq \alpha \; \forall x\in S
+\end{equation}
+Since $0\in S$, from \eqref{eq:farkas_final} we have that $\alpha\geq 0$ and hence also $p^Tc>0$. In addition, \eqref{eq:farkas_final} is equivalent to 
+\begin{equation*}
+	p^TA^Ty\leq \alpha \;\; \forall y\geq 0 
+\end{equation*}
+or to 
+\begin{equation*}
+	(Ap)^Ty\leq \alpha \;\; \forall y\geq 0.
+\end{equation*}
+Let us now prove that $Ap \leq 0$ (notice that this means component-wise). By contradiction, if there was an index $i\in \{1,2, \dots,m\}$ such that $(Ap)_i>0$, then for $y=\beta e_i$ we would have that $(Ap)^Ty = \beta (Ap)_i$ which is an expression that goes to $\infty$ as $\beta\to \infty$, and, thus, cannot be bounded by a constant $\alpha$. At this point we have found a system for which $Ap\leq 0$ and $p^Tc=c^Tp>0$, which contradicts the implication $M$.
+\end{proof}
+\noindent In order to prove Gordon's alternative theorem, we are going to use Farkas' lemma in the following formulation
+\begin{lemma}[Farkas' lemma, first formulation]\label{lemma:Farkas}
+	Let $c\in \Rn$ and $A\in \Rmn.$ Then exactly one of the following system has a solution:
+	\begin{itemize}
+		\item[I.] $Ax\leq 0, c^Tx> 0$. 
+		\item[II.] $A^Ty=c, y\geq 0$.
+	\end{itemize}
+\end{lemma}
+\noindent To show that the two formulations are equivalent, let us notice that $II$ is equivalent to $N$ and let us write down the truth table of $M$ and $I$. In particular, let us call $M_1$ the statement $Ax\leq 0$ and $M_2$ the statement $c^Tx\leq0$ and notice that $I=M_1 \wedge \bar{M}_2$.\\
+
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	M$_1$& M$_2$ & M= M$_1\Rightarrow$M$_2$& $I=M_1 \wedge \bar{M}_2$ \\
+	\hline
+	F& F & T & F \\
+	\hline
+	F& T & T & F \\
+	\hline
+	T& F & F & T \\
+	\hline
+	T& T & T & F \\
+	\hline
+\end{tabular}\\[1\baselineskip]
+In particular, this means that the two formulations are equivalent as the first formulation (Lemma \ref{lemma:Farkas}) states that exactly one between $I$ and $II$ has solutions while the second formulation (Lemma \ref{lemma:farkas}) states that $M$ and $N$ are equivalent.
+
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
