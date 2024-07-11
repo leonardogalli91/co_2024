@@ -366,8 +366,8 @@ where in the last inequality we used the fact that $f(x_{k+1})\leq f(x_k)$, whic
 
 
 
-\section{Constrained nonconvex optimization}
-In this chapter we will derive the necessary optimality conditions, i.e., Karush-Kunh-Tucker (KKT) conditions, for the most general case where $C$ is possibly nonconvex. In particular, we consider problems of the following shape
+\section{Constrained Nonconvex Optimization}
+In this chapter we will derive the necessary optimality conditions, i.e., Karush-Kunh-Tucker (KKT) conditions, for the most general case where the feasible set is possibly nonconvex. In particular, we consider problems of the following shape
 \begin{equation}\label{eq:last_problem}
 \begin{split}
 \min \;\; &f(x)\\
@@ -385,10 +385,10 @@ any feasible descent directions.
 \begin{proof}
 The proof goes by contradiction and follows directly from the definition of feasible descent direction and directional derivative.
 \end{proof}
-\begin{definition}[Active Constraints] Let $g_i(x)\leq 0, \; i\in [m] $ be a set of inequalities. The active constraints at $\bar{x}$ are the constraints satisfied as equalities at $\bar{x}$. The set of active constraints is denoted by $I(x):=\{i\in[m]: g_i(x)=0\}.$
+\begin{definition}[Active Constraints] Let $g_i(x)\leq 0, \; i\in [m] $ be a set of inequalities. The active constraints at $x$ are the constraints satisfied as equalities at $x$. The set of active constraints is denoted by $I(x):=\{i\in[m]: g_i(x)=0\}.$
 \end{definition}
 
-\begin{lemma}
+\begin{lemma}\label{lemma:for_fritzjohn}
 Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem} and let $I(x^*)$ be the set of active constraints at $x^*$. Then, there does not exist a vector $d\in\Rn$ such that 
 \begin{align*}
 &\grad(x^*)^Td<0,\\
@@ -404,8 +404,8 @@ Suppose by contradiction that $d$ satisfies the system of inequalities above. Th
 for all $t\in (0,\min\{\epsilon_1,\epsilon_2\})$, which is a contradiction to the local optimality of $x^*$.
 \end{proof}
 We have thus shown that a necessary optimality condition for local optimality is the infeasibility of a certain system of strict inequalities. On the other hand, similarly to the stationarity condition, this system is difficult to use in practice. We will state now the Fritz-John conditions.
-\begin{theorem}[Fritz-John Conditions]
-Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}. Then there exists multipliers $\lambda_0,\dots, \lambda_1, \dots, \lambda_m$ such that they are not all zeros and such that 
+\begin{theorem}[Fritz-John Conditions]\label{thm:fritzjohn}
+Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}. Then there exists multipliers $\lambda_0,\dots, \lambda_1, \dots, \lambda_m\geq0$ such that they are not all zeros and such that 
 \begin{equation}\label{eq:fritzjohn}
 \begin{split}
 \lambda_0\grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*) &= 0,\\
@@ -422,7 +422,7 @@ Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}. Then there 
 \subsection{Alternative Theorems}
 We begin with a very simple yet powerful result on convex sets, namely the separation theorem between a point and a closed convex set. This result will be the basis for all the optimality conditions that will be discussed later on.
 \begin{theorem}[Strict Separation Theorem]\label{thm:separation}
-	Let $C$ be a closed and convex set and let $y\not \in C$. Then there exists $p\in \Rn \setminus \{0\}$ and $\alpha\in \Rn$ such that
+	Let $C$ be a closed and convex set and let $y\not \in C$. Then there exists $p\in \Rn \setminus \{0\}$ and $\alpha\in \R$ such that
 	\begin{equation*}
 		p^Ty>\alpha \qquad \text{and} \qquad p^Tx\leq \alpha \;\;\forall x\in C.
 	\end{equation*}
@@ -450,7 +450,7 @@ and the result is established.
 	\end{equation*}
 \end{definition}
 \begin{lemma}\label{lemma:cone}
-	Let $a_1, a_2, \dots a_k\in \Rn$. Then $\cone(\{a_1, \dots, a_k\})$ is closed and convex.
+	Let $a_1, a_2, \dots a_p\in \Rn$, $p\in \N$. Then $\cone(\{a_1, \dots, a_p\})$ is closed and convex.
 \end{lemma}
 \begin{proof}
 	Exercise.
@@ -514,7 +514,7 @@ Let us now prove that $Ap \leq 0$ (notice that this means component-wise). By co
 \end{tabular}\\[1\baselineskip]
 In particular, this means that the two formulations are equivalent as the first formulation (Lemma \ref{lemma:Farkas}) states that exactly one between $I$ and $II$ has solutions while the second formulation (Lemma \ref{lemma:farkas}) states that $M$ and $N$ are equivalent.
 
-\begin{theorem}[Gordon's Alternative Theorem]
+\begin{theorem}[Gordon's Alternative Theorem]\label{thm:gordon}
 	Let $A\in\Rmn$. Then exactly one of the following statements has a solution:
 	\begin{itemize}
 		\item[M.] $Ax<0$.
@@ -558,12 +558,105 @@ that is, there exists $z\in \R^m_+$ such that
 	A^Tz=0, \qquad e^Tz=1.
 \end{equation*}
 Since $ e^Tz=1$ it follows in particular that $z\neq 0$, and we have thus shown the existence of $0\neq z \in \R^m_+$ such that $A^Tz=0$, that is $N$ is feasible.
-
-\subsection{KKT Conditions}
-Before stating and proving the KKT conditions, 
-
 \end{proof}
 
+\subsection{KKT Conditions}
+Before stating and proving the KKT conditions, we first prove Theorem \ref{thm:fritzjohn}.
+\begin{proof}[Proof of Theorem \ref{thm:fritzjohn}]
+	By Lemma \ref{lemma:for_fritzjohn} it follows that the following system of inequality does not have a solution:
+	\begin{equation}\label{eq:system_for_fritzjohn}
+		\begin{split}
+			\grad(x^*)^Td<0,\\
+			\nabla g_i(x^*)^Td<0 \quad i\in I(x^*),
+		\end{split}
+	\end{equation}
+where $I(x^*)=\{i_1, i_2, \dots, i_k\}$. System \eqref{eq:system_for_fritzjohn} can be rewritten as 
+\begin{equation*}
+	Ad<0,
+\end{equation*}
+where 
+\begin{equation*}
+	A=\begin{pmatrix}
+		\grad(x^*)^T\\
+		\nabla g_{i_1}(x^*)^T\\
+		\vdots\\
+		\nabla g_{i_k}(x^*)^T
+	\end{pmatrix}
+\end{equation*}
+By Gordon's theorem of the alternative (Theorem \ref{thm:gordon}), system \eqref{eq:system_for_fritzjohn} is infeasible iff there exists a vector $\eta=(\lambda_0, \lambda_{i_1}, \dots, \lambda_{i_k})^T\neq 0$ such that 
+\begin{equation*}
+	A^T\eta = 0, \qquad \eta\geq 0,
+\end{equation*}
+which is the same as 
+\begin{equation*}
+	\begin{split}
+		\lambda_0 \grad(x^*) + \sum_{i\in I(x^*)} \lambda_i \nabla g_i(x^*) &= 0,\\
+		\lambda_i&\geq 0, \quad i \in I(x^*).
+	\end{split}
+\end{equation*}
+Define $\lambda_i=0$ for any $i\not \in I(x^*)$, and we obtain that 
+\begin{equation*}
+	\lambda_0 \grad(x^*) + \sum_{i=1}^{m} \lambda_i\nabla g_i(x^*)=0
+\end{equation*}
+and that $\lambda_i g_i(x^*)=0$ for any $i\in [m]$ as required.
+\end{proof}
+A major drawback of the Fritz-John conditions is in the fact that they allow $\lambda_0$ to be
+zero. This case is not particularly informative as when $\lambda_0=0$ the Fritz-John conditions simply means that the gradients of the active constraints are linearly dependent. This condition has nothing to do with the objective function, implying that
+there might be a lot of points satisfying the Fritz-John conditions which are not local minimum points. If we add an assumption that the gradients of the active constraints are linearly independent at $x^*$, then we can establish the KKT conditions, which are the same as the Fritz-John conditions with $\lambda_0 = 1$. Before introducing them, let us define the Lagrangian of problem \eqref{eq:last_problem}
+\begin{equation}\label{eq:lagrange}
+	L(x,\lambda) = f(x) +\sum_{i=1}^m \lambda_i g_i(x),
+\end{equation}
+where $\lambda_1, \dots, \lambda_m$ are the nonnegative Lagrange multipliers associated to the inequalities $g_1, \dots, g_m$.
+
+\begin{theorem}[KKT conditions]
+	Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}, with $f, g_1,\dots, g_m\in \C(\Rn)$. Let $I(x^*)$ be the set of active constraints and suppose that the gradients of the active constraints $\{\nabla g_i(x^*)\}_{i\in I(x^*)}$ are linearly independent. Then there exists multipliers $\lambda_1, \dots, \lambda_m\geq 0$ such that 
+	\begin{equation}\label{eq:kkt}
+		\begin{split}
+			\nabla_x L(x,\lambda) = \grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*) &= 0,\\
+			\lambda_ig_i(x^*)&=0 \quad i=1, \dots, m.
+		\end{split}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	By Fritz-John it follows that there exist $\tilde{\lambda}_0, \tilde{\lambda}_1, \dots, \tilde{\lambda}_m\geq 0$ not all zeros, such that \begin{equation*}
+		\begin{split}
+			\tilde{\lambda}_0\grad(x^*)+ \sum_{i=1}^{m} \tilde{\lambda}_i \nabla g_i(x^*) &= 0,\\
+			\tilde{\lambda}_ig_i(x^*)&=0 \quad i=1, \dots, m.
+		\end{split}
+	\end{equation*}
+In particular, $\tilde{\lambda}_0\neq0$ otherwise the gradients of the active constraints would be linearly dependent, against the assumption of being linearly independent. The KKT-multipliers are simply defined as $\lambda_i=\frac{\tilde{\lambda}_i}{\lambda_0}$.
+\end{proof}
+\noindent The condition that the gradients of the active constraints are linearly independent
+is one of many types of assumptions that are referred to in the literature as ``constraint
+qualifications.'' In particular this condition is called Linear Independence Constraint Qualification (LICQ). Another constraint qualification that implies the KKT points to be necessary conditions for optimality is when the $g_i$ are affine functions. The points satisfying these conditions are usually called ``regular''. By construction, solving (exactly) the KKT conditions will only allow you to find KKT points which are regular, but there might be better non-regular points. Take the extreme case of the problem $\min x\; \; s.t. x^2=0$, where the set of KKT points is empty but the solution exists and it is $x^*=0$. On the other hand, it is possible to rewrite system \eqref{eq:kkt} as 
+\begin{equation*}
+	A (x,\lambda) :=
+	\begin{pmatrix}
+		\grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*)\\
+		\lambda_1 g_1(x)\\
+		\vdots\\
+		\lambda_m g_m(x)
+	\end{pmatrix}=0,
+\end{equation*}
+we can define the merit function of this system as $F(x,\lambda) := \frac{1}{2}||A(x,\lambda)||^2$ and solve instead the following optimization problem
+\begin{equation*}
+	\begin{split}
+		\min \;\; &F(x,\lambda)= \frac{1}{2}||A(x,\lambda)||^2\\
+		\st& \lambda\geq 0.
+	\end{split}
+\end{equation*}
+Note that the above problem has convex constraints for which a projection is extremely easy (box-constraints), thus solving this problem with projected gradient will both aim at constructing solutions that are both feasible and optimal. On the other hand, $F$ might not be convex, so the problem may not be solved to a global optimum. In this case, the solution $x^*$ may not be feasible and it may be need to be projected onto the feasible set. One could also consider solving the original problem ignoring the constraints and projecting the solution back to the feasible set only at the end. However, this approach is not always possible (e.g., consider a system that can only be evaluated within certain parameters) and may result in solutions that are arbitrary far from the feasible set. The KKT system instead automatically encapsulates the idea that one should move into the direction of the gradient as long as it is far from an active constraint.
+
+\begin{remark}
+	The Lagrange function is connected to the notion of \textit{duality}. Given $C$ the constrained set of \eqref{eq:last_problem}, and $L(x,\lambda)$ the Lagrange function related to this problem, the dual objective function $q:\Rn\to \R \cup \{-\infty\}$ is give by $q(\lambda) := \min_{x\in C} L(x,\lambda)$, where we use the notation ``min'' even if the minimum might not be attained. In addition, the optimal value of $q(\lambda)$ is not always finite, as there are values of $\lambda$ for which $q(\lambda) = -\infty$. Is therefore natural to define the domain of the dual objective function as dom(q)$:=\{\lambda \in \R^m_+: q(\lambda)>-\infty\}$. Thus, the dual problem of \eqref{eq:last_problem} is given by 
+	\begin{equation*}
+		\begin{split}
+			\max_\lambda \;\; &q(\lambda) = \max_\lambda \min_{x\in C} L(x,\lambda)\\
+			\st& \lambda\in \text{dom}(q).
+		\end{split}
+	\end{equation*}
+\end{remark}
+ 
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
