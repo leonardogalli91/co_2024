@@ -629,23 +629,37 @@ In particular, $\tilde{\lambda}_0\neq0$ otherwise the gradients of the active co
 \noindent The condition that the gradients of the active constraints are linearly independent
 is one of many types of assumptions that are referred to in the literature as ``constraint
 qualifications.'' In particular this condition is called Linear Independence Constraint Qualification (LICQ). Another constraint qualification that implies the KKT points to be necessary conditions for optimality is when the $g_i$ are affine functions. The points satisfying these conditions are usually called ``regular''. By construction, solving (exactly) the KKT conditions will only allow you to find KKT points which are regular, but there might be better non-regular points. Take the extreme case of the problem $\min x\; \; s.t. x^2=0$, where the set of KKT points is empty but the solution exists and it is $x^*=0$. On the other hand, it is possible to rewrite system \eqref{eq:kkt} as 
-\begin{equation*}
-	A (x,\lambda) :=
+\begin{equation}\label{eq:final_system}
+	B (x,\lambda) :=
 	\begin{pmatrix}
-		\grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*)\\
+		\grad(x)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x)\\
 		\lambda_1 g_1(x)\\
 		\vdots\\
-		\lambda_m g_m(x)
-	\end{pmatrix}=0,
+		\lambda_m g_m(x)\\
+	\end{pmatrix}=0.
+\end{equation}
+However, solving this system does not ensure the feasibility of $x$. One needs to take into account also the constraints of \eqref{eq:last_problem}. In fact, notice that the KKT are necessary conditions for a feasible local minimum. In particular, one could use some new variables $w$ to ensure that the constraints are satisfied, i.e., $g_i(x)+w_i=0$ with $w\in \R^m_+$ is equivalent to $g_i(x)\leq 0$. This variables are called ``slack'' variables as they would relax the constraints if one does not enforce them to be non-negative. Also, $w_i=0$ if and only if the corresponding constraint $g_i$ is active. Thus, the system \eqref{eq:final_system} equipped with the constraints $g_i\leq 0$ is equivalent to 
+\begin{equation*}
+	A (x,\lambda,w) :=
+	\begin{pmatrix}
+		\grad(x)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x)\\
+		\lambda_1 w_1\\
+		\vdots\\
+		\lambda_m w_m\\
+		g_1(x) + w_1\\
+		\vdots\\
+		g_m(x) +w_m\\
+	\end{pmatrix}=0.
 \end{equation*}
-we can define the merit function of this system as $F(x,\lambda) := \frac{1}{2}||A(x,\lambda)||^2$ and solve instead the following optimization problem
+Notice that $A:\Rn\times\R^m_+\times\R^m_+\to \R^{2m+1}$ is generally nonlinear and non-convex. Now, we can define the merit function of this system as $F(x,\lambda,w) := \frac{1}{2}||A(x,\lambda,w)||^2$ and solve instead the following optimization problem
 \begin{equation*}
 	\begin{split}
-		\min \;\; &F(x,\lambda)= \frac{1}{2}||A(x,\lambda)||^2\\
-		\st& \lambda\geq 0.
+		\min \;\; &F(x,\lambda, w)= \frac{1}{2}||A(x,\lambda,w)||^2\\
+		\st& \lambda\geq 0\\
+		& w\geq 0.
 	\end{split}
 \end{equation*}
-Note that the above problem has convex constraints for which a projection is extremely easy (box-constraints), thus solving this problem with projected gradient will both aim at constructing solutions that are both feasible and optimal. On the other hand, $F$ might not be convex, so the problem may not be solved to a global optimum. In this case, the solution $x^*$ may not be feasible and it may be need to be projected onto the feasible set. One could also consider solving the original problem ignoring the constraints and projecting the solution back to the feasible set only at the end. However, this approach is not always possible (e.g., consider a system that can only be evaluated within certain parameters) and may result in solutions that are arbitrary far from the feasible set. The KKT system instead automatically encapsulates the idea that one should move into the direction of the gradient as long as it is far from an active constraint.
+Note that the above problem has convex constraints for which a projection is extremely easy (box-constraints), thus solving this problem with projected gradient will both aim at constructing solutions that are feasible and optimal. On the other hand, $F$ might not be convex, so the problem may not be solved to a global optimum ($A(x,\lambda,w)=0$). In this case, the solution $x^*$ may not be feasible and it may be need to be projected onto the feasible set. One could also consider solving the original problem ignoring the constraints and projecting the solution back to the feasible set only at the end. However, this approach is not always possible (e.g., consider a system that can only be evaluated within certain parameters) and may result in solutions that are arbitrary far from the feasible set. The KKT system instead automatically encapsulates the idea that one should move into the direction of the gradient as long as it is far from an active constraint.
 
 \begin{remark}
 	The Lagrange function is connected to the notion of \textit{duality}. Given $C$ the constrained set of \eqref{eq:last_problem}, and $L(x,\lambda)$ the Lagrange function related to this problem, the dual objective function $q:\Rn\to \R \cup \{-\infty\}$ is give by $q(\lambda) := \min_{x\in C} L(x,\lambda)$, where we use the notation ``min'' even if the minimum might not be attained. In addition, the optimal value of $q(\lambda)$ is not always finite, as there are values of $\lambda$ for which $q(\lambda) = -\infty$. Is therefore natural to define the domain of the dual objective function as dom(q)$:=\{\lambda \in \R^m_+: q(\lambda)>-\infty\}$. Thus, the dual problem of \eqref{eq:last_problem} is given by 
@@ -657,6 +671,6 @@ Note that the above problem has convex constraints for which a projection is ext
 	\end{equation*}
 \end{remark}
  
-\bibliographystyle{plain}
-\bibliography{../biblio}
+%\bibliographystyle{plain}
+%\bibliography{../biblio}
 \end{document}
