@@ -1,0 +1,42 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage[left=2.50cm, right=2.50cm, top=2.0cm, bottom=2.0cm]{geometry}
+\include{../macros}
+\title{Ideas for Exercises}
+\date{}
+\begin{document}
+\maketitle
+\noindent Strong suggestions:
+\begin{itemize}
+    \item Proof of Lemma 1.11 and Lemma 1.12 from \cite{beck14a} (Lemma 2.2 and Corollary 2.1 from Chapter 1 of my notes). \checkmark  
+    \item Example 2.5 from \cite{beck14a}, give the analytical form of the function, without plotting it and ask to find and classify all minima and maxima. \checkmark (Sheet 03, Problem 1)
+    \item Proof of Theorem 2.17 from \cite{beck14a} (Theorem 3.2  from Chapter 1 of  my notes). \checkmark (Sheet 03, Exercise 1)
+    \item Proof of Theorem 2.27 from \cite{beck14a} (Theorem 3.4  from Chapter 1 of  my notes). \checkmark (Sheet 03, Exercise 2)
+    \item Proof of Theorem 2.29 from \cite{beck14a} (Theorem 3.5  from Chapter 1 of  my notes). \checkmark (Sheet 04, Problem 2)
+    \item Compute the Lipschitz constant of some known functions (e.g., linear, quadratic, page 73 of \cite{beck14a})  \checkmark (Sheet 05)
+    \item Proof of $(a)\Rightarrow(b)$ of Theorem 4.20 from \cite{beck14a} (Theorem 2.1  from Chapter 2 of my notes) \checkmark (Sheet 05, Exercise 1)
+    \item I will not cover exact line searches, so maybe you could prove Lemma 4.24 in the case of exact line searches and Lemma 4.7 from \cite{beck14a}  \checkmark (Sheet 06)
+    \item Prove of Theorem 4.25 (convergence of GD (only with Armijo line search)) from \cite{beck14a} when $f\in $C$^1(\mathbb{R}^n)$ instead of $f\in $C$^{1,1}_L(\mathbb{R}^n)$
+    \checkmark (Sheet 06)
+    \item Prove R-linear convergence for Barzilai-Borwein method for quadratic functions when $\lambda_n<2\lambda_1$ (the proof is in Lemma 2.1 from \cite{dai02a})
+    \item Lemma 4.10 (Kantorovich inequality) and Lemma 4.11 from \cite{beck14a} are also quite related to Proposition 2.1 from Chpater 2 of my notes 
+    \item Theorem 7.6 from \cite{beck14a} (Theorem 2.1 from Chapter 3 of my notes)
+    \item Lemma 9.11 of \cite{beck14a} (Lemma 3.1 from Chapter 3 of my notes)
+    %\item I will cover the proof of Gordan’s theorem of the alternative (Theorem 10.4 from \cite{beck14a}) nor Farkas' Lemma (Theorem 10.3)
+\end{itemize}
+Weak suggestions:
+\begin{itemize}
+    \item Prove that the nuclear norm is actually a norm.
+    \item Characterization of matrices based on their diagonal values (e.g., Lemma 2.12 and 2.16 from \cite{beck14a}).  \checkmark
+    \item An exercise applying a nonmonotone GD to the Rosenbrock function (Example 4.13 from \cite{beck14a})
+    \item In the constrained case, I am leaving out the line search, so Lemma 9.12 and Lemma 9.13 but also Section 9.4.2 from \cite{beck14a} could be exercises 
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+\end{document}

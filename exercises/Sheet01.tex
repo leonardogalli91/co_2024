@@ -1,0 +1,177 @@
+\documentclass{ExerciseSheet}
+
+%Set Number of the Exercise sheet and the submission deadline.
+\setExerciseSheetNumber{1}
+\setSubmissionDate{xx.xx.2024}
+
+%boolean variable to determine whether the solutions should be included
+\newif\ifsolutions
+\solutionstrue
+%\solutionsfalse
+
+%We have a figure in this sheet
+\usepackage{graphicx}
+
+\begin{document}
+
+
+%Start with exercises
+%-----------------------------------------------------------------------%
+
+\subsection*{Notation}
+\vskip 0.5cm 
+\begin{problem}
+	Find one or two interesting optimization problems and classify them following the taxonomy provided in class. 
+\end{problem}
+\vskip 0.5cm
+%-----------------------------------------------------------------------%
+\begin{exo}
+Prove that for $p=\ln(n)$ and any $x \in\Rn$, we have
+\begin{equation*}
+	\| x\|_{\infty} \leq \| x\|_p \leq e\|x\|_{\infty}
+\end{equation*}
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+For the first inequality notice that for any $x \in \Rn$
+\begin{equation*}
+||x||_{\infty}^p=\max_{i \in [n]} |x_i|^p \leq |x_1|^p +|x_2|^p+ \cdots + |x_n|^p=||x||_p^p.
+\end{equation*}
+For the second inequality we observe that for $x \in \Rn$ it holds that
+\begin{equation*}
+	||x||_p^p=|x_1|^p+|x_2|^p +\cdots +|x_n|^p \leq n \max_{i \in [n]} |x_i|^p = n ||x||_{\infty}^p=e^p ||x||_{\infty}^p,
+\end{equation*}
+where the last equality follows from $p=\ln(n)$.
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{exo}
+Given $x\in\mathbb{R}^n$, for any $0<p<q$, prove that $\| x \|_q \leq \| x \|_p \leq n^{\frac{1}{p}-\frac{1}{q}}\|x\|_q $.\\
+\footnotesize\textit{Hint: Use H\"older's inequality.}
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+To prove the second inequality, we use H\"older's inequality for sums, i.e., 
+	\begin{equation*}
+		\sum_{i=1}^{n}|a_i b_i| \leq \left(\sum_{i=1}^{n} |a_i|^r \right)^{\frac{1}{r}} \left(\sum_{i=1}^{n} |b_i|^{\frac{r}{r-1}} \right)^{1-\frac{1}{r}},
+	\end{equation*}
+	with $a_i = x_i^p, b_i=1 \, \forall i \in [n]$ and $r=\frac{q}{p}>1$, thus, we obtain
+	\begin{equation*}
+		\sum_{i=1}^{n}|x_i|^p \leq \left(\sum_{i=1}^{n} (|x_i|^p)^{\frac{q}{p}} \right)^{\frac{p}{q}} \left(\sum_{i=1}^{n} 1 \right)^{1-\frac{p}{q}} = \left(\sum_{i=1}^{n} |x_i|^q\right)^{\frac{p}{q}} n^{1-\frac{p}{q}}.
+	\end{equation*}
+	Now, 
+	\begin{eqnarray*}
+		\| x \|_p = \left(\sum_{i=1}^{n} |x_i|^p \right)^{\frac{1}{p}} \leq \left(\left(\sum_{i=1}^{n} |x_i|^q\right)^{\frac{p}{q}} n^{1-\frac{p}{q}} \right)^{\frac{1}{p}} = \left(\sum_{i=1}^{n} |x_i|^q\right)^{\frac{1}{q}} n^{\frac{1}{p}-\frac{1}{q}} = n^{\frac{1}{p}-\frac{1}{q}} \| x\|_q,
+	\end{eqnarray*}
+	which proves the first inequality.\\
+	To prove the first inequality we use the fact that given $\alpha\geq1$, the function 
+	\begin{equation}\label{eq:tplus1}
+		f(t)= (1+t)^\alpha - 1 -t^\alpha\geq0 \; \;\forall t\geq 0
+	\end{equation}
+	So, let us first prove \eqref{eq:tplus1}. We compute the first derivative $f'(t)=\alpha(1+t)^{\alpha-1}-\alpha t^{\alpha-1}$. Since $\alpha-1\geq0$, $(1+t)^{\alpha-1}>t^{\alpha-1}$, meaning that $f'(t)>0 \; \forall t\geq0$. Thus, $f(t)$ is increasing and since $f(0)=0$, we can conclude that $f(t)\geq0 \;\forall t\geq 0.$ Now, we recursively use \eqref{eq:tplus1}, to achieve
+	\begin{align*}
+		\left(\sum_{i=1}^{n} |x_i| \right)^\alpha &= |x_1|^\alpha \left(1+\sum_{i=2}^{n} \frac{|x_i|}{|x_1|} \right)^\alpha\\
+		&\geq |x_1|^\alpha \left(1+ \left(\sum_{i=2}^{n} \frac{|x_i|}{|x_1|}\right)^\alpha\right) = |x_1|^\alpha \left(1+\frac{|x_2|}{|x_1|} \left(1 + \sum_{i=3}^{n} \frac{|x_i|}{|x_2|}\right)^\alpha\right)  \\
+		&\dots\\
+		& \geq |x_1|^\alpha\left(1+ \frac{|x_2|^\alpha}{|x_1|^\alpha}\left(\dots \left( 1+ \frac{|x_n|^\alpha}{|x_{n-1}|^\alpha}\right)\dots\right)\right)\\
+		& = \sum_{i=1}^{n}|x_i|^\alpha.
+	\end{align*}
+	Using this last inequality with $\alpha=\frac{q}{p}> 1$ in the derivation below, we can obtain the result
+	\begin{equation*}
+		\| x\|_p^q = \left(\sum_{i=1}^{n} |x_i|^p \right)^{\frac{q}{p}} \geq \sum_{i=1}^{n} |x_i|^{p\frac{q}{p}} = \| x\|_q^q.
+	\end{equation*}
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{exo}
+Let $A \in \R^{n\times n}$ and let the operator norm of $A$ be
+\begin{equation*}
+||A||_{p\to q}:= \sup_{||x||_p=1} ||Ax||_q
+\end{equation*}
+\begin{enumerate}
+	\item[a)] Prove that the operator norm $||\cdot||_{\infty\to \infty}$ is the max of row sum of $A$, i.e.,
+	\begin{equation*}
+		||A||_{\infty\to \infty}= \max_{i \in [n]} \sum_{j=1}^{n}|a_{ij}|
+	\end{equation*}
+
+\item[b)] Let $\lambda_1(A^TA), \dots, \lambda_n(A^TA)$ denote the eigenvalue of $A^TA$. Show that
+\begin{equation*}
+	||A||_{2\to 2}= \max_{k \in [n]} \sqrt{\lambda_k(A^TA)} = \max_{k \in [n]} \sqrt{\lambda_k(AA^T)} 
+\end{equation*}
+\end{enumerate}
+\end{exo}
+
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+a) By definition
+\begin{equation*}
+	||A||_{\infty\to \infty}:= \sup_{||x||_\infty=1} ||Ax||_\infty.
+\end{equation*}
+Let $x$ be any vector with $\|x\|_{\infty}=1$, then
+\begin{align*}
+||Ax||_\infty&= \max_{i\in[n]} |(Ax)_i| = %\sup_{||x||_\infty=1} \max_{i\in[n]} \left |\left (\sum_{j=1}^{n} A_{j} x_j \right )_i \right| = 
+\max_{i\in[n]} \left |\sum_{j=1}^{n} a_{ij} x_j \right| \leq \max_{i\in[n]} \sum_{j=1}^{n} | a_{ij} x_j | \leq \max_{i\in[n]} \sum_{j=1}^{n} | a_{ij}| \; ||x||_{\infty}= \max_{i\in[n]} \sum_{j=1}^{n} | a_{ij}|.
+\end{align*}
+Now, since we are looking for the supremum of the l.h.s., if we show that there exist a $x$ with $\|x\|_{\infty}=1$, for which the above inequality is an equality, then the proof is complete. Suppose that $i \in \arg\!\min\, \sum_{j=1}^{n} | a_{ij}|$, then let construct $x$ as follows
+\begin{equation*}
+	x_j =\begin{cases} 1 \quad &\text{if } a_{ij}\geq0\\ -1 &\text{else,}\end{cases}
+\end{equation*}
+which means that for each $j$ we have $a_{ij}x_j= |a_{ij}|$. Let now be $k$ be any row, thus 
+\begin{equation*}
+\left |\sum_{j=1}^{n} a_{kj} x_j \right| \leq \sum_{j=1}^{n} | a_{kj} x_j | \leq \sum_{j=1}^{n} | a_{kj} | \leq \sum_{j=1}^{n} | a_{ij} | =  \left | \sum_{j=1}^{n}  a_{ij} x_j \right |,
+\end{equation*}
+where the second inequality follows from the fact that $|x_j| = 1 \; \; \forall j.$ In turns, the above inequality implies that $\left | \sum_{j=1}^{n}  a_{ij} x_j \right | = \max_{i\in[n]} \left | \sum_{j=1}^{n}  a_{ij} x_j \right | = \| A x\|_{\infty}$, where the last equality follows from the definition of the infinity norm. Thus, as showed in the above derivation we have  $\max_{i \in [n]}\sum_{j=1}^{n} | a_{ij} | = ||Ax||_{\infty},$ which concludes the proof.\\[1\baselineskip]
+b) By definition, we have
+\begin{equation*}
+	||A||_{2\to 2}:= \sup_{||x||_2=1} ||Ax||_2.
+\end{equation*}
+As in the proof of a), we first prove that the thesis holds as an inequality for a generic $x$ and in the second step that we can find a $x$ with $\|x\|=1$ for which the thesis holds as an equality. Given $A \in \R^{n\times n}$, the matrix $A^TA$ is self-adjoint (in $\mathbb{R}^{n\times n}$, symmetric) and positive semi-definite. Also, its eigenvalues $\lambda_1(A^TA), \dots, \lambda_n(A^TA) \in \mathbb{R}_+$. Given $u_1, \dots, u_n$ the set of eigenvectors, we have 
+\begin{equation*}
+	A^TA \tilde{u}_j= \lambda_j(A^TA) \tilde{u}_j \quad \forall j\in[n].
+\end{equation*}
+By definition, $u_1, \dots, u_n$ form an orthogonal basis of $\Rn$, which means that any vector $x\in\Rn$ can be written as 
+\begin{equation*}
+	x =\sum_{j=1}^{n}c_ju_j,
+\end{equation*}
+where $c_j$ are the coefficients of the linear combination. Thus, by the orthogonality of the $u_j$, we have 
+\begin{equation*}
+	\| x\|^2 = x^Tx=\left(\sum_{j=1}^{n}c_j u_j^T\right) \left(\sum_{i=1}^{n}c_iu_i\right) = \sum_{j=1}^{n}|c_j|^2 u_j^Tu_j,
+\end{equation*}
+and 
+\begin{equation*}
+A^TA x =A^TA \sum_{j=1}^{n}c_ju_j = \sum_{j=1}^{n}c_j \lambda_j(A^TA) u_j
+\end{equation*}
+which leads to 
+\begin{align*}
+	\| A x\|^2 &= (Ax)^TA x=x^T(A^TAx) = \left(\sum_{i=1}^{n}c_iu_i^T\right) \left(\sum_{j=1}^{n}c_j \lambda_j(A^TA) u_j\right)= \sum_{j=1}^{n}|c_j|^2 \lambda_j(A^TA) u_j^Tu_j.
+\end{align*}
+By bounding $\lambda_j(A^TA) \leq \lambda_1(A^TA)$, we have
+\begin{equation*}
+	\| A x\|^2 \leq \lambda_1(A^TA) \sum_{j=1}^{n}|c_j|^2 u_j^Tu_j = \lambda_1(A^TA)\| x\|^2.
+\end{equation*}
+We have now proven that $\| A x\| \leq \sqrt{\lambda_1(A^TA)}\| x\|$ for a generic $x\in \Rn$. Let us now build a $x$ such that $\|x\|=1$ and for which the above inequality holds as an equality. In particular, let $x:= \frac{u_1}{\|u_1\|}$, be the normalized eigenvector corresponding to the largest eigenvalue, then we have 
+\begin{equation*}
+\|A x\|^2 =  x_1^TA^TA x=  x^T(A^TA x)= x^T\lambda_1(A^TA) x = \lambda_1(A^TA) \|x\|^2= \lambda_1(A^TA),
+\end{equation*}
+which concludes the proof, because we have found a $x$ with $\|x\|=1$, such that $\| A x\|\!\!=\!\!\sqrt{\lambda_1(A^TA)}.$
+
+\end{solution}
+\fi
+
+
+
+\end{document}

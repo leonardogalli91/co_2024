@@ -1,0 +1,194 @@
+\documentclass{ExerciseSheet}
+
+%Set Number of the Exercise sheet and the submission deadline.
+\setExerciseSheetNumber{2}
+\setSubmissionDate{xx.xx.2024}
+
+%boolean variable to determine whether the solutions should be included
+\newif\ifsolutions
+\solutionstrue
+\solutionsfalse
+
+%We have a figure in this sheet
+\usepackage{graphicx}
+
+\begin{document}
+
+
+%Start with exercises
+%-----------------------------------------------------------------------%
+
+
+%\subsection*{Notation}
+\vskip 0.5cm 
+%-----------------------------------------------------------------------%
+\begin{problem}
+Recall the definition of the Rayleigh quotient for a symmetric matrix $A\in \R^{n \times n}$:
+\begin{equation*}
+    R_A: \R^n\backslash \{0\} \longrightarrow \R, \quad x \mapsto  \frac{x^T A x}{\|x\|^2}.
+\end{equation*}
+Then show: 
+\begin{itemize}
+    \item $\lambda_n(A) \leq R_A(x) \leq \lambda_1(A)$, $\forall x\neq 0$.
+\end{itemize}
+And deduce: 
+\begin{itemize}
+    \item $\min_{x\neq 0} R_A(x)=\lambda_n(A)$
+    \item  $\max_{x\neq 0} R_A(x)=\lambda_1(A)$
+\end{itemize}
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+By the spectral decomposition theorem we can write $A$ as $A=U^TDU$, where $U$ is an orthogonal matrix (consisting of the eigenvectors) and $D$ is a diagonal matrix, consisting of the eigenvalues. Without loss of generality, we can assume, the eigenvalues are ordered, i.e. $D=\text{diag}(\lambda_1(A), ..., \lambda_n(A))$ and $\lambda_i(A) \geq \lambda_{i+1}(A)$ for $i=1,...,n-1$.
+
+\begin{align*}
+    \frac{x^TA x}{x^Tx} \overset{U^TU=Id}{=} \frac{x^TU^TDUx}{x^tU^TUx} \overset{y=Ux}{=} \frac{y^TDy}{y^Ty} = \frac{\sum_{i=1}^n y_i^2 \lambda_i(A)} {\sum_{i=1}^n y_i^2} \geq \frac{\sum_{i=1}^n y_i^2 \lambda_n(A)} {\sum_{i=1}^n y_i^2} = \lambda_n(A)
+\end{align*}
+\begin{align*}
+    \frac{x^TA x}{x^Tx} \overset{U^TU=Id}{=} \frac{x^TU^TDUx}{x^tU^TUx} \overset{y=Ux}{=} \frac{y^TDy}{y^Ty} = \frac{\sum_{i=1}^n y_i^2 \lambda_i(A)} {\sum_{i=1}^n y_i^2} \leq \frac{\sum_{i=1}^n y_i^2 \lambda_1(A)} {\sum_{i=1}^n y_i^2} = \lambda_1(A)
+\end{align*}
+
+As we have already shown the bounds on the Rayleigh quotient, we just need to show that the minimum and maximum are actually obtained. Choosing corresponding eigenvectors to the minimal respectively maximal eigenvalue does the trick. 
+As let $x$ be the eigenvector corresponding to $\lambda_i$, then $$R_A(x)=\frac{x^TAX}{x^Tx}=\frac{x^T\lambda_i x}{x^Tx}= \lambda_i$$
+
+\end{solution}
+
+\fi
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{problem}
+Show that for all $x,y,z \in \R^n$
+\begin{equation*}
+    \|x-y\| \leq \|x-z\| + \|z-y\|.
+\end{equation*}
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+We simply use the triangle inequality 
+\begin{equation*}
+    \|x-y\| = \|x-z+z-y\| \leq \|x-z\| + \|z-y\|.
+\end{equation*}
+\end{solution}
+\fi
+%-----------------------------------------------------------------------%
+
+\begin{exo}
+Prove that for all $x\in \R^n$ one has
+\begin{equation*}
+    \|x\|_\infty = \lim_{p\rightarrow \infty} \|x\|_p.
+\end{equation*}
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+Consider
+\begin{align*}
+    \lim_{p\rightarrow \infty} \|x\|_p &= \lim_{p\rightarrow \infty} \left(\sum_{i=1}^ n |x_i|^ p\right)^{1/p} = \lim_{p\rightarrow \infty} \left(\sum_{i=1}^n \|x\|^p_\infty\frac{|x_i|^p}{\|x\|^p_\infty}\right)^{1/p} \\
+    &= \|x\|_\infty \lim_{p\rightarrow \infty} \left(\sum_{i=1}^n \frac{|x_i|^p}{\|x\|^p_\infty}\right)^{1/p}
+\end{align*}
+Now, as all the summands are bounded by one, we have that the $p-$th root converges to one. 
+\end{solution}
+
+\fi
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{exo}
+Prove the Cauchy-Schwarz inequality, i.e. for any $x,y \in \R^n$:
+\begin{equation*}
+    |\langle x, y \rangle | \leq \|x\| \|y\|.
+\end{equation*}
+And show we have equality iff $x$ and $y$ are linearly dependent. 
+\end{exo} 
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+If $y=0$ then the statement is clear as both sides of the inequality are zero. \\
+Otherwise we set $z:=x - \frac{\inner{y}{x}}{\inner{y}{y}}$. Then 
+\begin{equation*}
+    \inner{z}{y} = \inner{x}{y} - \frac{\inner{y}{x}}{\inner{y}{y} }\inner{y}{y} = 0.
+\end{equation*}
+Which yields 
+\begin{align*}
+    \|x\|_2^2 &= \left\|\frac{\inner{y}{x}}{\inner{y}{y} } y + z \right\|_2^2 \\
+    &= \inner{\frac{\inner{y}{x}}{\inner{y}{y} } y + z }{\frac{\inner{y}{x}}{\inner{y}{y} } y + z } \\
+    &= \left|\frac{\inner{y}{x}}{\inner{y}{y} }\right|^2\langle y,y\rangle + 2 \frac{\inner{y}{x}}{\inner{y}{y} }\langle y, z \rangle + \langle z, z \rangle \\
+    &= \frac{\left|\inner{y}{x}\right|^2}{\|y\|_2^2 }+ \|z\|_2^2 \\
+    &\geq \frac{\left|\inner{y}{x}\right|^2}{\|y\|_2^2 }.
+\end{align*}
+Multiplying both sides with $\|y\|_2^2$ and taking the square root yields the result. \\
+
+Notice that we have equality iff $z=0$, which is the case if $x,y$ are linearly dependent. 
+\end{solution}
+
+\fi
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{exo}[On matrix norm]
+Recall the following definition from the lecture. Given a matrix $A\in \R^{m\times n}$ and two norms $\| .\|_p$ and $\|.\|_q$ on $\R^n$ and $\R^m$, respectively. Then the induced matrix-norm is  $\|A\|_{p\rightarrow q} $ is defined by 
+\begin{equation*}
+    \|A\|_{p\rightarrow q} = \max_{\|x\|_p=1} \|Ax\|_q.
+\end{equation*}
+\begin{itemize}
+ \item Show the definition is equivalent to $\|A\|_{p\rightarrow q} = \max_{x\neq 0} \frac{\|Ax\|_q}{\|x\|_p}$.
+\item Show that the induced matrix norm is submultiplicative, i.e. $\|Ax\|_q \leq \|A\|_{p\rightarrow q} \|x\|_p$.
+    \item Show that the maximum is actually obtained. 
+   
+    
+\end{itemize}
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+\begin{itemize}
+    \item By  
+    By positive homogeneity we have for any $x\neq 0$
+    \begin{equation*}
+        \frac{\|Ax\|_q}{\|x\|_p} = \left\| A \frac{x}{\|x\|_p} \right\|_q \leq \max_{\|y\|_p=1} \|Ay\|_q, 
+    \end{equation*}
+    so we can take the maximum over all $x\neq 0$ on the right hand side. \\
+   On the other hand, because of set inclusion we also have
+    \begin{equation*}
+         \max_{\|y\|_p=1} \|Ay\|_q \leq \max_{x\neq 0} \frac{\|Ax\|_q}{\|x\|_p},
+    \end{equation*}
+    hence have equality.
+    \item Trivial for $x=0$. So let $x\neq 0$, then
+    \begin{equation*}
+        \|Ax\|_q = \|x\|_p \frac{\|Ax\|_q}{\|x\|_p} \leq \|x\|_p \max_{y\neq 0} \frac{\|Ay\|_q}{\|y\|_p} \leq \|x\|_p \|A\|_{p\rightarrow q}
+    \end{equation*}
+    \item We have that the map $f:\{x\in \R^n| \|x\|_p\}\rightarrow \R, \quad f(x)=\|Ax\|_q$ is continuous, by using the submultiplicativity. And the set $\{x\in \R^n| \|x\|_p\}\subset \R^n$ is compact (bounded and closed). Hence $f$ obtains it's minimum and maximum on the domain. 
+\end{itemize}
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{exo}[On specific matrix norm]
+We show the following norm mentioned in the lecture.
+\begin{itemize}
+    \item Show that the $\|A\|_1=\max_{j=1,..,n} \sum_{i=1}^m|A_{i,j}|$ .
+  
+\end{itemize}
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+
+\end{solution}
+
+\fi
+
+\end{document}

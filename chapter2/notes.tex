@@ -1,13 +1,5 @@
 \documentclass[10pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{amssymb}
-\usepackage{graphicx}
-\usepackage{mathtools}
-\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
-\usepackage[left=2.50cm, right=2.50cm, top=2.0cm, bottom=2.0cm]{geometry}
+\include{../packages}
 \include{../macros}
 \title{Continuous Optimization}
 \author{Chapter 2: Gradient Descent}
@@ -450,7 +442,7 @@ and
 \end{equation}
 In particular, for \eqref{eq:bb1}, and equivalently for \eqref{eq:bb2}, we get the following proposition.
 \begin{proposition}
-	Given $\{x_k\}_k$ the sequence generate by Algorithm \eqref{eq:bb1} to solve \eqref{eq:quadratic}, with $Q$ symmetric and positive definite, with $\lambda_n<2\lambda_1$, we get 
+	Given $\{x_k\}_k$ the sequence generate by Algorithm \eqref{eq:bb1} to solve \eqref{eq:quadratic}, with $Q$ symmetric and positive definite, with $2\lambda_n>\lambda_1$, we get 
 	\begin{equation*}
 		\| \grad(x_k)\|\leq \delta^k \|\grad(x_0)\| \quad \with \delta=\frac{\lambda_n}{\lambda_1}-1.
 	\end{equation*}
@@ -458,7 +450,7 @@ In particular, for \eqref{eq:bb1}, and equivalently for \eqref{eq:bb2}, we get t
 \begin{proof}
 Exercise.
 \end{proof}
-\noindent Beyond this result, the same type of convergence (with a constant $\delta<1$) can be proved also without assuming $\lambda_n<2\lambda_1$. %TODO type of convergence
+\noindent Beyond this result, the same type of convergence (with a constant $\delta<1$) can be proved also without assuming $2\lambda_n>\lambda_1$. %TODO type of convergence
 \subsubsection{Barzilai-Borwein in the Non-Quadratic Case}
 In the non quadratic case, applying the fundamental theorem of calculus to $\grad(x)$, we get that
 \begin{equation*}

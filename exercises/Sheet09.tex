@@ -1,0 +1,150 @@
+\documentclass{ExerciseSheet}
+
+%Set Number of the Exercise sheet and the submission deadline.
+\setExerciseSheetNumber{9}
+\setSubmissionDate{xx.xx.2024}
+
+%boolean variable to determine whether the solutions should be included
+\newif\ifsolutions
+\solutionstrue
+%\solutionsfalse
+
+%We have a figure in this sheet
+\usepackage{graphicx}
+
+\begin{document}
+
+
+%Start with exercises
+%-----------------------------------------------------------------------%
+
+\begin{problem}Let $C\subset \R^n$ be a convex closed subset. The distance function $d_C:\R^n\rightarrow \R_{\geq 0}$ of a point to the set $C$ is given as 
+\begin{equation*}
+    d_C(x)=\inf_{y\in C} \|x-y\|_2.
+\end{equation*}
+\begin{enumerate}
+    \item Show that $d_C(x)= \|x-P_C(x)\|$.
+    \item Show that $d_C$ is a convex function. 
+\end{enumerate}
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+\begin{enumerate}
+    \item Theorem 3.5 (norm and normed square have the same minimizer).
+    \item Let $x, y \in \R^n$ and $\lambda \in (0,1)$, define $v:= P_C(x)$ and $w:=P_C(y)$. Because $C$ is convex also $\lambda v + (1-\lambda )w \in C.$ 
+    \begin{align*}
+        d_C(\lambda x + (1-\lambda) y) &= \inf_{c \in C} \|\lambda x + (1-\lambda) y - c\|_2 \\
+        & \leq \|\lambda x + (1-\lambda) y - \left( \lambda v + (1-\lambda )w\right)\|_2 \\
+        & = \|\lambda (x-v) + (1-\lambda) (y-w) \|_2 \|\\
+        &\leq \lambda \|x-v\|_2 + (1-\lambda) \|y-w\|_2 \\
+        &= \lambda d_c(x) + (1-\lambda) d_c(y).
+    \end{align*}
+\end{enumerate}
+
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{problem}[Projection operator]
+We consider different convex sets $C$. Find an explicit formula for the Projection operator $P_C:\R^n \rightarrow C$ in each case.. 
+	\begin{enumerate}
+	    \item $C=\R^n_+ := \{y \in R^n | y_i\geq 0, \quad  i=1,...,n\}$.
+     \item Take any $l_i\leq u_i$ both real numbers, $i=1,...,n$. Then define $C= [l_1, u_1]\times ... \times [l_n, u_n] \subset \R^n$.
+	\end{enumerate}
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+\end{solution}
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{exo}[Decrease Lemma for Convex Constrained Problems]
+
+Let $f \in C_L^{1,1}(C)$, where $C$ is convex and closed. Then for any $x \in C$ and $t \in \left(0, \frac{2}{L}\right)$  the following inequality holds 
+\begin{equation*}
+    f(x) - f(P_C(x-t \nabla f (x))) \geq t \left(1 -  \frac{Lt}{2}\right) \left\|\frac{1}{t} (x-P_C(x-t \nabla f(x)))\right\|_2^2.
+\end{equation*}
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+Denote by $x_t = P_C(x-t\nabla f(x))$
+By the (Prequel) Descent lemma (Lemma 2.2 in the lecture notes) we have 
+\begin{align*}
+    f(x_t) \leq f(x) + \nabla f(x)^T(x_t - x) + \frac{L}{2} \|x-x_t\|
+\end{align*}
+On the other hand by the Second Projection Theorem (Theorem 3.6) we have (because $x\in C$)
+\begin{equation*}
+    (x-t\nabla f(x) - P_C(x-t\nabla f(x))^T(x-P_C(x-t \nabla f(x)) \leq 0,
+\end{equation*}
+which implies 
+\begin{align*}
+    -t\nabla f(x)^T(x-P_C(x-t\nabla f(x))) + \|x - P_C(x-t\nabla f(x))\|^2 &\leq  0 \\
+    \Leftrightarrow \|x - P_C(x-t\nabla f(x))\|^2 \leq t\nabla f(x)^T(x-P_C(x-t\nabla f(x))) \\
+    \Leftrightarrow -\frac{1}{t} \|x - P_C(x-t\nabla f(x))\|^2 \geq \nabla f(x)^T(P_C(x-t\nabla f(x))- x) = \nabla f(x)^T(x_t -x)
+\end{align*}
+Now note $x-x_t = x - P_c(x-t\nabla f(x))$ \\
+Putting this in the first inequality we get
+
+\begin{align*}
+    f(x_t) &\leq f(x) + \nabla f(x)^T(x_t - x) + \frac{L}{2} \|x-x_t\|^2 \\
+    & \leq  f(x) + \left(\frac{L}{2} - \frac{1}{t}\right) \|x-x_t\|^2  
+    \\
+    &= f(x) + \left(\frac{L}{2} - \frac{1}{t}\right) t^2 \|\frac{1}{t}(x- P_c(x-t\nabla f(x))\|^2  \\
+    &= f(x) + t \left(\frac{Lt}{2} - 1\right) \|\frac{1}{t}(x- P_c(x-t\nabla f(x))\|^2  .
+\end{align*}
+Rearranging yields the result. 
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{exo}[Projection onto balls]
+We consider the convex set $C=B[0, r]$ for some $r>0$. What is the projection operator $P_C:\R^n \rightarrow C$?
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{exo}
+Let $C\subset \R^n$ be convex and closed set and $f\in C^{1,1}_L$ be a convex function over $C$. Let $f^*$ be the optimal value of the minimization problem 
+\begin{equation*}
+    \min_{x\in C} f(x).
+\end{equation*}
+Prove that for any $x\in C$ we have the following inequality:
+\begin{equation*}
+    f(x) - f^* \geq \frac{1}{2L} \|G_L(x)\|^2,
+\end{equation*}
+where $G_L(x) = L (x-P_C(x-\frac{1}{L} \nabla f(x)))$.
+\end{exo}
+
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+Follows directly by the Decrease Lemma for Convex Constrained Problems with $t= \frac{1}{L}$ and using that $f^*$ is the minimum.
+Question where do we need that $f$ is convex?
+\end{solution}
+\fi
+
+
+
+\end{document}

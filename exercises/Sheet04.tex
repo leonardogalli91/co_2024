@@ -1,0 +1,131 @@
+\documentclass{ExerciseSheet}
+
+%Set Number of the Exercise sheet and the submission deadline.
+\setExerciseSheetNumber{4}
+\setSubmissionDate{xx.xx.2024}
+
+%boolean variable to determine whether the solutions should be included
+\newif\ifsolutions
+\solutionstrue
+%\solutionsfalse
+
+%We have a figure in this sheet
+\usepackage{graphicx}
+
+\begin{document}
+
+
+%Start with exercises
+%-----------------------------------------------------------------------%
+\vskip 0.5cm 
+
+\begin{problem}
+    Find the global minimum and maximum points of the function $f:S \rightarrow \R, \quad  f(x,y)=x^2+y^2+2x-3y$ over the unit ball $S=B[0,1]\subset \R^2$.
+\end{problem}
+
+\ifsolutions
+\vskip 0.3 cm
+\begin{solution}
+    We first calculate the gradient to find stationary points of $f$, i.e.
+    \begin{equation*}
+        \nabla f(x,y)=\left(\begin{array}{c} 2x+2 \\ 2y-3 \end{array}\right).
+    \end{equation*}
+Setting the gradient to zero yields
+\begin{align*}
+    \nabla f(x,y)=\left(\begin{array}{c} 0\\ 0 \end{array}\right) &\iff \left(\begin{array}{c} 2x+2 \\ 2y-3 \end{array}\right) = \left(\begin{array}{c} 0\\ 0 \end{array}\right) \\
+    &\iff \left(\begin{array}{c} x\\ y \end{array}\right) = \left(\begin{array}{c} -1 \\ \frac{3}{2} \end{array}\right).
+\end{align*}
+But this stationary point is not in our domain $S$, hence all extrem points must lie on the boundary of $S$. Now bd$(S)=\{(x,y): x^2+y^2=1\}$, hence we can rewrite points in the boundary as $(x, \pm \sqrt{1-x^2})$.
+
+By substituting the $y$ value in $f$ consider
+\begin{equation*}  
+    g(x)=1+2x-3\sqrt{1-x^2}, \quad g'(x)= 2 + \frac{3x}{\sqrt{1-x^2}}.
+\end{equation*}
+Setting the first derivative to zero, we obtain $x=\pm \frac{2}{\sqrt{13}}$, as
+\begin{align*}
+    g'(x)=0 &\iff \frac{3x}{\sqrt{1-x^2}} = -2 \iff 3x = -2\sqrt{1-x^2} \\
+    &\iff 9x^2 = 4(1-x^2) \iff 13x^2 = 4 \iff x^2 = \frac{4}{13}.
+\end{align*}
+So the candidates for optimizing the function $f$ are $(\pm \frac{2}{\sqrt{13}}, \pm \frac{3}{\sqrt{13}})$, by looking at the function we see that it's minimum is obtained at $f(-\frac{2}{\sqrt{13}}, \frac{3}{\sqrt{13}})= 1 - \sqrt{13}$ and its maximum is obtained at  $f(\frac{2}{\sqrt{13}}, -\frac{3}{\sqrt{13}})= 1 + \sqrt{13}$.
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm 
+\begin{problem}[Sufficient Condition for a Saddle Point]
+Proof Theorem 3.5 of the lecture. That is, let $f: S \rightarrow \R$ be a function defined on an open set $S \subset \R^n$. Suppose that $f\in C^2(S)$ and that $x^*$ is a stationary point. 
+If $\nabla^2f(x^*)$ is an indefinite matrix, then $x^*$ is a saddle point for $f$ over $S$.
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+Since $\nabla^2f(x^*)$ is indefinite, it has at least one positive eigenvalue $\lambda >0$. Let $v$ be a corresponding normed eigenvector. As $S$ is an open set, there exists a $r>0$ s.t. $x^*\alpha v \in S$ for all $\alpha \in [0, r]$. 
+
+We use the quadratic approximation theorem and the fact that $x^*$ is a stationary point, i.e. has zero gradient to get the existence of a function $g: \R_+ \rightarrow \R$ s.t. \begin{equation*}
+    \frac{g(t)}{t} \rightarrow 0, \text{as } t\rightarrow 0. 
+\end{equation*}
+Therefore for any $\alpha \in (0,r)$ we have 
+\begin{align*}
+    f(x^*+\alpha v) &= f(x^*) + \frac{\alpha^2}{2}v^T \nabla^2f(x^*)v + g(\alpha^2 \|v\|^2) \\
+    &=f(x^*) + \frac{\lambda \alpha^2}{2} \|v\|^2 + g(\|v\|^2\alpha^2) \\
+    &= f(x^*) + \frac{\lambda \alpha^2}{2} + g(\alpha^2).
+\end{align*}
+There exists an $r_0$ s.t. for all $\alpha \in (0, r_0)$ we have $g(\alpha^2)>-\frac{\lambda}{2}\alpha^2$ and hence $f(x^*+\alpha v) > f(x)$. Therefore, $x^*$ cannot be a local maximum point of f over $S$.
+
+Repeat the same argument with a negative eigenvalue and a corresponding eigenvector to also show $x^*$ cannot be a local minimum. 
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{exo}
+Consider the following functions and their domains:
+\begin{enumerate}
+    \item  $f:C \rightarrow \R, \quad f(x_1, x_2)=x_1^2+x_2^2$ over the set $C=\{(x_1, x_2): x_1+x_2 \leq -1\}$. 
+    \item $g:C \rightarrow \R, \quad g(x_1, x_2)= -2x_1^2 + x_1x_2^2+4x_1^4$ over $C=\R$
+\end{enumerate}
+Do they obtain their minima and maxima over $C$?
+What are they? \\
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+\begin{enumerate}
+    \item Weierstrass is not applicable ($C$ not bounded). But $f$ is coerciveness, $C$ is non-empty and closed hence we know it has global minimum over $C$. 
+
+    
+\end{enumerate}
+\end{solution}
+
+\fi
+
+\vskip 0.5cm
+\begin{exo}
+Let $A\in \R^{n \times n}, b\in\R^n, c\in \R$
+\begin{equation*}
+    D = \left(\begin{array}{rr}A & b \\ b^T &c \end{array}\right).
+\end{equation*}
+Suppose $A$ is positive definite. Prove that $D$ is positive semidefinite if and only if $c-b^TA^{-1}b\geq 0$.  
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+We can do the following decomposition of $D$
+\begin{align*}
+    \left(\begin{array}{rr} A & b \\ b^T &c \end{array}\right) &= \left(\begin{array}{rr} I & 0 \\ b^TA^{-1} & 1\end{array} \right) \left(\begin{array}{rr} A & 0 \\ 0 &c-b^TA^{-1}b \end{array}\right)
+    \left(\begin{array}{rr} I & A^{-1}b \\ 0 & 1\end{array} \right).
+\end{align*}
+Therefore $D$ is positive semidefinite iff the middle matrix of the decomposition on the right hand side is positive semidefinite which is the case iff $c-b^TA^{-1}b\geq 0$. 
+This also uses the fact that the matrix $\left(\begin{array}{rr} I & 0 \\ b^TA^{-1} & 1\end{array} \right) $ is invertible. 
+\end{solution}
+
+\fi
+
+\end{document}

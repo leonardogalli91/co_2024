@@ -1,0 +1,171 @@
+\documentclass{ExerciseSheet}
+
+%Set Number of the Exercise sheet and the submission deadline.
+\setExerciseSheetNumber{7}
+\setSubmissionDate{xx.xx.2024}
+
+%boolean variable to determine whether the solutions should be included
+\newif\ifsolutions
+\solutionstrue
+\solutionsfalse
+
+%We have a figure in this sheet
+\usepackage{graphicx}
+
+\begin{document}
+
+
+%Start with exercises
+%-----------------------------------------------------------------------%
+
+%-----------------------------------------------------------------------%
+\begin{problem}
+The goal of this exercise is to prove Proposition 2.2 of the lecture. \\
+That is we consider the function 
+\begin{equation*}
+f(x)= \frac{1}{2} x^TQx + c^Tx +b,    
+\end{equation*}
+where $Q$ is positive definite and symmetric and the sequence ${x_k}$ is derived in the following way:
+\begin{align*}
+    x_{k+1}=x_k-\frac{1}{\mu_k^{BB1}} \nabla f(x_k),
+\end{align*}
+and $\mu_k^{BB1}:=R_Q(s_k)=\frac{s_k^TQs_k}{\|s_k\|_2^2}$ is the Rayleigh quotient at point $s_k=x_k-x_{k-1}$.
+\begin{enumerate}
+    \item Prove that for $\lambda_i < \mu_k^{BB1}$ 
+    $$\frac{\lambda_i}{\mu_k^{BB1}}-1\geq 1 - \frac{\lambda_1}{\lambda_n}$$ holds.
+    \item Let $(\lambda_i, u_i),$ i=1,...,n be a set of eigenvalue and eigenvector pairs (and assume the eigenvectors are orthonormal). \\
+    And let $d_i^k$ be the coefficient $$\nabla f(x_k)=\sum_{i=1}^n d_i^k u_i.$$\\
+    Find a closed form for each $d_i^k$, in terms of $d_i^1, \lambda_i, \mu_k^{BB1}$
+    \item Prove $$\left(d_i^{k+1}\right)^2\leq \delta^2 \left(d_i^k\right)^2,$$
+    where $\delta=\frac{\lambda_1}{\lambda_n}-1$
+    \item Conclude $$\|\nabla f(x_k)\|_2\leq \delta^k \|\nabla f(x_0)\|_2$$
+    \item Follows as the $u_i$ are orthogonal and iteration. 
+\end{enumerate}
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+\begin{enumerate}
+    \item We have $\lambda_n \leq \lambda_i < \mu_k^{BB1}\leq \lambda_1$, this implies
+    \begin{align*}
+        \frac{\mu_k^{BB1}}{\lambda_i} \leq \frac{\lambda_1}{\lambda_n}
+    \end{align*}
+    \item We have $\nabla f(x)= Qx + c$, hence $$\nabla f(x_{k+1}) = Q x_{k+1}+ c = Q x_k - Q \frac{1}{\mu_k^{BB1}} \nabla f(x_k) + c = (I - \frac{1}{\mu_k^{BB1}}Q)\nabla f(x_k)$$
+    Inductively we get
+    \begin{align*}
+        \nabla f(x_{k+1})&=\prod_{j=1}^k (I-\frac{1}{\mu_j^{BB1}}Q) \nabla f(x_1) \\
+        &=\prod_{j=1}^k (I-\frac{1}{\mu_j^{BB1}}Q)\sum_{i=1}^n d_i^0 u_i \\
+        &= \sum_{i=1}^n d_i^1 \prod_{j=1}^k (1-\frac{\lambda_i}{\mu_j^{BB1}})
+    \end{align*}
+    Therefore $d_i^k = \prod_{j=1}^k (1-\frac{\lambda_i}{\mu_j^{BB1}}) $.
+    \item We have the relation 
+    $d_i^{k+1}=(1-\frac{\lambda_i}{\mu_k^{BB1}})d_i^k$\\
+    As $(1-\frac{\lambda_i}{\mu_k^{BB1}})<\delta$ the claim follows. 
+\end{enumerate}
+   
+\end{solution}
+
+\fi
+
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{exo}
+Let $f:\R^n \longrightarrow \R$, $f(x)=\sqrt{1+\|x\|^2}$. Show that $f\in C^{1,1}_1$
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+First we calculate the gradient of $f$
+\begin{equation*}
+    \nabla f(x) = \frac{x}{\sqrt{1+\|x\|^2}}.
+\end{equation*}
+And now we calculate the Hessian of $f$
+\begin{align*}
+   \partial x_j \partial x_j f(x) &= \partial x_j \frac{x_i}{\sqrt{1+\|x\|^2}} = \delta_{i,j} \frac{1}{\sqrt{1+\|x\|^2}} - \frac{x_ix_j}{\sqrt{1+\|x\|^2}^3} \\
+   \nabla^2 f(x) &= \text{diag}(\frac{1}{\sqrt{1+\|x\|^2}}) - xx^T \frac{1}{\sqrt{1+\|x\|^2}^3}
+\end{align*}
+Now we calculate the norm of $\nabla^2 f(x)$
+\begin{align*}
+    \|\nabla^2 f(x)\| &= \sup_{\|z\|=1} z^T\nabla^2 f(x) z \\
+    &= (\frac{1}{\sqrt{1+\|x\|^2}}) - z^Txx^Tz \frac{1}{\sqrt{1+\|x\|^2}^3} \\
+    &\leq (\frac{1}{\sqrt{1+\|x\|^2}})  \leq 1. 
+\end{align*}
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{exo}
+Give an example of a function $f\in C^{1,1}_L$ and a starting point $x_0$ s.t. the problem minimize $f(x)$ has an optimal solution and the gradient with constant step size $t=\frac{2}{L}$ diverges.
+\end{exo}
+
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+For example $f(x):\R^2 \rightarrow \R, f(x)=0.5(10x_1^2 + x_2^2)$. Then
+\begin{equation*}
+    \nabla f(x) = \left(
+\begin{array}{c}
+10x_1\\
+x_2\\
+\end{array}
+\right), \quad L=10.
+\end{equation*}
+Choose for example $x_0 = (2, 0)$.
+\end{solution}
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{exo}
+	Let $A\in \R^{n\times n}$, be a positive definite matrix. 
+ Denote by $m=\lambda_{\text{min}}(A)$ and $M=\lambda_{\text{max}}(A)$ the smallest and largest eigenvalues of $A$ respectively. 
+ \begin{itemize}
+     \item What are the eigenvalues of the matrix $A+MmA^{-1}$?
+     \item What is the maximum of $\varphi:[m,M]\longrightarrow \R, \varphi(t)=t+\frac{Mm}{t}$
+    \item Show for any $\alpha, \beta \in \R$ we have $\alpha \beta \leq \frac{1}{4}(\alpha+\beta)^2$
+    \item Show that for any $0\neq x \in \R^n$ the inequality \begin{equation*}
+        \frac{(x^Tx)^2}{(x^TAx)(x^TA^{-1}x)} \geq \frac{4 Mm}{(M+m)^2}
+    \end{equation*}
+    holds.
+ \end{itemize}
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+\begin{itemize}
+    \item $$\lambda_i(A) + \frac{Mm}{\lambda_i(A)}$$ are the eigenvalues of the matrix. 
+    \item \begin{align*}
+        \varphi'(t) & = 1 - \frac{Mm}{t^2} \\
+        \varphi'(t) = 0 & \Leftrightarrow 1 = \frac{Mm}{t^2} \\
+        & \Leftrightarrow Mm = t^2 \\
+        & \Leftrightarrow \sqrt{Mm} = t. \\
+        \varphi''(t) & = 2 \frac{Mm}{t^3}>0,
+    \end{align*}
+    so this is a minimum. And the maximum is obtained at the end-point of the interval. 
+    \begin{equation*}
+        \varphi(m) =  m + \frac{Mm}{m} = m + M = \varphi(M).
+    \end{equation*}
+    \item Instead we show $(\alpha + \beta)^2 \geq 4 \alpha \beta.$ We have
+    \begin{equation*}
+        0 \leq (\alpha - \beta)^2 = \alpha^2 -2\alpha \beta + \beta^2 = \alpha^2 + \beta^2 + 2 \alpha \beta - 4 \alpha \beta = (\alpha + \beta)^2 - 4 \alpha \beta.
+    \end{equation*}
+    \item \begin{align*}
+        A + MmA^{-1} &\leq (M+m)I \\
+        x^TAx + x^TMmA^{-1}x &\leq (M+m)x^Tx\\
+        \Rightarrow (x^TAx)(x^TMmA^{-1}x) \leq \frac{1}{4} (x^TAx + x^TMmA^{-1}x)^2 &\leq \frac{1}{4}((M+m)x^Tx)^2 \\
+        \Leftrightarrow \frac{4Mm}{(M+m)^2} \leq \frac{(x^Tx)^2}{(x^TAx)(x^TA^{-1}x)}
+    \end{align*}
+\end{itemize}
+\end{solution}
+\fi
+
+\end{document}

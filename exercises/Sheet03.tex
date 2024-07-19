@@ -1,0 +1,164 @@
+\documentclass{ExerciseSheet}
+
+%Set Number of the Exercise sheet and the submission deadline.
+\setExerciseSheetNumber{3}
+\setSubmissionDate{xx.xx.2024}
+
+%boolean variable to determine whether the solutions should be included
+\newif\ifsolutions
+\solutionstrue
+\solutionsfalse
+
+%We have a figure in this sheet
+\usepackage{graphicx}
+
+\begin{document}
+
+
+% \subsection*{Notation}
+% % These exercises are too far in the future for the current sheet. 
+% \vskip 0.5cm
+
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{problem}
+  Consider the following one-dimensional function over the interval $I=[0, 8].$
+    \begin{align*}    
+      \begin{cases}
+       (x-2)^2+0.5,  &0\leq x \leq 1, \\
+           \quad   0.5,& 1\leq x \leq 2, \\
+       -(x-3)^2+0.5, & 2\leq x \leq 2.5, \\
+        (x-4)^2, & 2.5\leq x \leq 4, \\
+       -(x-6)^2+ 2, &4\leq x \leq 6, \\
+         -2x + 15, & 6\leq x \leq 6.5, \\
+          2x - 12 & 6.5\leq x \leq 8.
+      \end{cases}
+   \end{align*}
+   Determine all   minima and maxima of $f$ on $I.$
+\end{problem}
+
+
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+\end{solution}
+\fi
+
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{problem}
+    Prove that if $\Abf,~\Bbf\in \R^{n\times n}$ are positive semidefinite matrices, then their sum $\Abf+\Bbf$ is also positive semidefinite matrices.
+    
+\end{problem}
+
+
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+ Assume $\Abf,~\Bbf\in \R^{n\times n}$ are positive semidefinite and let $\xbf\in \R^n\backslash\{0\}.$ Since $\Abf$ and $\Bbf$ are positive semidefinite we have
+    \begin{align}\label{positive semidefinite}
+        \begin{cases}
+            \xbf^T\Abf\xbf\geq 0 \\
+            \xbf^T\Bbf\xbf\geq 0
+        \end{cases}
+    \end{align}
+ On the other hand
+ \begin{align*}
+     \xbf^T(\Abf+\Bbf)\xbf = \xbf^T\Abf\xbf+ \xbf^T\Bbf\xbf
+ \end{align*}
+ substituting $\eqref{positive semidefinite}$ into the above yields
+    \begin{align*}
+     \xbf^T(\Abf+\Bbf)\xbf \geq 0
+ \end{align*}
+\end{solution}
+\fi
+
+
+
+
+
+
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{exo}
+%Let us 
+Prove the Eigenvalue characterisation theorem from the lecture. Let $A\in \R^{n\times n}$ be a symmetric matrix. Then
+\begin{enumerate}
+    \item A is positive definite iff all eigenvalues are positive.
+    \item A is positive semidefinite iff all eigenvalues are non-negative.
+    \item A is indefinite iff A has at least one positive and one negative eigenvalue.
+\end{enumerate}
+\end{exo}
+
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+\begin{enumerate}
+    \item Suppose $A$ is positive definite, and let $(\lambda, x)\in \R \times \R^n$ be any eigenvalue, eigenvector pair. Then as $A$ is positive definite and $x\neq 0$ $$0< x^TAx = x^T\lambda x = \lambda \|x\|^2,$$ which implies $\lambda>0$.  \\
+    Suppose now all eigenvalues are positive. Choose any $x\in \R^n\backslash\{0\}$. As $A$ is symmetric we can use the spectral decomposition theorem and write $A = U^TDU$, let $y=Ux\neq 0$, as $U$ is invertible. Then
+    \begin{equation*}
+        x^TAx = x^TU^T D Ux = y^T D y = \sum_{i=1}^n y_i^2 d_i >0, 
+    \end{equation*}
+    because all the $d_i>0$ and $y\neq0$.
+    \item Basically the same argument only with $\geq$ instead of $>$
+    \item Suppose $A$ is indefinite. We can again use the spectral decomposition %them
+    and write $A=U^TDU$, let $x,y \in \R^n$ be such that $0< x^TAx$ and $0>y^TAy$. Then setting $v:=Ux$
+    \begin{equation*}
+        0 < x^TAx = x^T U^T D U X = v^TD v = \sum_{i=1}^n v_i^2 d_i,
+    \end{equation*}
+    which implies at least one of the $d_i$ (the eigenvalues) is positive. \\
+    On the other hand, setting $w:=Uy$ 
+    \begin{equation*}
+        0 > y^TAy = y^T U^T D U y = w^TDw = \sum_{i=1}^n w_i^2 d_i,
+    \end{equation*}
+    which implies at least one of the $d_i$ is negative. \\
+    The converse is clear, as the corresponding eigenvectors to the negative and positive eigenvalues fullfill the definition of indefinite. 
+\end{enumerate}
+\end{solution}
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{exo}
+	Prove the Sufficient Second Order Optimality Condition, that is:
+Let $f: S \longrightarrow \R$ be a function defined on the open set $S\subset \R^n$. Suppose that $f \in C^2(S)$ and that $x^*$ is a stationary point. Then the following hold:
+\begin{enumerate}
+    \item If $\nabla^2 f(x^*) \succ 0$, then $x^*$ is a strict local minimizer of $f$.
+    \item  If $\nabla^2 f(x^*) \prec 0$, then $x^*$ is a strict local maximiser of $f$.
+\end{enumerate}
+\end{exo}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+\begin{enumerate}
+    \item Let $x^*\neq x\in S,$ assume $\nabla^2 f(x^*) \succ 0.$ Let us prove that $x^*$ is a strict local minimizer of $f$ over $S$ that is 
+\begin{align*}
+    f(x)>f(x^*) \text{ for all $x\in S$ and $x\neq x^*$}.
+\end{align*}
+There exists $r>0,$ such that $B(x^*, r)\subseteq S$ for which $\nabla^2 f(x) \succ 0$ for all $x\in B(x^*, r)$   as the Hessian is continuous since $f \in C^2(S).$ Moreover, applying the linear approximation theorem yields for all $x\in B(x^*, r)$ there exists $z\in [x^* , x]$ such that %  $f$ over $[x^* , x]$ 
+\begin{align*}
+    f(x) = f(x^*) + \nabla f(x^*)^T(x-x^*) + \frac{1}{2}(x-x^*)^T\nabla^2 f(z)(x-x^*)
+\end{align*}
+% where $z_{\epsilon}=x^*+\epsilon(x-x^*)$ with $\epsilon\in [0,1].$
+Since $x^*$ is a stationary point of $f,$ then $\nabla f(x^*)=0,$ it follows that, 
+  \begin{align*}
+    f(x) - f(x^*) =  \frac{1}{2}(x-x^*)^T\nabla^2 f(z)(x-x^*).
+\end{align*}
+in addition, $z\in [x^* , x]\subseteq B(x^*, r)$ hence, $\nabla^2 f(z) \succ 0.$ Since $x\neq x^*,$ it follows  $$(x-x^*)^T\nabla^2 f(z)(x-x^*)>0$$
+therefore,
+  \begin{align*}
+      f(x) > f(x^*) \text{ for all $x\in B(x^*, r)$}.
+  \end{align*}
+\item Apply the same argument on $-f.$
+\end{enumerate}
+\end{solution} 
+\fi
+
+\end{document}
