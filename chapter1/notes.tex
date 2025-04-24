@@ -1,7 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 \include{../packages}
 \include{../macros}
-\title{Continuous Optimization}
+\title{Optimization Methods}
 \author{Chapter 1: Basics of Optimization}
 \date{}
 \begin{document}
@@ -16,22 +16,27 @@
 	\end{split}
 	\end{equation}
 \begin{itemize}
-	\item $x \in \Rn$: vector of variables to be chosen ($n$ scalar variables $x_1 , \dots , x_n$)
-	\item $f$: objective function to be minimized
-	\item $g_1,\dots, g_m$: inequality constraint functions to be satisfied
-	\item $h_1,\dots, h_p$: equality constraint functions to be satisfied
+	\item $x \in \Rn$: $n$ variables to be chosen;
+	\item $f: \Rn\to \R$: objective function to be minimized;
+	\item $g_1,\dots, g_m: \Rn \to \R$: inequality constraint functions to be satisfied;
+	\item $h_1,\dots, h_p: \Rn \to \R$ equality constraint functions to be satisfied.
 \end{itemize}
-The feasible set can also be denoted by $S=\{x \in \Rn: g_i(x) \leq 0 \; i=1, \dots, m, \;\; h_j(x) = 0 \; j=1, \dots, p\}$.
+The feasible set can also be denoted by $S=\{x \in \Rn: g_i(x) \leq 0 \; i=1, \dots, m, \;\; h_j(x) = 0 \; j=1, \dots, p\}$. Notice this is the most general shape of optimization problems, but there are problems in which there are no inequality constraints (m=0) or no equality constraints (p=0).
 \subsection{Taxonomy}
 Concerning the dimensionality, optimization problems can be 
 \begin{itemize}
-	\item infinite-dimensional: when the space of variables is infinite dimensional, e.g., elements can be vectors of functions of one ore more variables;
-	\item finite-dimensional: when the space of variables is finite-dimensional, e.g., $\Rn.$
+	\item finite-dimensional: when the space of variables is finite-dimensional, e.g., as in our case $x\in\Rn$;
+	\item infinite-dimensional: in principle, optimization problems can also be infinite dimensional  dimensional, e.g., $x\in \mathcal{H}:=\{h:\Xcal\to \Ycal\}$ where the variable $x$ is now a function from the space $\Xcal$ to $\Ycal$.
 \end{itemize}
 Concerning the granularity of the space, optimization problems can be 
 \begin{itemize}
-	\item discrete: when at least one variable is an integer;
-	\item continuous: when all variables involved are continuous.
+	\item continuous: when all variables involved are continuous;
+	\item discrete: when at least one variable is an integer, e.g., $x\in \mathbb{Z}^n, x\in \{0,1\}^n.$
+\end{itemize}
+Concerning the feasibility region, optimization can be 
+\begin{itemize}
+\item unconstrained: when there are no constraints, e.g., $S=\Rn$;
+\item constrained: when there is at least one constraint, e.g., $S\subset\Rn$.
 \end{itemize}
 Concerning the hypothesis of linearity, optimization problems are also called
 \begin{itemize}
@@ -45,7 +50,7 @@ Concerning the hypothesis of differentiability, we can distinguish between
 \item smooth optimization: when the functions defining the objective
 and the constraints are continuously differentiable;
 \item nonsmooth optimization problems: when the functions defining the objective and the constraints are continuous, but typically not differentiable in all points of the feasible set. Weaker notions of derivatives are used to solve this problem.
-\item derivative-free optimization: this branch of optimization consider cases in which evaluating the objective function/constraints is very costly, in particular the functions defining the objective and the constraints might not be continuous. A similar field is that of black-box optimization, in which the optimizer assumes to not have any information on the objective function or on the constraints.
+\item derivative-free optimization (more recently called zeroth-order optimization, in contrast to first- and second-order): this branch of optimization consider cases in which evaluating the objective function/constraints is very costly and the derivatives are unavailable (noisy, unreliable, too expensive). In this field, it is sometimes possible to assume that the underlying function is continuously differentiable. On the other hand, for black-box optimization one assumes to not have any information on the objective function or on the constraints.
 \end{itemize}
 Concerning the hypothesis of convexity, we can distinguish between
 \begin{itemize}
@@ -80,22 +85,37 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 \end{equation*}
 %TODO: remark for myself, draw the network
 \end{example}
-\begin{example}[Training of Neural Networks (Unconstrained Optimization)] Let us start from describing a single (artificial) neuron. In particular, this unit takes as an input a vector and performs a scalar product with the weights of the neuron. In a second step, this value passes through a thresholding function $\sigma$ called activation function. Inspired by real neurons, also this unit propagates its output only if the weighted sum of its inputs (in the natural neuron, the potential difference)  is over a certain threshold. Neural networks stack various neurons in parallel to build a layer and, in turn, concatenate various layer (deep networks). This model is very expressive, in fact already a wide-enough 2-layer neural network is able to approximate any possible function of the input.
-	\par Neural networks are the most widely used machine learning model and they can be formally defined as follows. 
+\begin{example}[Training of Neural Networks (Unconstrained Optimization)] Let us start from describing the supervised learning task. We want to approximate as well as possible an unknown function $h^*:\Xcal\to\Ycal$, for instance the value of a certain asset in the stock market at a certain time $t$. So $\Ycal$ is the value of the asset and the space $\Xcal$ is the Cartesian product of time, politicians' statements/tweets, price of raw materials, revenue of the last quarter, etc. Let $h^*$ be the true function, then the optimization problem becomes
+	\begin{equation*}
+		\begin{split}
+			\min_{h} \;\; &\E_{x\sim \Dcal} \ell(h(x),h^*(x))=:R(h)\\
+			\st& h \in \mathcal{H}:=\{\Xcal\to \Ycal\}
+		\end{split}
+	\end{equation*}
+where $\ell:\Ycal\times\Ycal\to \R$ is the loss function that measures how far is a certain output from the true label, e.g., $\ell(h(x),h^*(x)):=(h(x)-h^*(x))^2$ and $\mathcal{H}$ is also called the hypothesis class. This is a stochastic, infinite dimensional problem for which we don't know $\Dcal$ and there might not be a true function, e.g., the space $\Xcal$ does not contain all the useful information to predict $\Ycal$. In practice, we are given a set of $M$ training examples, $S=\{(x_i, y_i)\}_{i=1}^{M}$
+\begin{itemize}
+	\item $x_i \in \mathbb{R}^{d}$ $d$ is the amount of features describing an instance (e.g., as above, or the pixels of an image)
+	\item $y_i\in\mathbb{R}$ (e.g., value of an asset), $y_i\in\{1,\dots C\}$ (e.g., classification, one of the $C$ classes),
+\end{itemize}
+ and what we can do is to minimize the empirical risk $\hat{R}(h)$. In fact, the following problem is called Empirical Risk Minimization:
+\begin{equation*}
+	\begin{split}
+		\min_{h} \;\; &\sum_{i=1}^M \ell(h(x_i),y_i)=:\hat{R}(h)\\
+		\st& h \in \{\Xcal\to \Ycal\}.
+	\end{split}
+\end{equation*}
+Now, this is a deterministic optimization problem, but it is still infinite dimensional, because we minimize over the set of all possible functions. What we can try to do is to parameterize our function $h$. In particular, the most widely used class of functions in modern machine learning is that of neural networks. Let us start from the biological motivation: real neurons in the brain propagate their output only if the weighted sum of its inputs (potential differences) is over a certain threshold. The artificial neuron takes as an input a vector and performs a scalar product with the weights of the neuron. In a second step, inspired by the real neurons, this value passes through a thresholding function $\sigma$ called activation function. Neural networks stack various neurons in parallel to build a layer and, in turn, concatenate various layer (deep networks). This model is very expressive, in fact already a wide-enough 2-layer neural network is able to approximate any possible function of the input (Universal Approximation Theorem). Formal definition
 	\begin{itemize}
-		\item $\mathcal{D}=\{(x_i, y_i)\}_{i=1}^{M}$ be a training set of $M$ instances
-		\begin{itemize}
-			\item $x_i \in \mathbb{R}^{d}$ $d$ is the amount of features of the dataset (e.g., pixels)
-			\item $y_i\in\mathbb{R}$
-		\end{itemize}
 		\item the $j$-th layer applied on a generic input $n_{j-1}$-dimensional input $x$:\\
 		$g_j(x) := \sigma (W_j x +b_j )$, $W_j \in \R^{n_{j-1}\times n_j}$, $b_j \in \R^{n_j}$, $\sigma$ is applied component-wise,\\ e.g., ReLU $\sigma(x)= \begin{cases} 0 & \text{if} \;\;x<0\\ x &\text{otherwise} \end{cases}$ %(ReLU)
 		\item the weights: $w = \begin{pmatrix}
 			\text{vec}(W_1)\\
+			b_1\\
 			\vdots\\
-			\text{vec}(W_L)
+			\text{vec}(W_L)\\
+			b_L
 		\end{pmatrix}\in \mathbb{R}^{n}$
-		\item the network applied on the $i$-th instance: $h_i(w):=g_L \circ \dots \circ g_1(x_i)$ 
+		\item the network applied on the $i$-th instance: $h_i(w):=g_L \circ \dots \circ g_1(x_i)$. If we now think of the infinite dimensional function $h$ from before, the weights $w$ are the parameters of this hypothesis function.
 		\item the losses: $f_i(w):=\mathcal{L}(h_i(w),y_i)$, e.g., $\mathcal{L}(h_i(w),y_i)= (h_i(w)-y_i)^2$%(sofmax)
 	\end{itemize}
 	
@@ -107,8 +127,7 @@ To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity 
 \begin{example}[Portfolio Optimization (Convex Quadratic Programming)] Portfolio selection theory studies how to allocate an investor’s available capital into a prefixed set of assets with the aims of maximizing the expected return and minimizing the investment risk. Let $n$ be the number of available assets, let $\mu\in \Rn$ be the vector of expected returns of the assets, and let $Q \in \Rnn$ be a symmetric positive semidefinite matrix whose generic element $q_{ij}$ is the covariance of returns of assets i and j. We assume that the available (normalized) capital is fully invested. Then, let $x \in \Rn$ be the vector of decision variables, where $x_i$ is the fraction of the available capital to be invested into asset $i$, with $i = 1, \dots, n$. 
 \par By this notation, $\mu^T x$ is the expected return of the portfolio and $x^TQx$ is the covariance of the portfolio which
 can be used as a measure of the risk connected with the investment (diversification of the portfolio). 
-In the traditional Markowitz portfolio selection model \cite{markowits52a}, the optimization problem is stated as the
-following convex quadratic programming problem
+In the traditional Markowitz portfolio selection model \cite{markowits52a}, the optimization problem is stated as the following convex quadratic programming problem
 \begin{equation*}
 	\begin{split}
 		\min \;\; &x^TQx\\
