@@ -348,7 +348,7 @@ and the eigenvector(s) of $A$ corresponding to the minimal eigenvalue are the mi
 and the eigenvectors of $A$ corresponding to the maximal eigenvalue are maximizers of this problem.
 \end{corollary}
 %TODO: the proof is a possible exercise
-\subsection{Singular values and Singular Vectors}
+\subsection{Singular Values and Singular Vectors}
 Similar objects exist also for non-squared matrices $A \in \Rmn$.
 \begin{theorem}[Singular Value Decomposition] Let $A \in \Rmn$. Then there exist orthogonal matrices $U\in \R^{m\times m}$ and $V\in \Rnn$ and the uniquely defined real values
 \begin{equation*}
@@ -589,16 +589,16 @@ Our main task will usually be to find and study global minimum or maximum points
 	\end{enumerate}
 \end{definition}
 Notice that a global minimum (maximum) point is also a local minimum (maximum) point.
-\par A well-known result (\textbf{Fermat's theorem}) is that for a one-dimensional function $f$ defined and differentiable
-over an interval $(a, b)$, if a point $x^*\in (a, b)$ is a local optimum, then $f'(x^*) = 0$. The multidimensional extension of this result states that the gradient is zero at local optima. We refer to such an optimality condition as a first order optimality condition, as it is expressed in terms of the first order derivatives.
+
 \subsection{First Order Optimality Conditions}
+\par A well-known result (\textbf{Fermat's theorem}) is that for a one-dimensional function $f$ defined and differentiable over an interval $(a, b)$, if a point $x^*\in (a, b)$ is a local optimum, then $f'(x^*) = 0$. The multidimensional extension of this result states that the gradient is zero at local optima. We refer to such an optimality condition as a first order optimality condition, as it is expressed in terms of the first order derivatives.
 \begin{theorem}[First Order Optimality Condition]\label{thm:first_order_optimality}
 	Let $f:S\to \R$ be a function defined on $S\subseteq \Rn$. Suppose that $x^*\in\interior(S)$ is a local optimum and that all partial derivatives of $f$ exist at $x^*$. Then $\grad(x)=0$.
 \end{theorem}
 \begin{proof}
 	Let $i\in [n]$ and consider the one-dimensional function $g(t)=f(x^*+te_i)$. Note that $g$ is differentiable at $t=0$ and by definition $g'(0) = \partiali(x^*)$. Since $x^*$ is a local optimum of $f$, if follows that $t=0$ is a local optimum of $g$, which, by Fermat's Theorem, directly implies that $g'(0) = 0$ and thus also $\partiali(x^*)=0$. Now, since the argument can be repeated for all $i\in[n]$, the result $\nabla f(x^*) = 0$ follows.
 \end{proof}
-Theorem \ref{thm:first_order_optimality} presents a necessary optimality condition: the gradient vanishes at all local optimum points, which are interior points of the domain of the function. However, the \textbf{reverse claim is not true} as there could be points which are not local optimum points, whose gradient is zero. The points in which the gradient vanishes are called \textbf{stationary points} and they are the only candidates for local optima among the points in the interior of the domain of the function.
+Theorem \ref{thm:first_order_optimality} presents a necessary optimality condition: the gradient vanishes at all local optimum points, which are interior points of the domain of the function. However, the \textbf{reverse claim is not true} as there could be points with zero gradient which are not local optima. The points in which the gradient vanishes are called \textbf{stationary points} and they are the only candidates for local optima among the points in the interior of the domain of the function.
 \begin{definition}[Stationary Points]
 	Let $f:S\to \R$ be a function defined on a set $S\subseteq \Rn$. Suppose that $x^* \in \interior(S)$ and that $f$ is differentiable in a neighborhood of $x^*$. Then $x^*$ is called stationary point of $f$ if $\grad(x^*)=0$.
 \end{definition}
@@ -610,11 +610,12 @@ Theorem \ref{thm:first_order_optimality} presents a necessary optimality conditi
 	A symmetric matrix $A\in \Rnn$ is positive definite, denoted by $A \succ0$, if $x^TAx> 0$ for every $x\in \Rn, x\neq 0$.
 \end{definition}
 
-\noindent In this course, a positive definite or semidefinite matrix is always assumed to be symmetric. The same definitions can be given for negative (semi)definite matrices. Notice that a matrix $A$ is negative (semi)definite if and only if $-A$ is positive (semi)definite. A more complicated matrix is instead the following.
+\noindent In this course, a positive definite or semidefinite matrix is always assumed to be symmetric. The same definitions can be given for negative (semi)definite matrices. Notice that a matrix $A$ is negative (semi)definite if and only if $-A$ is positive (semi)definite.
 \begin{definition}[Indefiniteness]
 	A symmetric matrix $A\in \Rnn$ is indefinite, if there exist $x,y \in \Rn$ such that $x^TAx> 0$ and $y^TAy<0$.
 \end{definition}
-Indefinite matrices are easier to recognize than positive (semi)definite ones, as matrices that contain positive and negative values on the diagonal are indefinite. To better characterize the latter, we need to look the eigenvalues of the matrix.
+Indefinite matrices are easier to recognize than positive (semi)definite ones, as matrices that contain positive and negative values on the diagonal are indefinite. %TODO: for me, you can simply extract that value by multiplying on the left and right by e_i
+To better characterize the latter, we need to look the eigenvalues of the matrix.
 \begin{theorem}[Eigenvalue characterization theorem]
 	Let $A\in \Rnn$ be a symmetric matrix. Then
 	\begin{enumerate}
@@ -634,7 +635,7 @@ Indefinite matrices are easier to recognize than positive (semi)definite ones, a
 \end{theorem}
 %TODO: notice that x^* needs to be a stationary point, everything builds on that 
 \begin{proof}
-	(a) Since $x^*$ is a local minimizer, there exists a ball $B(x^*,r)\subseteq U$ for which $f(x) \geq f(x^*)\; \forall x\in B(x^*,r)$. Let $d\in \Rn$ be a nonzero vector. For any $0<\alpha<\frac{r}{||d||}$ we have $x_\alpha^* :=x^* + \alpha d \in B(x^*, r)$, which means that for any such $\alpha$
+	(a) Since $x^*$ is a local minimizer, there exists a ball $B(x^*,r)\subseteq S$ for which $f(x) \geq f(x^*)\; \forall x\in B(x^*,r)$. Let $d\in \Rn$ be a nonzero vector. For any $0<\alpha<\frac{r}{||d||}$ we have $x_\alpha^* :=x^* + \alpha d \in B(x^*, r)$, which means that for any such $\alpha$
 	\begin{equation}\label{eq:x_alpha}
 		f(x^*)\leq f(x_\alpha^*).
 	\end{equation}
@@ -661,7 +662,7 @@ which combined with \eqref{eq:x_alpha} yields that for any $\alpha \in (0, \frac
 %TODO: notice that x^* is strict in this case
 
 \begin{definition}[Saddle Points]
-	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in C(S)$. A stationary point $x^*$ is a saddle point of $f$ over $S$ when it is neither a local minimizer nor a local maximizer of $f$ over $S$.
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in \C(S)$. A stationary point $x^*$ is a saddle point of $f$ over $S$ when it is neither a local minimizer nor a local maximizer of $f$ over $S$.
 \end{definition}
 
 \begin{theorem}[Sufficient Condition for a Saddle Point]
