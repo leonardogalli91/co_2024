@@ -479,7 +479,7 @@ Thus, we rewrite \eqref{eq:armijo} as
 \end{proof}
 To achieve the asymptotic convergence to stationary points for this method, we can use Theorem \ref{thm:Armijo_convergence_p2} by noticing that \eqref{eq:failure} can be achieved also for \eqref{eq:grippo}, as the additional value $R_k-f(x_k)$ is positive and can be thus neglected.
 
-\section{Gradient method on convex function}
+\section{Gradient method on convex functions}
 In the following 3 sections, we will see how to speed up the convergence of GD for functions with additional structure. In particular, we will cover convex functions, strongly convex functions and functions satisfying the Polyak-\L ojasiewicz condition. Moreover, we will simplify the analysis by assuming $f\in \LC(\Rn)$.
 \begin{definition}[Convex Function]
 	A function $f:\Rn\to \R$ is said to be convex if given $x_1,x_2\in \Rn$ and $\lambda\in [0,1]$, then 
@@ -516,7 +516,7 @@ we can provide the following very useful result by Jensen's.
 			&\leq (1-\lambda_{k+1})f(v) + \lambda_{k+1} f(x_{k+1}),
 		\end{split}
 	\end{equation*}
-	with $v= \sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} x_i$. Since $\sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} = \frac{1-\lambda_{k+1}}{1-\lambda_{k+1}} = 1,$ it follows that $v$ is a convex combination of $k$ points from $\Rn$, hence by the induction hypotesis we have that $f(v)\leq \sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} f(x_i)$, which combined with the equality above yields
+	with $v= \sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} x_i$ where the last inequality follows by convexity. Since $\sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} = \frac{1-\lambda_{k+1}}{1-\lambda_{k+1}} = 1,$ it follows that $v$ is a convex combination of $k$ points from $\Rn$, hence by the induction hypotesis we have that $f(v)\leq \sum_{i=1}^k\frac{\lambda_i}{1-\lambda_{k+1}} f(x_i)$, which combined with the equality above yields
 	\begin{equation*}
 		f(z) \leq \sum_{i=1}^{k+1} \lambda_i f(x_i).
 	\end{equation*}
@@ -540,7 +540,7 @@ we can provide the following very useful result by Jensen's.
 	\end{equation*}
 	which implies that $f(z)\geq f(x^*) $ because $\grad(x^*)=0$.
 \end{proof}
-In particular, being a stationary point is both sufficient and necessary condition for $x^*$ to be a global minimum.
+In particular when $f$ is convex, being a stationary point is both sufficient and necessary condition for $x^*$ to be a global minimum.
 We can now establish the conditions under which a twice continuously differentiable function $f$ is convex.
 \begin{theorem}[Second order characterization of convexity]
 	Let $f\in \Cii(\Rn)$. Thus, we have that $f$ is convex iff $\hess(x)\succcurlyeq0\quad \forall x\in \Rn.$
@@ -656,7 +656,7 @@ For simplicity, we will assume to know $L$, so that we can employ Algorithm \eqr
 	\end{align}
 \end{proof}
 
-Notice that by \eqref{eq:pre_cocoercivity} applied on $y=x$ and $x=x^*$, we have $ \frac{1}{2L}\|\grad(x_k) \|^2 \leq f(x)-f^*$, meaning that the actual termination criterion of Algorithm \ref{gd} on the norm of the gradient also works for convex functions. In particular, we have the following.
+Notice that by \eqref{eq:pre_cocoercivity} applied on $y=x$ and $x=x^*$, we have $ \frac{1}{2L}\|\grad(x) \|^2 \leq f(x)-f^*$, meaning that the actual termination criterion of Algorithm \ref{gd} on the norm of the gradient also works for convex functions. In particular, we have the following.
 \begin{corollary}
 	The iteration complexity of Algorithm \eqref{gd} on convex functions is $\BigO(\epsilon^{-1})$.
 \end{corollary}
@@ -667,12 +667,72 @@ Notice that by \eqref{eq:pre_cocoercivity} applied on $y=x$ and $x=x^*$, we have
 \section{Gradient method on strongly convex functions}
 
 \begin{definition}[Strongly Convex Function]
-	A function $f:\Rn\to \R$ is said to be strictly convex if given $x_1,x_2\in \Rn$ and $\lambda\in [0,1]$, then 
+	Let $f : \Rn \to \R$, and $\mu > 0$. We say that $f$ is $\mu$-strongly convex if, for every $x, y \in \Rn$, and every $\lambda \in [0, 1]$ we have that
 	\begin{equation*}
-		f(\lambda x_1 +(1-\lambda) x_2) < \lambda f(x_1) +(1-\lambda) f(x_2).
+		\mu \frac{\lambda(1-\lambda)}{2} \|x - y\|^2 + f(\lambda x + (1-\lambda)y) \leq \lambda f(x) + (1-\lambda)f(y).
 	\end{equation*}
+We say that $\mu$ is the strong convexity constant of $f$.
 \end{definition}
 
+
+
+The lemma below shows that it is easy to craft a strongly convex function: just add a multiple of $\| \cdot \|^2$ to a convex function. This happens for instance when using Tikhonov regularization (a.k.a. ridge regularization) in machine learning or inverse problems.
+
+\begin{lemma}
+	Let $f : \Rn \to \R$, and $\mu > 0$. The function $f$ is $\mu$-strongly convex if and only if there exists a convex function $g : \Rn \to \R$ such that $f(x) = g(x) + \frac{\mu}{2}\|x\|^2$.
+\end{lemma} 
+\begin{proof}
+	Given $f$ and $\mu$, define $g(x) := f(x) - \frac{\mu}{2}\|x\|^2$. We need to prove that $f$ is $\mu$-strongly convex if and only if $g$ is convex. By denoting $z_\lambda := (1-\lambda)x + \lambda y$,  $f$ is $\mu$-strongly convex
+	\begin{align*}
+		&\Leftrightarrow f(z_\lambda) + \frac{\mu}{2}\lambda(1-\lambda)\|x - y\|^2 \leq (1-\lambda)f(x) + \lambda f(y) \quad \forall \lambda \forall x, y\in \Rn \\
+		&\Leftrightarrow g(z_\lambda) + \frac{\mu}{2}\|z_\lambda\|^2 + \frac{\mu}{2}\lambda(1-\lambda)\|x - y\|^2 \leq (1-\lambda)g(x) + \lambda g(y) + (1-\lambda)\frac{\mu}{2}\|x\|^2 + \lambda\frac{\mu}{2}\|y\|^2 \quad \forall \lambda \forall x, y\in \Rn.
+	\end{align*}
+	Let us now gather all the terms multiplied by $\mu$ to find that
+	\begin{align*}
+		&\frac{1}{2}\|z_\lambda\|^2 + \frac{1}{2}\lambda(1-\lambda)\|x - y\|^2 - (1-\lambda)\frac{1}{2}\|x\|^2 - \lambda\frac{1}{2}\|y\|^2 \\
+		&= (1-\lambda)^2\|x\|^2 + \lambda^2\|y\|^2 + 2\lambda(1-\lambda)\langle x, y \rangle + \lambda(1-\lambda)\|x\|^2 + \lambda(1-\lambda)\|y\|^2 - 2\lambda(1-\lambda)\langle x, y \rangle \\
+		&\quad - (1-\lambda)\|x\|^2 - \lambda\|y\|^2 \\
+		&= \|x\|^2\left((1-\lambda)^2 + \lambda(1-\lambda) - (1-\lambda)\right) + \|y\|^2\left(\lambda^2 + \lambda(1-\lambda) - \lambda\right) \\
+		&= 0.
+	\end{align*}
+	
+	\noindent Thus, all the terms in $\mu$ disappear, and what remains is exactly the definition for $g$ to be convex.
+\end{proof}
+
+\noindent Let us now present some useful lemmas. 
+\begin{lemma}
+	Let $f : \Rn \to \R$ be continuous and strongly convex, then $f$ admits a unique minimizer.
+\end{lemma}
+\begin{proof}
+	Exercise. 
+\end{proof}
+
+\begin{lemma}
+	Let $f \in \C(\Rn)$ be $\mu$-strongly convex, then
+	\begin{equation}
+		\text{for all } x, y \in \Rn, \quad f(y) \geq f(x) + \grad(x)^T(y - x) + \frac{\mu}{2}\|y - x\|^2.
+	\end{equation}
+\end{lemma}
+
+\begin{proof}
+	Exercise.
+%	Define $g(x) := f(x) - \frac{\mu}{2}\|x\|^2$. According to Lemma 2.12, $g$ is convex. It is also clearly differentiable by definition. According to the sum rule, we have $\nabla f(x) = \nabla g(x) + \mu x$. Therefore we can use the convexity of $g$ with Definition 8.4 to write
+%	\begin{equation}
+%		f(y) - f(x) - \langle \nabla f(x), y - x \rangle \geq \frac{\mu}{2}\|y\|^2 - \frac{\mu}{2}\|x\|^2 - \langle \mu x, y - x \rangle = \frac{\mu}{2}\|y - x\|^2.
+%	\end{equation}
+\end{proof} 
+
+\begin{lemma}Let $f\in \Cii(\Rn)$ be $\mu$-strongly convex. Then, for all $x \in \Rn$, for every eigenvalue $\lambda$ of $\nabla^2 f(x)$, we have $\lambda \geq \mu$.
+\end{lemma}
+
+\begin{proof}
+	Exercise.
+%	Define $g(x) := f(x) - \frac{\mu}{2}\|x\|^2$, which is convex according to Lemma 2.12. It is also twice differentiable, by definition, and we have $\nabla^2 f(x) = \nabla^2 g(x) + \mu I d$. So the eigenvalues of $\nabla^2 f(x)$ are equal to the ones of $\nabla^2 g(x)$ plus $\mu$. We can conclude by using Lemma 2.9. 
+\end{proof}
+
+%\begin{example}[Least-squares and strong convexity]
+%	Let $f$ be a least-squares function as in Exercise 2.10. Then $f$ is strongly convex if and only if $\Phi$ is injective. In this case, the strong convexity constant $\mu$ is $\lambda_{\min}(\Phi^{\top} \Phi)$, the smallest eigenvalue of $\Phi^{\top} \Phi$.
+%\end{example}
 
 \section{Gradient method on functions satisfying PL}
 
