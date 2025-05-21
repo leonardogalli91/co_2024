@@ -674,9 +674,9 @@ The term $ \mu\|x - y\|^2$ ensures that when moving away from $x$ the function v
 
 
 
-The lemma below shows that it is easy to craft a strongly convex function: just add a multiple of $\| \cdot \|^2$ to a convex function. This happens for instance when using Tikhonov regularization (a.k.a. ridge regularization) in machine learning or inverse problems.
+The lemma below shows that it is easy to craft a strongly convex function: just add a multiple of $\| \cdot \|^2$ to a convex function. This happens for instance when using Tikhonov regularization (a.k.a. ridge/$\ell_2$ regularization) in machine learning or inverse problems.
 
-\begin{lemma}
+\begin{lemma}\label{lemma:l2_regularization}
 	Let $f : \Rn \to \R$, and $\mu > 0$. The function $f$ is $\mu$-strongly convex if and only if there exists a convex function $g : \Rn \to \R$ such that $f(x) = g(x) + \frac{\mu}{2}\|x\|^2$.
 \end{lemma} 
 \begin{proof}
@@ -697,7 +697,7 @@ The lemma below shows that it is easy to craft a strongly convex function: just 
 	\noindent Thus, all the terms in $\mu$ disappear, and what remains is exactly the definition for $g$ to be convex.
 \end{proof}
 
-\noindent Let us now present some useful lemmas. 
+\noindent Let us now present some useful lemmas, that can be proved by exploiting Lemma \ref{lemma:l2_regularization}.
 \begin{lemma}
 	Let $f : \Rn \to \R$ be continuous and strongly convex, then $f$ admits a unique minimizer.
 \end{lemma}
