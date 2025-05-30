@@ -879,7 +879,7 @@ Moreover, the iteration complexity of GD with the Polyak step size is $\BigO(\ep
 \section{Barzilai-Borwein Step Size}
 We now introduce another possible step size rule, called Barzilai-Borwein \cite{barzilai88a}. This step is born to minimize strongly convex quadratic objective functions, i.e.,
 \begin{equation}\label{eq:quadratic}
-	f(x) = x^TQx + c^Tx + b,
+	f(x) =\frac{1}{2} x^TQx + c^Tx + b,
 \end{equation}
 where $x,c\in\Rn$, $b\in \R$, $Q\in \Rnn$ is symmetric and positive definite. In this case, we get the following result for GD.
 \begin{proposition}[Finite convergence of GD in the quadratic case]
@@ -946,14 +946,15 @@ and
 \end{equation}
 In particular, for \eqref{eq:bb1}, and equivalently for \eqref{eq:bb2}, we get the following proposition.
 \begin{proposition}
-	Given $\{x_k\}_k$ the sequence generate by Algorithm \eqref{eq:bb1} to solve \eqref{eq:quadratic}, with $Q$ symmetric and positive definite, with $2\lambda_n>\lambda_1$, we get 
+	Given $\{x_k\}_k$ the sequence generate by Algorithm \eqref{eq:bb1} to solve \eqref{eq:quadratic}, with $Q$ symmetric and positive definite, with $\lambda_1<2\lambda_n$, we get 
 	\begin{equation*}
-		\| \grad(x_k)\|\leq \delta^k \|\grad(x_0)\| \quad \with \delta=\frac{\lambda_n}{\lambda_1}-1.
+		\| \grad(x_k)\|\leq \delta^k \|\grad(x_0)\| \quad \with \delta=\frac{\lambda_1}{\lambda_n}-1.
 	\end{equation*}
 \end{proposition}
 \begin{proof}
 Exercise.
 \end{proof}
+
 \begin{remark}
 	\begin{itemize}
 		\item Beyond this result, the same exponential convergence can be proven for quadratic strongly convex functions also without assuming $2\lambda_n>\lambda_1$ (see \cite{dai02a}). 
@@ -971,30 +972,149 @@ Exercise.
 \end{remark}
 
 
-%\begin{algorithm}[H]\label{alg:bb}
-%	\caption{Nonmonotone Barzilai-Borwein Method}
-%	
-%	\KwIn{Pick $x_0\in \Rn$ arbitrarly, $\epsilon=10^{-4},\nu=10^{-8}, \alpha=0.1, \beta=0.5$.}
-%	
-%	$k = 0$
-%	
-%	\While{$\|\grad(x_k)\|> \epsilon$}{
-%		
-%		$\mu_k^{BB1} = \frac{(\grad(x_k)-\grad(x_{k-1}))^T(x_k-x_{k-1})}{\|x_k - x_{k-1}\|^2}$
-%		
-%		project $\mu_k^{BB1}$ into $[\nu,\frac{1}{\nu}]$ and call it $\tilde{\mu}_k^{BB1}$
-%		
-%		$t_k \leftarrow$ Nonmonotone Line Search(s, $\alpha$, $\beta$) with $s=\tilde{\mu}_k^{BB1}$
-%		
-%		$x_{k+1} = x_k - t_k \grad(x_k)$
-%		
-%		$k = k+1$
-%	}
-%\end{algorithm}
+\begin{algorithm}[H]\label{alg:bb}
+	\caption{Nonmonotone Barzilai-Borwein Method}
+	
+	\KwIn{Pick $x_0\in \Rn$ arbitrarly, $\epsilon=10^{-4},\nu_1=\nu_2=10^{-6}, \alpha=0.1, \beta=0.5$.}
+	
+	$k = 0$
+	
+	\While{$\|\grad(x_k)\|> \epsilon$}{
+		
+		$\mu_k^{BB1} = \frac{(\grad(x_k)-\grad(x_{k-1}))^T(x_k-x_{k-1})}{\|x_k - x_{k-1}\|^2}$
+		
+		project $\mu_k^{BB1}$ into $[\nu_1,\nu_2]$ and call it $\tilde{\mu}_k^{BB1}$
+		
+		$t_k \leftarrow$ Nonmonotone Line Search(s, $\alpha$, $\beta$) with $s=\tilde{\mu}_k^{BB1}$
+		
+		$x_{k+1} = x_k - t_k \grad(x_k)$
+		
+		$k = k+1$
+	}
+\end{algorithm}
+
+\section{Conjugate Gradient Method}
+Until now, we have considered first order methods in which the direction was always the gradient, while we have modified the step size. In this section, we modify also the direction taken at each step. 
+We consider conjugate direction methods, a class of algorithms originally introduced as iterative methods for solving linear system of equations with positive definite coefficient matrix $Q$. Notice that solving the linear system
+\begin{equation}\label{eq:equality_system}
+	Qx=c, \quad Q\in \Rnn, c\in \Rn
+\end{equation}
+is equivalent to minimizing the following strongly convex quadratic function
+\begin{equation*}
+	\min_{x\in \Rn} f(x) = \frac{1}{2}x^TQx - c^Tx,
+\end{equation*}
+as $f$ has a unique minimizer in its unique stationary point $\grad (x^*)= Qx^*-c = 0$.
+\begin{definition}[Conjugate Directions]
+	Given a symmetric $n \times n$ matrix $Q$, two non zero vectors $d_i, d_j \in \mathbb{R}^n$ are said to be conjugate with respect to $Q$ (or $Q$-conjugate, or $Q$-orthogonal) if: $d_i^T Q d_j = 0$.
+\end{definition}
+\noindent When $Q = I$ the definition above reduces to the definition of orthogonal vectors. Now we show that mutually conjugate vectors are linearly independent.
+\begin{proposition}[Linear Independence of Conjugate Directions]
+	Let $d_0, d_1, \ldots, d_m \in \mathbb{R}^n$ be a set of non zero mutually conjugate vectors with respect to a $n \times n$ matrix $Q$ symmetric and positive definite. Then $d_0, d_1, \ldots, d_m$ are linearly independent.
+\end{proposition}
+\begin{proof}
+	Let $\alpha_0, \alpha_1, \ldots, \alpha_m$ be real numbers such that $\sum_{j=0}^m \alpha_j d_j = 0$. Pre-multiplying by $d_i^T Q$, as $d_i^T Q d_j = 0$ for $i \neq j$, we obtain: $0 = \sum_{j=0}^m \alpha_j d_i^T Q d_j = \alpha_i d_i^T Q d_i$. On the other hand, as $Q$ is positive definite and $d_i \neq 0$ we have $d_i^T Q d_i > 0$, so that we have necessarily $\alpha_i = 0$. Repeating the same reasoning for $i = 0, 1, \ldots, m$ we can assert that $\alpha_i = 0$ for $i = 0, 1, \ldots, m$, which proves the thesis. 
+\end{proof}
+\noindent Now, suppose we have a set of $n$ mutually $Q$-conjugate directions $\mathcal{D} = \{d_0, d_1, \ldots, d_{n-1}\}$. From the proposition above, $\mathcal{D}$ is a linearly independent set, which constitutes a basis for $\mathbb{R}^n$, so that we can write
+\begin{equation*}
+	v = \alpha_0 d_0 + \alpha_1 d_1 + \ldots + \alpha_{n-1} d_{n-1}, \quad \forall v \in \Rn
+\end{equation*}
+where $\alpha_0, \alpha_1, \ldots, \alpha_{n-1}$ are scalar coefficients. By pre-multiplying both members for $d_i^T Q$ and the $Q$-conjugacy assumption, we get 
+\begin{equation*}
+	\alpha_i = \frac{d_i^T Q v}{d_i^T Q d_i}
+\end{equation*}
+Now, if $v= x^* - x_0$, with $x^*$ the global minimum, we have 
+\begin{equation*}
+	x^* = x_0 + \sum_{k=0}^{n-1} \alpha_k d_k \quad \text{con} \quad \alpha_k = \frac{d_k^T Q(x^* - x_0)}{d_k^T Q d_k}, \quad k = 0, \ldots, n - 1
+\end{equation*}
+Thus, we can define an iterative procedure that constructs $x^*$ starting from $x_0$:
+\begin{equation*}
+	x_{k+1} = x_k + \alpha_k d_k
+\end{equation*}
+Notice that $\alpha_k = \frac{d_k^T Q(x^* - x_0)}{d_k^T Q d_k} = \frac{d_k^T Q(x^* - x_k)}{d_k^T Q d_k} + \frac{d_k^T Q(x_k - x_0)}{d_k^T Q d_k}$. From $x_k - x_0 = \sum_{i=0}^{k-1} \alpha_i d_i$, and the $Q$-conjugacy assumption, we have
+\begin{equation*}
+	d_k^T Q(x_k - x_0) = 0. 
+\end{equation*}
+Thus $\alpha_k = \frac{d_k^T Q(x^* - x_k)}{d_k^T Q d_k}$. 
+Finally, from $Q(x^* - x_k) = c - Q x_k = -\grad(x_k)$, we obtain
+\begin{equation}\label{eq:conjugate_alpha}
+	\alpha_k = -\frac{\grad (x_k)^T d_k}{d_k^T Q d_k},
+\end{equation}
+where now the step size $\alpha_k$ does not involve $v$ nor $x^*$.
 
 
+\begin{proposition}[Finite Convergence for Conjugate Direction Method]
+	Let $Q\in \Rnn$ be a symmetric positive definite and let $\{d_0, d_1, \ldots, d_{n-1}\}$ be a system of $n$ non zero vectors mutually conjugate with respect to $Q$. To solve \eqref{eq:quadratic}, consider the algorithm defined by the iteration $x_{k+1} = x_k + \alpha_k d_k,$
+with $\alpha_k$ defined as in \eqref{eq:conjugate_alpha}. Then, 
+\begin{itemize}
+\item[(i)] if $\grad(x_i) \neq 0$, for $i = 0, 1, \ldots, k - 1$ we have:
+\begin{equation*}
+\grad(x_i)^T d_i = 0, \quad \text{for } i = 0, 1, \ldots, k - 1;
+\end{equation*}
+\item[(ii)] there exists $m \leq n - 1$ such that $x_{m+1}$ is the minimum point $x^*$ of $f$.
+\end{itemize}
+\end{proposition}
+\begin{proof}
+	Let $k \geq 1$ and suppose that $\grad(x_i) \neq 0$, for $i = 0, 1, \ldots, k - 1$. Starting from a point $x_i$ of the sequence, and pre-multiplying by $Q$, we can write:
+	\begin{equation*}
+		Q x_k = Q x_i + \sum_{j=i}^{k-1} \alpha_j Q d_j,
+	\end{equation*}
+and, given $\grad(x) = Qx - c$, we also have
+\begin{equation*}
+	\grad(x_k) = \grad(x_i) + \sum_{j=i}^{k-1} \alpha_j Q d_j.
+\end{equation*}
+Now, given any $i\in[k-1]$, if we pre-multiply by $d_i^T$, we have 
+$$d_i^T \grad(x_k) = d_i^T\grad(x_i)+ \sum_{j=i}^{k-1} \alpha_j d_i^TQ d_j  = d_i^T\grad(x_i)+ \alpha_i d_i^TQ d_i = 0,$$
+where the last inequality follows from \eqref{eq:conjugate_alpha}. We can repeat the same reasoning for $i=1, \dots, k-1$ and $(i)$ follows. Assume now that $\grad(x_i)\neq 0 \;\; \forall i=0, \dots, n-1$. From $(i)$ for $k=n$, we obtain $\grad(x_n)^Td_i=0 \;\; \forall i=0, \dots, n-1$. In particular, $\grad(x_n)$ is orthogonal to each of the $n$ elements of a basis in $\Rn$ (and consequently of their span), thus, $\grad(x_n)$ must be 0. 
+\end{proof} 
+Until now, we have assumed that the search directions $d_0 , d_1 , \dots , d_{n-1}$ (mutually conjugate with respect to $Q$) were already available. Conjugate directions can be constructed by means of a generalization of the Gram-Schmidt orthogonalization algorithm. We initially set $d_0 = \grad(x_0)$ and, when $\grad(x_{k+1})\neq 0$, we define the new direction 
+\begin{equation}\label{eq:cg}
+	d_{k+1} = -\grad(x_{k+1}) +\beta_{k+1} d_k, \quad \with \beta_{k+1} =\frac{\grad(x_{k+1})^TQd_k}{d_k^TQd_k}.
+\end{equation}
+For this method we have the following properties.
+\begin{lemma}\label{lemma:cg}
+	Let $f(x) =\frac{1}{2}x^TQx -c^Tx$, with $Q\in \Rnn$ symmetric and positive definite, then for the Algorithm \eqref{eq:cg}, we have 
+	\begin{enumerate}
+		\item[(i)] $d_{k+1}^TQd_k =0$,
+		\item[(ii)] $d_k^T\grad(x_{k+1})=0$,
+		\item[(iii)]$\grad(x_{k+1})^Td_{k+1} = -||\grad(x_{k+1})||^2,$
+		\item[(iv)] $\alpha_k = \frac{||\grad (x_k)||^2}{d_k^T Q d_k},$
+		\item[(v)] $d_k = 0 \Leftrightarrow \grad(x_k)\Leftrightarrow \alpha_k=0$.
+	\end{enumerate}
+\end{lemma}
+\begin{proof}
+	$(i)$: $d_{k+1}^TQd_k = -\grad(x_{k+1}) + \grad(x_{k+1}) = 0$. \\
+	$(ii)$: Pre-multiplying by $Q$ both members of the update rule, by $\grad(x) = Qx - c$ we obtain
+	\begin{equation}\label{eq:12.11}
+		\grad(x_{k+1}) = \grad(x_k) + \alpha_k Q d_k. 
+	\end{equation}
+Now, we pre-multiply by $d_k^T$ and apply \eqref{eq:conjugate_alpha}, to get 
+$$d_k^T\grad(x_{k+1}) = d_k^T\grad(x_k) + \alpha_k d_k^TQ d_k = d_k^T\grad(x_k) -\frac{\grad (x_k)^T d_k}{d_k^T Q d_k} d_k^TQ d_k.$$
+$(iii)$: Pre-multiplying \eqref{eq:cg} by $\grad(x_{k+1})^T$ we get
+$$\grad(x_{k+1})^Td_{k+1} = -\grad(x_{k+1})^T\grad(x_{k+1}) +\beta_{k+1} \grad(x_{k+1})^Td_k,$$
+which brings to $(iii)$, because the last term is 0, because of $(ii)$.\\
+$(iv):$ follows directly from \eqref{eq:conjugate_alpha} and $(iii)$.\\
+$(v):$ $\grad(x_k)\Leftrightarrow \alpha_k=0$ follows directly from $(iv)$. Also, from $(iii)$, we have $d_k=0\Rightarrow \grad(x_k)=0$. If now $\grad(x_k)=0$, we have $\beta_k = 0$, which means that $d_k=\grad(x_k)+ 0 =0$.
+\end{proof} 
 
+\begin{proposition}[CGM: Conjugacy and Convergence]
+	Let $f$ be the quadratic function defined by $f(x) = \frac{1}{2}x^T Q x - c^T x$, with $Q$ symmetric and positive definite. Suppose $g_0 \neq 0$ and consider the points $x_k$, for $k = 1, 2, \ldots$ generated by the CGM defined by (12.5)--(12.9). Then there exists an integer $m \leq n - 1$ such that, for $i = 1, \ldots, m$ we have
+	\begin{align}
+		g_i^T g_j &= 0, \quad j = 0, 1, \ldots, i - 1, \tag{12.15} \\
+		d_i^T Q d_j &= 0 \quad j = 0, 1, \ldots, i - 1, \tag{12.16} \\
+		g_{m+1} &= 0. \tag{12.17}
+	\end{align}
+\end{proposition}
 
+\begin{proof}
+	As $g_0 \neq 0$ we can assume that there exists an integer $m > 0$ such that $g_i \neq 0$ for $i = 0, 1 \ldots, m$ and we show, by induction, that (12.15) and (12.16) hold.
+
+First of all, we show that these relationships hold for $i = 1$. In fact, for $i = 1$, as $d_0 = -g_0$ we have, by (12.12), $g_1^T g_0 = -g_1^T d_0 = 0$ and, by (12.10), $d_1^T Q d_0 = 0$; thus the assertions (12.15) and (12.16) are true. Then we assume that (12.15) and (12.16) hold for a given $i \geq 1$ and we prove that the same is true when we replace $i$ with $i + 1 \leq m$, that is:
+\begin{align}
+	g_{i+1}^T g_j &= 0, \quad j = 0, 1, \ldots, i, \tag{12.18} \\
+	d_{i+1}^T Q d_j &= 0 \quad j = 0, 1, \ldots, i. \tag{12.19}
+\end{align}
+To be continued...
+\end{proof}
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
