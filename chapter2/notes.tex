@@ -1166,8 +1166,8 @@ By the induction hypothesis, the last term is zero. Moreover, as $j < i$ we have
 		\item The same finite convergence can be obtained also when $Q$ is positive semi-definite, by assuming that $f$ admits a minimum (proof left as an Exercise). %it is proved in Proposition 12.10 page 272 of the Grippo Sciandrone
 		Then CG can be applied to find a solution of linear least squares problems, i.e., problems whose objective function is
 		$$ f(x):= \frac{1}{2} ||Ax-b||^2 \quad \with A\in \R^{m\times n}, b\in \R^m.$$
-		Indeed, up to an additive constant, the problem above is a quadratic function with $Q=A^TA$ and $c=A^Tb$, that always admits a solution in $\Rn$ i.e., $A^TA x =A^Tb$ (proof left as an Exercise). %Proposition 2.11 from Grippo Sciandrone 
-		\item The expression for $\beta_{k+1}$ can be simplified in a way that the Hessian matrix does not appear explicitly, i.e., $\beta_{k+1} =\frac{||\grad(x_{k+1})||^2}{||\grad(x_k)||^2}$ (Exercise). %pp 255-256 to prove (12.25) 
+		Indeed, up to an additive constant, the problem above is a quadratic function with $Q=A^TA$ and $c=A^Tb$, that always admits a solution in $\Rn$ i.e., $A^TA x =A^Tb$ (proof left as an Exercise). %pp 43-44 Proposition 2.11 from Grippo Sciandrone 
+		\item The expression for $\beta_{k+1}$ can be simplified in a way that the Hessian matrix does not appear explicitly, i.e., $\beta_{k+1} =\frac{||\grad(x_{k+1})||^2}{||\grad(x_k)||^2}$ (Exercise). %pp 255-256 to prove (12.25) from Grippo Sciandrone 
 		\item There are various extensions for the non-quadratic case. They all need to replace the analytical expression for $\alpha_k$ with a line search. Given $y_k = g_{k+1} - g_k$ and recalling that the following equalities hold in the quadratic case
 		\begin{align*}
 			\grad(x_{k+1})^T y_k &= \|\grad(x_{k+1})\|^2\\
