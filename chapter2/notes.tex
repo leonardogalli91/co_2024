@@ -2,7 +2,7 @@
 \include{../packages}
 \include{../macros}
 \title{Optimization Methods}
-\author{Chapter 2: First Order Methods for Unconstrained Optimization}
+\author{Chapter 2: First-Order Methods for Unconstrained Optimization}
 \date{}
 \begin{document}
 	\maketitle
@@ -783,7 +783,7 @@ Exercise.
 \end{proof}
 \noindent The PL property is weaker than strong convexity, as we see next.
 \begin{lemma}
-	Let $f\in \C^1(\Rn)$ and $\mu>0$. If $f$ is strongly convex, than $f$ satisfies $\mu$-PL.
+	Let $f\in \C(\Rn)$ and $\mu>0$. If $f$ is strongly convex, than $f$ satisfies $\mu$-PL.
 \end{lemma}
 \begin{proof}
 	Exercise.
@@ -968,14 +968,14 @@ Exercise.
 		\begin{equation*}
 			\mu_k^{BB1} = \frac{(\grad(x_k)-\grad(x_{k-1}))^T(x_k-x_{k-1})}{\|x_k - x_{k-1}\|^2} = \frac{\int_{0}^{1}(x_k-x_{k-1})^T \hess(x_k+t(x_k-x_{k-1})) (x_k-x_{k-1}) dt }{\|x_k - x_{k-1}\|^2}.
 		\end{equation*}
-		Thus, $\mu_k^{BB1}$ is the mean of the Rayleigh quotient over the Hessians computed on the segment $[x_k, x_{k-1}]$. On the other hand, if $f$ is not quadratic, the Hessian changes at every step $k$, meaning that even if we approximate well one eigenvalue of the Hessian at time $k$, this may not be useful anymore. Moreover, when $f$ is not strongly convex, $\mu_k^{BB1}$ may become too small, or for non-convex functions, not even positive. To employ this method in these other settings, one need to project the step into a finite positive segment $\nu_1\leq \mu_k^{BB1}\leq \nu_2$, with $\nu_1, \nu_2>0$ two fixed constants.
+		Thus, $\mu_k^{BB1}$ is the mean of the Rayleigh quotient over the Hessians computed on the segment $[x_k, x_{k-1}]$. On the other hand, if $f$ is not quadratic, the Hessian changes at every step $k$, meaning that even if we approximate well one eigenvalue of the Hessian at time $k$, this may not be useful anymore. Moreover, when $f$ is not strongly convex, $\mu_k^{BB1}$ may be too small, or for non-convex functions, it may not even be positive. To employ this method in these other settings, one need to project the step into a finite positive segment $\nu_1\leq \mu_k^{BB1}\leq \nu_2$, with $\nu_1, \nu_2>0$ two fixed constants.
 		\item The BB method \eqref{eq:bb1} might not ensure a monotone decrease of the objective function. On the other hand, while in the strongly convex quadratic case this is not an issue, in the non-quadratic one, there are counter-examples showing that \eqref{eq:bb1} might not converge. The solution is thus to employ a line search, that to maintain the method as close to the original as possible, should be nonmonotone. 
 	\end{itemize}
 \end{remark}
 
 
 \begin{algorithm}[H]\label{alg:bb}
-	\caption{Nonmonotone Barzilai-Borwein Method}
+	\caption{Nonmonotone Barzilai-Borwein Method (\cite{raydan97a})}
 	
 	\KwIn{Pick $x_0\in \Rn$ arbitrarly, $\epsilon=10^{-4},\nu_1=\nu_2=10^{-6}, \alpha=0.1, \beta=0.5$.}
 	

@@ -1,0 +1,578 @@
+\documentclass[10pt,a4paper]{article}
+\include{../packages}
+\include{../macros}
+
+\title{Optimization Methods}
+\author{Chapter 3: Constrained Optimization}
+\date{}
+\begin{document}
+	\maketitle
+	\section{Optimization over convex constraints}
+	In this chapter we will consider constrained optimization problems with the following shape
+	\begin{equation}\label{eq:problem}
+		\begin{split}
+			\min \;\; &f(x)\\
+			\st& x \in C
+		\end{split}
+	\end{equation}
+\begin{definition}[Convex Set]
+	A set $C$ is said to be convex if given $x_1,x_2\in C$ and $\lambda\in [0,1]$, then $\lambda x_1 +(1-\lambda) x_2 \in C.$
+\end{definition}
+We note that Proposition 4.1 in Chapter 2 establishes only the sufficiency of the stationarity condition $\grad(x^*) = 0$ for guaranteeing that $x^*$ is a global optimal solution. When $C$ is not the
+entire space, this condition is not necessary, in fact it might be that the points for which $\grad(\cdot)=0$ are not in $C$.\\
+
+From now on, we consider \eqref{eq:problem} where $C$ is convex. On the other hand, we will not always assume also $f$ to be convex. From the convexity of $f$ we have the following two theorems. Notice that the following result is not a direct consequence of Proposition 4.1 in Chapter 2 as the local (and global) minimum, might be on the boundary of the set and not be stationary (in the sense of unconstrained optimization).
+\begin{theorem}[global=local in convex optimization] Let $f:C\to\R$ be a convex function over a convex set $C\subseteq \Rn$. Let $x^*\in C$ be a local minimum of $f$ over $C$. Then $x^*$ is a global minimum of $f$ over $C$.	
+\end{theorem}
+\begin{proof}
+	Since $x^*$ is a local minimum of $f$ over $C$ there exists $r$ such that $f(x)\geq f(x^*)$ for any $x\in C \cap B[x^*,r]$. Now let $y\in C$ with $y\neq x^*$. We want to show that $f(y) \geq f(x^*)$. Let $\lambda\in(0,1]$ be such that $x^*+\lambda(y-x^*)\in B[x^*,r]$, for instance $\lambda=\frac{r}{||y-x^*||}$. Now, since $x^*+\lambda (y-x^*) \in B[x^*,r]\cap C$, it follows that $f(x^*)\leq f(x^*+\lambda (y-x^*))$, and hence, by convexity of $f$, also 
+	\begin{equation*}
+		f(x^*)\leq f(x^*+\lambda (y-x^*)) \leq (1-\lambda)f(x^*) +\lambda f(y)
+	\end{equation*}
+Thus, $\lambda f(x^*) \leq \lambda f(y)$, which concludes the proof.
+\end{proof}
+\begin{theorem}[Convexity of the optimal set in convex optimization]\label{thm:unique}
+	Let $f:C\to \R$ be a convex function with $C\subseteq \Rn$ convex. Then, the set of optimal solutions of the problem \eqref{eq:problem}, which we denote by $X^*$ is convex. Moreover, if $f$ is strictly convex over $C$, then there exists at most one optimal solution.
+\end{theorem}
+\begin{proof}
+	If $X^*=\emptyset$, the result follows trivially. Suppose that $X\neq\emptyset$ and denote the optimal value of $f$ by $f^*$. Let $x,y\in C$ with $\lambda\in[0,1]$. Then, by convexity $f(\lambda x+(1-\lambda)y)\leq \lambda f^* +(1-\lambda)f^*= f^*$, hence $\lambda x +(1-\lambda)y$ is also optimal, i.e., it belongs to $X^*$, establishing the convexity of $X^*$. Suppose now that $f$ is strictly convex and $X^*$ is nonempty, and suppose by contradiction that there are 2 points $x,y$ in $X^*$. Then $\lambda x +(1-\lambda)y \in C$, and by the strict convexity of $f$ we have 
+	\begin{equation*}
+		f(\lambda x +(1-\lambda) y) < \lambda f(x) + (1-\lambda) f(y) = f^*,
+	\end{equation*}
+which is a contradiction to the fact that $f^*$ is the optimal value.
+\end{proof}
+\subsection{Stationarity}
+Note that the following definition and the following theorem are given also for the more general case in which $f$ is not convex.
+\begin{definition}[Stationary points of convex constrained problems]
+	Let $f\in \C(C)$, where $C$ is closed and convex. Then $x^*$ is a stationary point of \eqref{eq:problem} if
+	\begin{equation}\label{eq:stationarity}
+	 \grad(x^*)^T(x-x^*)\geq 0 \; \forall x\in C.
+\end{equation}
+\end{definition}
+\noindent In words, this means that there are no feasible descent directions of $f$ at $x^*$. This suggests that stationarity is in fact a necessary condition for a local minimum of \eqref{eq:problem}.
+\begin{theorem}[Stationarity as necessary optimality condition of a convex constrained problem]\label{thm:stationarity}
+	Let $f\in \C(C)$, where $C$ is closed and convex and let $x^*$ be a local minimum of \eqref{eq:problem}. Then $x^*$ is a stationary point of \eqref{eq:problem}.
+\end{theorem}
+\begin{proof}
+	Let $x^*$ be a local minimum of $f$ and assume by contradiction that is not a stationary point of \eqref{eq:problem}. Then there exists $x\in C$ such that $\grad(x^*)(x-x^*)< 0$. Therefore, $f'(x,d)<0$, where $d=x-x^*$. Hence, by Lemma 1.1 of Chapter 2, there exists $\epsilon\in(0,1)$ such that $f(x^*+td)<f(x^*)\;\forall t\in(0,\epsilon).$ Since $C$ is convex, we have that $x^*+td = (1-t)x^*+tx\in C$, leading to the conclusion that $x^*$ is not a local optimum of \eqref{eq:problem}, which is a contradiction.
+\end{proof}
+
+\begin{theorem}[Stationarity as necessary and sufficient optimality condition for a convex problem]\label{thm:convex_stationarity}
+	Let $f\in \C(C)$, where $C$ is closed and convex and $f$ is also convex. Let $x^*$ be a local minimum of \eqref{eq:problem}. Then $x^*$ is a stationary point of \eqref{eq:problem} iff $x^*$ is a optimal solution of \eqref{eq:problem}.
+\end{theorem}
+\begin{proof}
+	The necessity of the stationarity condition follows from Theorem \ref{thm:stationarity}. To prove the sufficiency, assume that $x^*$ is a stationary point of \eqref{eq:problem} and let $x\in C$. Then, the gradient characterization of convex functions \eqref{eq:grad_ineq} and stationarity of $x^*$, we get
+	\begin{equation*}
+		f(x) \geq f(x^*) +\grad(x^*)^T(x-x^*) \geq f(x^*),
+	\end{equation*}
+which concludes the proof.
+\end{proof}
+\noindent Unfortunately, \eqref{eq:stationarity} is not an easy condition to check, we need something else.
+\subsection{Orthogonal Projection}
+We can instead characterize stationary points by using the projection operator.
+Given a nonempty closed convex set $C$, the orthogonal projection operator $P_C:\Rn \to C$ is defined by 
+\begin{equation}\label{eq:projection}
+	P_C(x) = \argmin\left\{||x-y||^2: y\in C\right\}
+\end{equation}
+The orthogonal projection operator with input $x$ returns the vector in $C$ that is the closest (in $\ell_2$-norm)
+to $x$. Note that the orthogonal projection operator is defined as a solution of a convex
+optimization problem, specifically, a minimization of a convex quadratic function subject to a convex feasibility set. The first orthogonal projection theorem states that the orthogonal projection operator is in fact well-defined, meaning that the optimization problem in \eqref{eq:projection} has a unique optimal solution.
+\begin{theorem}[First Projection Theorem]
+	Let $C$ be a nonempty closed convex set. Then problem \eqref{eq:projection} has a unique optimal solution.
+\end{theorem}
+\begin{proof}
+	As $C$ is closed and $||x-y||^2$ is coercive, we have that the problem admits at least one solution (by Theorem 3.8 of Chapter 1). Moreover, $||x-y||^2$ is strictly convex as the objective function is quadratic with
+	positive definite Hessian (the identity). Thus, from Theorem \ref{thm:unique} we get that \eqref{eq:projection} has a unique solution.
+\end{proof}
+The second projection theorem, provides an useful characterization of the projection operator. Geometrically it states that for a given closed and convex set $C$, $x \in \Rn$, and for any $y\in C$, the angle between $x-P_C (x)$ and $y-P_C (x)$ is obtuse.
+This phenomenon is illustrated in Figure \ref{fig:second_projection}.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{second_projection}.
+	\caption{The orthogonal projection operator.} \label{fig:second_projection}
+\end{figure}
+\begin{theorem}[Second Projection Theorem]\label{thm:second_projection}
+	Let $C$ be a nonempty closed convex set. Then $z=P_C(x)$ iff 
+	\begin{equation}\label{eq:second_projection}
+		(x-z)^T(y-z) \leq 0\quad \forall \,y\in C.
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	$z=P_C(x)$ iff it is the optimal solution of \eqref{eq:projection} iff (by Theorem \ref{thm:convex_stationarity})
+	\begin{equation*}
+		\grad(z)^T(y-z)\geq 0 \quad \forall\,y\in C,
+	\end{equation*}
+which concludes the proof as $\grad(z) = x-z.$
+\end{proof}
+Another important property of the orthogonal projection operator is given in the
+following theorem, which also establishes the so-called nonexpansiveness property of $P_C$.
+\begin{theorem}[Nonexpansiveness of the projection operator]
+	Let $C$ be a closed and convex set. Then, for any $v,w\in \Rn$
+	\begin{itemize}
+		\item[a)] 
+		\begin{equation}\label{eq:nonexpansiveness_1}
+			(P_C(v)-P_C(w))^T(v-w)\geq ||P_C(v)-P_C(w)||^2
+		\end{equation}
+		\item[b)]
+		\begin{equation}\label{eq:nonexpansiveness_2}
+			 ||P_C(v)-P_C(w)||\leq ||v-w||.
+		\end{equation}
+	\end{itemize}
+\end{theorem}
+\begin{proof}
+	From Theorem \ref{thm:second_projection} we have that for any $x \in \Rn$ and $y\in C$
+	\begin{equation*}
+		(x-P_C(x))^T(y-P_C(x)) \leq 0.
+	\end{equation*}
+Replacing $x=v$ and $y=P_C(w)$ we have
+\begin{equation*}
+	(v-P_C(v))^T(P_C(w)-P_C(v)) \leq 0.
+\end{equation*}
+Replacing, instead, $x=w$ and $y=P_C(v)$
+\begin{equation*}
+	(w-P_C(w))^T(P_C(v)-P_C(w)) \leq 0.
+\end{equation*}
+Now, summing the two inequalities we get
+\begin{equation*}
+	(P_C(w)-P_C(v))^T(v-w+P_C(w)-P_C(v)) \leq 0,
+\end{equation*}
+and hence, 
+\begin{equation*}
+	(P_C(v)-P_C(w))^T(v-w) \geq ||P_C(w)-P_C(v)||^2.
+\end{equation*}
+To prove \eqref{eq:nonexpansiveness_2}, we note that if $P_C(v) = P_C(w)$, the inequality is trivial. Thus, we assume $P_C(v) \neq P_C(w)$. Then by Cauchy-Schwartz, we have 
+\begin{equation*}
+	(P_C(v)-P_C(w))^T(v-w) \leq ||P_C(v)-P_C(w)|| \cdot||v-w||,
+\end{equation*}
+which combined with \eqref{eq:nonexpansiveness_1} gives 
+\begin{equation*}
+	||P_C(v)-P_C(w)||^2 \leq ||P_C(v)-P_C(w)|| \cdot||v-w||,
+\end{equation*}
+which concludes the proof as $P_C(v) \neq P_C(w)$.
+\end{proof}
+Coming back to stationarity, let us provide the alternative characterization of a stationary point through the projection operator. Notice that this theorem holds also when $f$ is non-convex. 
+\begin{theorem}\label{thm:stationarity_projection}
+	Let $f\in C^1(C)$ with $C$ closed and convex and let $s>0$. $x^*$ is a stationary point of the problem \eqref{eq:problem} iff 
+	\begin{equation}\label{eq:stationary_projection}
+		x^*=P_C(x^*-s\grad(x^*)).
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	By the second projection theorem (Theorem \ref{thm:second_projection}), we get that $x^*=P_C(x^*-s\grad(x^*))$ iff
+	\begin{equation*}
+		(x^*-s\grad(x^*) -x^*)^T(x-x^*)\leq 0, 
+	\end{equation*}
+which concludes the proof, as $x^*$ is a stationary point when $\grad(x^*)^T(x-x^*)\geq0$
+\end{proof}
+\subsection{Projected Gradient Method}
+The characterization of stationary points through equation \eqref{eq:stationary_projection} directly suggest a new algorithm for solving convex constrained optimization methods. As we will see later, this algorithm finds stationary points despite $f$ being convex or not. \\
+\begin{algorithm}[H]\label{alg}
+	\caption{Projected Gradient (PG) Method}
+	
+	\KwIn{$x_0\in \Rn$, $\epsilon>0$, $t\in (0,\frac{L}{2})$}
+	
+	$k = 0$
+	
+	\While{$||x_{k-1}-x_k||> \epsilon$}{
+				
+		$x_{k+1} = P_C(x_k-t\grad(x_k)$
+		
+		$k = k+1$
+	}
+\end{algorithm}
+The proof of convergence of PG is similar to that of GD. In particular, we first prove the Decrease Lemma for constrained optimization problem. 
+\begin{lemma}[Decrease Lemma for Convex Constrained Problems]
+	Let $f\in \LC(C)$, where $C$ is convex and closed. Then for any $x\in C$ and $t\in (0,\frac{2}{L})$ the following inequality holds
+	\begin{equation*}
+		f(x)-f(P_C(x-t\grad(x))) \geq t\left(1- \frac{Lt}{2}\right) \left\| \frac{1}{t}(x-P_C(x-t\grad(x))) \right\|^2.
+	\end{equation*}
+\end{lemma}
+\begin{proof}
+	Exercise.
+\end{proof}
+\noindent It is now convenient to define the gradient mapping as
+\begin{equation}\label{eq:gradient}
+	G_M(x) := M \left(x-P_C\left(x-\frac{1}{M}\grad(x)\right)\right) \quad\with M>0.
+\end{equation}
+Note that in the unconstrained case $G_M(x)=\grad(x)$ so the gradient mapping is an extension of the usual gradient operator. In addition, by Theorem \ref{thm:stationarity_projection}, $G_M(x) = 0$ iff $x$ is a stationary point of \eqref{eq:problem}. This means that we can look at $\|G_M(x)\|$ as an optimality measure. Moreover, the sufficient decrease stated above can be rewritten as 
+\begin{equation*}
+	f(x)-f(P_C(x-t\grad(x))) \geq t\left(1- \frac{Lt}{2}\right) \left\| G_{\frac{1}{t}} (x) \right\|^2.
+\end{equation*}
+This generalized sufficient decrease property allows us to prove similar results to those proven in the unconstrained case.
+\begin{theorem}[Convergence of PG method]
+	Let $f\in \LC(C)$, with $C$ closed and convex. Let $\{x_k\}_k$ be a sequence generated by Algorithm \ref{alg} for solving \eqref{eq:problem}. Assume that $f$ is bounded below over $C$. Then we have the following
+	\begin{itemize}
+		\item[(a)] The sequence $\{f(x_k)\}_k$ is nonincreasing. In addition, for any $k\geq 0$, $f(x_{k+1}) < f(x_k)$ unless $x_k$ is a stationary point.
+		\item[(b)] $G_{\frac{1}{t}}(x_k) \to 0$ as $k\to \infty$.
+	\end{itemize}
+\end{theorem}
+\noindent Notice that the theorem above only ensures convergence to a stationary point, which in the non-convex case might not be a global minimum. Also, the rate of convergence of PG is the same as that of GD, that is $\mathcal{O}(\frac{1}{\sqrt{T}})$. If we assume $f$ to be convex, we can instead ensure a faster rate of convergence, moreover, thanks to Theorem \ref{thm:convex_stationarity} all stationary points of \eqref{eq:problem} are global minima.
+\begin{theorem}[Convergence of PG method for convex problems]
+	Let $f\in \LC(C)$ be convex, with $C$ closed and convex. Let $\{x_k\}_k$ be a sequence generated by Algorithm \ref{alg} for solving \eqref{eq:problem}. Assume that the set of optimal solutions $X^*$ is nonempty and that $f^*$ is the optimal value. Then we have the following
+	\begin{itemize}
+		\item[(a)] for any $k\geq0$ and $x^*\in X^*$
+		\begin{equation*}
+			2t(f(x_{k+1}) -f^*) \leq ||x_k-x^*||^2 - ||x_{k+1}-x^*||^2,
+		\end{equation*}
+		\item[(b)] for any $n\geq 0$:
+		\begin{equation*}
+			f(x_n)-f^*\leq \frac{||x_0-x^*||}{2t n}.
+		\end{equation*}
+	\end{itemize}
+\end{theorem}
+\begin{proof}
+	By the Descent Lemma (for unconstrained optimization, Lemma 2.2 from Chapter 2), we have 
+	\begin{equation*}
+		f(x_{k+1}) \leq f(x_k)+\grad(x_k)^T(x_{k+1}-x_k) +\frac{L}{2}||x_{k+1}-x_k||^2.
+	\end{equation*}
+Let $x^*$ be a global minimum of \eqref{eq:problem}, then the gradient characterization of convexity \eqref{eq:grad_ineq} implies that $f(x_k)\leq f(x^*)+\grad(x_k)^T(x_k-x^*)$, which together with the previous inequality implies that
+\begin{equation}\label{eq:intermediate}
+	f(x_{k+1}) \leq f(x^*)+\grad(x_k)^T(x_k-x^*)+\grad(x_k)^T(x_{k+1}-x_k) +\frac{L}{2}||x_{k+1}-x_k||^2.
+\end{equation}
+By the second projection theorem \eqref{eq:second_projection} applied on the projected point $x_{k+1}$, we have that 
+\begin{equation*}
+\left(x_k -t\grad(x_k) -x_{k+1}\right)^T\left(x^*-x_{k+1}\right)\leq 0
+\end{equation*}
+if and only if
+\begin{equation*}
+\grad(x_k)^T\left(x_{k+1}-x^*\right)+ \frac{1}{t}\left(x_k -x_{k+1}\right)^T\left(x^*-x_{k+1}\right)\leq0
+\end{equation*}
+if and only if
+\begin{equation*}
+	\grad(x_k)^T\left(x_{k+1}-x^*\right) \leq \frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right).
+\end{equation*}
+Therefore, from the above inequality, \eqref{eq:intermediate} and $t\leq \frac{1}{L}$, we get
+\begin{equation*}
+	\begin{split}
+		f(x_{k+1}) &\leq f(x^*)+\grad(x_k)^T(x_k-x^*)+\grad(x_k)^T(x_{k+1}-x_k) +\frac{L}{2}||x_{k+1}-x_k||^2\\
+		& = f(x^*)+\grad(x_k)^T(x_{k+1}-x^*) +\frac{L}{2}||x_{k+1}-x_k||^2\\
+		&\leq f(x^*)+\frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right)+\frac{L}{2}||x_{k+1}-x_k||^2\\
+		&\leq f(x^*)+\frac{1}{t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*\right)+\frac{1}{2t}||x_{k+1}-x_k||^2\\
+		&= f(x^*)+\frac{1}{2t}(x_k-x_{k+1})^T\left(x_{k+1}-x^*+x_k - x^*\right)\\
+		&= f(x^*)+\frac{1}{2t}(x_k-x_{k+1}+x^*-x^*)^T\left(x_{k+1}-x^*+x_k - x^*\right)\\
+		&= f(x^*)+\frac{1}{2t}(x_k-x^*)^T\left(x_{k+1}-x^*+x_k - x^*\right) + \frac{1}{2t}(x^*-x_{k+1})^T\left(x_{k+1}-x^*+x_k - x^*\right)\\
+		&= f(x^*)+\frac{1}{2t}\left(||x_k-x^*||^2+(x_k-x^*)^T(x_{k+1}-x^*)-(x_k-x^*)^T(x_{k+1}-x^*) -||x_{k+1}-x^*||^2\right)\\
+		&= f(x^*)+\frac{1}{2t}\left(||x_k-x^*\|^2 -\|x_{k+1}-x^*\|^2\right)
+	\end{split}
+\end{equation*}
+establishing part (a). To achieve (b), we sum the inequalities (a) for $k=0,1, \dots, n-1$ and obtain
+\begin{equation*}
+	||x_n-x^*\|^2 -\|x_0-x^*\|^2 \leq 2t \sum_{k=0}^{n-1} \left(f(x^*)-f(x_{k+1})\right) \leq 2tn(f(x^*)-f(x_n)),
+\end{equation*}
+where in the last inequality we used the fact that $f(x_{k+1})\leq f(x_k)$, which, in turn, is a consequence of the Descent Lemma and the fact that $t\in(0, \frac{1}{L})$. Thus, 
+\begin{equation*}
+	f(x_n) -f(x^*) \leq \frac{||x_0-x^*\|^2 -\|x_n-x^*\|^2}{2tn}\leq \frac{||x_0-x^*\|^2}{2tn}.
+\end{equation*}
+\end{proof}
+
+
+
+
+\section{Constrained Nonconvex Optimization}
+In this chapter we will derive the necessary optimality conditions, i.e., Karush-Kunh-Tucker (KKT) conditions, for the most general case where the feasible set is possibly nonconvex. In particular, we consider problems of the following shape
+\begin{equation}\label{eq:last_problem}
+\begin{split}
+\min \;\; &f(x)\\
+\st& g_i(x)\leq 0, \quad i=0, \dots, m,
+\end{split}
+\end{equation}
+where $f,g_i\in \C(\R)$ but possibly not convex. Notice that this class of problems is very general, as equality constraints can be included observing that $h(x)=0$ can be replaced by 2 inequalities $h(x)\leq0$ and $-h(x)\leq 0$. From now on $C:=\{x\in\Rn: g_i(x)\leq 0, \; i\in [m] \}$. 
+\begin{definition}[Feasible Descent Direction] A vector $d$ is called feasible descent direction at $x\in C$ if $\grad(x)^Td<0$ and there exists $\epsilon>0$ such that $x+td\in C$ for all $t\in [0,\epsilon].$
+
+\end{definition}
+\noindent Obviously, a necessary local optimality condition of a point $x$ is that it does not have
+any feasible descent directions.
+\begin{lemma} Let $x^*$ be a local optimum of \eqref{eq:last_problem}, then there are no feasible descent directions at $x^*.$
+\end{lemma}
+\begin{proof}
+The proof goes by contradiction and follows directly from the definition of feasible descent direction and directional derivative.
+\end{proof}
+\begin{definition}[Active Constraints] Let $g_i(x)\leq 0, \; i\in [m] $ be a set of inequalities. The active constraints at $x$ are the constraints satisfied as equalities at $x$. The set of active constraints is denoted by $I(x):=\{i\in[m]: g_i(x)=0\}.$
+\end{definition}
+
+\begin{lemma}\label{lemma:for_fritzjohn}
+Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem} and let $I(x^*)$ be the set of active constraints at $x^*$. Then, there does not exist a vector $d\in\Rn$ such that 
+\begin{align*}
+&\grad(x^*)^Td<0,\\
+&\nabla g_i (x^*)^Td<0,\quad i \in I(x^*).
+\end{align*}
+\end{lemma}
+\begin{proof}
+Suppose by contradiction that $d$ satisfies the system of inequalities above. Then it follows that there exists $\epsilon_1>0$ such that $f(x^*+td)<f(x^*)$ and $g_i(x+td)<g(x^*)=0$ for any $t\in (0,\epsilon_1)$ and $i\in I(x^*)$. For any $i\not \in I(x^*)$, we have $g_i(x^*)<0$ and hence, by continuity of $g_i$ it follows that there exists $\epsilon_2>0$ such that $g_i(x^*+td)<0$ for any $t\in (0,\epsilon_2)$ and $i\not \in I$. We can thus conclude that 
+\begin{align*}
+&\grad(x^*+td)^Td<f(x^*),\\
+&\nabla g_i (x^*+td)^Td<0,\quad i \in [m],
+\end{align*}
+for all $t\in (0,\min\{\epsilon_1,\epsilon_2\})$, which is a contradiction to the local optimality of $x^*$.
+\end{proof}
+We have thus shown that a necessary optimality condition for local optimality is the infeasibility of a certain system of strict inequalities. On the other hand, similarly to the stationarity condition, this system is difficult to use in practice. We will state now the Fritz-John conditions.
+\begin{theorem}[Fritz-John Conditions]\label{thm:fritzjohn}
+Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}. Then there exists multipliers $\lambda_0,\dots, \lambda_1, \dots, \lambda_m\geq0$ such that they are not all zeros and such that 
+\begin{equation}\label{eq:fritzjohn}
+\begin{split}
+\lambda_0\grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*) &= 0,\\
+\lambda_ig_i(x^*)&=0 \quad i=1, \dots, m.
+\end{split}
+\end{equation}
+\end{theorem}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{separation}.
+	\caption{Strict separation of point from a closed and convex set.} \label{fig:separtation}
+\end{figure}
+\noindent In order to prove this theorem we need a rather large digression into the Alternative Theorems. 
+\subsection{Alternative Theorems}
+We begin with a very simple yet powerful result on convex sets, namely the separation theorem between a point and a closed convex set. This result will be the basis for all the optimality conditions that will be discussed later on.
+\begin{theorem}[Strict Separation Theorem]\label{thm:separation}
+	Let $C$ be a closed and convex set and let $y\not \in C$. Then there exists $p\in \Rn \setminus \{0\}$ and $\alpha\in \R$ such that
+	\begin{equation*}
+		p^Ty>\alpha \qquad \text{and} \qquad p^Tx\leq \alpha \;\;\forall x\in C.
+	\end{equation*}
+\end{theorem}
+\begin{proof}
+By the second projection theorem, the vector $\bar{x}=P_C(y)\in C$ satisfies
+\begin{equation*}
+	(y-\bar{x})^T(x-\bar{x}) \leq 0 \;\; \forall x\in C
+\end{equation*}
+which is the same as 
+\begin{equation*}
+	(y-\bar{x})^T x \leq (y-\bar{x})^T \bar{x} \;\; \forall x\in C.
+\end{equation*}
+Denote $p=y-x\neq 0$ (since $y\not \in C$) and $\alpha= (y-\bar{x})^T \bar{x}$. Then we have that $p^Tx\leq \alpha\;\forall x\in C$. On the other hand,
+\begin{equation*}
+	p^Ty = (y-\bar{x})^Ty = (y-\bar{x})^T(y-\bar{x}) + (y-\bar{x})^T\bar{x} = ||y-\bar{x}||^2 + \alpha > \alpha,
+\end{equation*}
+and the result is established.
+\end{proof}
+\noindent Now, before going on with two more alternative theorems, we need to show that the conic hull of a fine set is closed and convex.
+\begin{definition}[Conic Hull] Let $S\subseteq \Rn$. Then the conic hull of $S$, denoted by $\cone(S)$,
+	is the set comprising all the conic combinations of vectors from S:
+	\begin{equation*}
+		\cone(S):=\left\{\sum_{i=1}^k \lambda_i x_i: x_1,\dots, x_k\in S, \lambda\in \R^k_+, k \in \N\right\}
+	\end{equation*}
+\end{definition}
+\begin{lemma}\label{lemma:cone}
+	Let $a_1, a_2, \dots a_p\in \Rn$, $p\in \N$. Then $\cone(\{a_1, \dots, a_p\})$ is closed and convex.
+\end{lemma}
+\begin{proof}
+	Exercise.
+\end{proof}
+\noindent We can now go on with the next alternative theorem.
+\begin{lemma}[Farkas' lemma, second formulation]\label{lemma:farkas}
+	Let $c\in \Rn$ and $A\in \Rmn.$ Then the following two claims are equivalent:
+	\begin{itemize}
+		\item[M.] The implication $Ax\leq 0 \Rightarrow c^Tx\leq 0$ holds true. 
+		\item[N.] There exists $y\in \Rn_+$ such that $A^Ty=c.$
+	\end{itemize}
+\end{lemma}
+\begin{proof}
+	Suppose that system $N$ is feasible. To see that the implication $M$ holds, suppose that $Ax\leq 0$ for some $x\in \Rn$. Then, multiplying this inequality from the left by $y^T$ (a valid operation since $y\geq0$) yields 
+	\begin{equation*}
+		y^TAx\leq 0,
+	\end{equation*}
+which concludes the thesis by noticing that $c^T=y^TA$. 
+\par The reverse direction is not so obvious. Suppose that the implication $M$ is satisfied, and
+let us show that system $N$ is feasible. Suppose in contradiction that system $N$ is infeasible,
+and consider the following set
+\begin{equation*}
+	S=\{x\in\Rn: x= A^Ty \; y\in \Rn_+\},
+\end{equation*}
+which is closed and convex thanks to Lemma \ref{lemma:cone}. The infeasibility of B means that $c\not \in S$. By Theorem \ref{thm:separation}, it follows that there exists a vector $p\in \Rn \setminus \{0\}$ and $\alpha\in \R$ such that $p^Tc>\alpha$ and 
+\begin{equation}\label{eq:farkas_final}
+	p^Tx\leq \alpha \; \forall x\in S
+\end{equation}
+Since $0\in S$, from \eqref{eq:farkas_final} we have that $\alpha\geq 0$ and hence also $p^Tc>0$. In addition, \eqref{eq:farkas_final} is equivalent to 
+\begin{equation*}
+	p^TA^Ty\leq \alpha \;\; \forall y\geq 0 
+\end{equation*}
+or to 
+\begin{equation*}
+	(Ap)^Ty\leq \alpha \;\; \forall y\geq 0.
+\end{equation*}
+Let us now prove that $Ap \leq 0$ (notice that this means component-wise). By contradiction, if there was an index $i\in \{1,2, \dots,m\}$ such that $(Ap)_i>0$, then for $y=\beta e_i$ we would have that $(Ap)^Ty = \beta (Ap)_i$ which is an expression that goes to $\infty$ as $\beta\to \infty$, and, thus, cannot be bounded by a constant $\alpha$. At this point we have found a system for which $Ap\leq 0$ and $p^Tc=c^Tp>0$, which contradicts the implication $M$.
+\end{proof}
+\noindent In order to prove Gordon's alternative theorem, we are going to use Farkas' lemma in the following formulation.
+\begin{lemma}[Farkas' lemma, first formulation]\label{lemma:Farkas}
+	Let $c\in \Rn$ and $A\in \Rmn.$ Then exactly one of the following system has a solution:
+	\begin{itemize}
+		\item[I.] $Ax\leq 0, c^Tx> 0$. 
+		\item[II.] $A^Ty=c, y\geq 0$.
+	\end{itemize}
+\end{lemma}
+\noindent To show that the two formulations are equivalent, let us notice that $II$ is equivalent to $N$ and let us write down the truth table of $M$ and $I$. In particular, let us call $M_1$ the statement $Ax\leq 0$ and $M_2$ the statement $c^Tx\leq0$ and notice that $I=M_1 \wedge \bar{M}_2$.\\
+
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	M$_1$& M$_2$ & M= M$_1\Rightarrow$M$_2$& $I=M_1 \wedge \bar{M}_2$ \\
+	\hline
+	F& F & T & F \\
+	\hline
+	F& T & T & F \\
+	\hline
+	T& F & F & T \\
+	\hline
+	T& T & T & F \\
+	\hline
+\end{tabular}\\[1\baselineskip]
+In particular, this means that the two formulations are equivalent as the first formulation (Lemma \ref{lemma:Farkas}) states that exactly one between $I$ and $II$ has solutions while the second formulation (Lemma \ref{lemma:farkas}) states that $M$ and $N$ are equivalent.
+
+\begin{theorem}[Gordon's Alternative Theorem]\label{thm:gordon}
+	Let $A\in\Rmn$. Then exactly one of the following statements has a solution:
+	\begin{itemize}
+		\item[M.] $Ax<0$.
+		\item[N.] $p\neq 0, A^Tp = 0, p\geq 0$.
+	\end{itemize}
+\end{theorem}
+\begin{proof}
+	Suppose that the system $M$ has a solution. We will prove that $N$ is infeasible. Assume by contradiction that $B$ is feasible, meaning that there exists $p\neq0$ satisfying $A^Tp=0, p\geq0$. Multiplying the equality $A^Tp=0$ from the left by $x^T$ yields 
+	\begin{equation*}
+		(Ax)^Tp=0
+	\end{equation*}
+which is impossible since $Ax<0$ and $0\neq p\geq0$.
+\par Now suppose that the system $M$ does not have a solution. Note that the system $M$ is equivalent to 
+\begin{align*}
+	Ax+se&\leq 0\\
+	s&>0, s\in \R. 
+\end{align*}
+The latter system can be rewritten as 
+\begin{equation*}
+	\tilde{A}\begin{pmatrix}
+		x\\
+		s
+	\end{pmatrix}\leq 0, \qquad c^T\begin{pmatrix}
+	x\\
+	s
+\end{pmatrix}>0,
+\end{equation*}
+where $\tilde{A}=(A e)$ and $c=e_{n+1}$. The infeasibility of $M$ is thus equivalent to the infeasibility of the system 
+\begin{equation*}
+\tilde{A}w\leq 0, \quad c^Tw>0,\quad w\in \R^{n+1}.
+\end{equation*}
+By Farkas' lemma, there exists $z\in \R^{m}_+$ such that 
+\begin{equation*}
+	\begin{pmatrix}
+		A^T\\
+		e^T
+	\end{pmatrix}z = c,
+\end{equation*}
+that is, there exists $z\in \R^m_+$ such that 
+\begin{equation*}
+	A^Tz=0, \qquad e^Tz=1.
+\end{equation*}
+Since $ e^Tz=1$ it follows in particular that $z\neq 0$, and we have thus shown the existence of $0\neq z \in \R^m_+$ such that $A^Tz=0$, that is $N$ is feasible.
+\end{proof}
+
+\subsection{KKT Conditions}
+Before stating and proving the KKT conditions, we first prove Theorem \ref{thm:fritzjohn}.
+\begin{proof}[Proof of Theorem \ref{thm:fritzjohn}]
+	By Lemma \ref{lemma:for_fritzjohn} it follows that the following system of inequality does not have a solution:
+	\begin{equation}\label{eq:system_for_fritzjohn}
+		\begin{split}
+			\grad(x^*)^Td<0,\\
+			\nabla g_i(x^*)^Td<0 \quad i\in I(x^*),
+		\end{split}
+	\end{equation}
+where $I(x^*)=\{i_1, i_2, \dots, i_k\}$. System \eqref{eq:system_for_fritzjohn} can be rewritten as 
+\begin{equation*}
+	Ad<0,
+\end{equation*}
+where 
+\begin{equation*}
+	A=\begin{pmatrix}
+		\grad(x^*)^T\\
+		\nabla g_{i_1}(x^*)^T\\
+		\vdots\\
+		\nabla g_{i_k}(x^*)^T
+	\end{pmatrix}
+\end{equation*}
+By Gordon's theorem of the alternative (Theorem \ref{thm:gordon}), system \eqref{eq:system_for_fritzjohn} is infeasible iff there exists a vector $\eta=(\lambda_0, \lambda_{i_1}, \dots, \lambda_{i_k})^T\neq 0$ such that 
+\begin{equation*}
+	A^T\eta = 0, \qquad \eta\geq 0,
+\end{equation*}
+which is the same as 
+\begin{equation*}
+	\begin{split}
+		\lambda_0 \grad(x^*) + \sum_{i\in I(x^*)} \lambda_i \nabla g_i(x^*) &= 0,\\
+		\lambda_i&\geq 0, \quad i \in I(x^*).
+	\end{split}
+\end{equation*}
+Define $\lambda_i=0$ for any $i\not \in I(x^*)$, and we obtain that 
+\begin{equation*}
+	\lambda_0 \grad(x^*) + \sum_{i=1}^{m} \lambda_i\nabla g_i(x^*)=0
+\end{equation*}
+and that $\lambda_i g_i(x^*)=0$ for any $i\in [m]$ as required.
+\end{proof}
+A major drawback of the Fritz-John conditions is in the fact that they allow $\lambda_0$ to be
+zero. This case is not particularly informative as when $\lambda_0=0$ the Fritz-John conditions simply means that the gradients of the active constraints are linearly dependent. This condition has nothing to do with the objective function, implying that
+there might be a lot of points satisfying the Fritz-John conditions which are not local minimum points. If we add an assumption that the gradients of the active constraints are linearly independent at $x^*$, then we can establish the KKT conditions, which are the same as the Fritz-John conditions with $\lambda_0 = 1$. Before introducing them, let us define the Lagrangian of problem \eqref{eq:last_problem}
+\begin{equation}\label{eq:lagrange}
+	L(x,\lambda) = f(x) +\sum_{i=1}^m \lambda_i g_i(x),
+\end{equation}
+where $\lambda_1, \dots, \lambda_m$ are the nonnegative Lagrange multipliers associated to the inequalities $g_1, \dots, g_m$.
+
+\begin{theorem}[KKT conditions]
+	Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}, with $f, g_1,\dots, g_m\in \C(\Rn)$. Let $I(x^*)$ be the set of active constraints and suppose that the gradients of the active constraints $\{\nabla g_i(x^*)\}_{i\in I(x^*)}$ are linearly independent. Then there exists multipliers $\lambda_1, \dots, \lambda_m\geq 0$ such that 
+	\begin{equation}\label{eq:kkt}
+		\begin{split}
+			\nabla_x L(x,\lambda) = \grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*) &= 0,\\
+			\lambda_ig_i(x^*)&=0 \quad i=1, \dots, m.
+		\end{split}
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	By Fritz-John it follows that there exist $\tilde{\lambda}_0, \tilde{\lambda}_1, \dots, \tilde{\lambda}_m\geq 0$ not all zeros, such that \begin{equation*}
+		\begin{split}
+			\tilde{\lambda}_0\grad(x^*)+ \sum_{i=1}^{m} \tilde{\lambda}_i \nabla g_i(x^*) &= 0,\\
+			\tilde{\lambda}_ig_i(x^*)&=0 \quad i=1, \dots, m.
+		\end{split}
+	\end{equation*}
+In particular, $\tilde{\lambda}_0\neq0$ otherwise the gradients of the active constraints would be linearly dependent, against the assumption of being linearly independent. The KKT-multipliers are simply defined as $\lambda_i=\frac{\tilde{\lambda}_i}{\lambda_0}$.
+\end{proof}
+\noindent The condition that the gradients of the active constraints are linearly independent
+is one of many types of assumptions that are referred to in the literature as ``constraint
+qualifications.'' In particular this condition is called Linear Independence Constraint Qualification (LICQ). Another constraint qualification that implies the KKT points to be necessary conditions for optimality is when the $g_i$ are affine functions. The points satisfying these conditions are usually called ``regular''. By construction, solving (exactly) the KKT conditions will only allow you to find KKT points which are regular, but there might be better non-regular points. Take the extreme case of the problem $\min x\; \; s.t. x^2=0$, where the set of KKT points is empty but the solution exists and it is $x^*=0$. On the other hand, it is possible to rewrite system \eqref{eq:kkt} as 
+\begin{equation}\label{eq:final_system}
+	B (x,\lambda) :=
+	\begin{pmatrix}
+		\grad(x)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x)\\
+		\lambda_1 g_1(x)\\
+		\vdots\\
+		\lambda_m g_m(x)\\
+	\end{pmatrix}=0.
+\end{equation}
+However, solving this system does not ensure the feasibility of $x$. One needs to take into account also the constraints of \eqref{eq:last_problem}. In fact, notice that the KKT are necessary conditions for a feasible local minimum. In particular, one could use some new variables $w$ to ensure that the constraints are satisfied, i.e., $g_i(x)+w_i=0$ with $w\in \R^m_+$ is equivalent to $g_i(x)\leq 0$. This variables are called ``slack'' variables as they would relax the constraints if one does not enforce them to be non-negative. Also, $w_i=0$ if and only if the corresponding constraint $g_i$ is active. Thus, the system \eqref{eq:final_system} equipped with the constraints $g_i\leq 0$ is equivalent to 
+\begin{equation*}
+	A (x,\lambda,w) :=
+	\begin{pmatrix}
+		\grad(x)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x)\\
+		\lambda_1 w_1\\
+		\vdots\\
+		\lambda_m w_m\\
+		g_1(x) + w_1\\
+		\vdots\\
+		g_m(x) +w_m\\
+	\end{pmatrix}=0.
+\end{equation*}
+Notice that $A:\Rn\times\R^m_+\times\R^m_+\to \R^{2m+1}$ is generally nonlinear and non-convex. Now, we can define the merit function of this system as $F(x,\lambda,w) := \frac{1}{2}||A(x,\lambda,w)||^2$ and solve instead the following optimization problem
+\begin{equation*}
+	\begin{split}
+		\min \;\; &F(x,\lambda, w)= \frac{1}{2}||A(x,\lambda,w)||^2\\
+		\st& \lambda\geq 0\\
+		& w\geq 0.
+	\end{split}
+\end{equation*}
+Note that the above problem has convex constraints for which a projection is extremely easy (box-constraints), thus solving this problem with projected gradient will both aim at constructing solutions that are feasible and optimal. On the other hand, $F$ might not be convex, so the problem may not be solved to a global optimum ($A(x,\lambda,w)=0$). In this case, the solution $x^*$ may not be feasible and it may be need to be projected onto the feasible set. One could also consider solving the original problem ignoring the constraints and projecting the solution back to the feasible set only at the end. However, this approach is not always possible (e.g., consider a system that can only be evaluated within certain parameters) and may result in solutions that are arbitrary far from the feasible set. The KKT system instead automatically encapsulates the idea that one should move into the direction of the gradient as long as it is far from an active constraint.
+
+\begin{remark}
+	The Lagrange function is connected to the notion of \textit{duality}. Given $C$ the constrained set of \eqref{eq:last_problem}, and $L(x,\lambda)$ the Lagrange function related to this problem, the dual objective function $q:\Rn\to \R \cup \{-\infty\}$ is give by $q(\lambda) := \min_{x\in C} L(x,\lambda)$, where we use the notation ``min'' even if the minimum might not be attained. In addition, the optimal value of $q(\lambda)$ is not always finite, as there are values of $\lambda$ for which $q(\lambda) = -\infty$. Is therefore natural to define the domain of the dual objective function as dom(q)$:=\{\lambda \in \R^m_+: q(\lambda)>-\infty\}$. Thus, the dual problem of \eqref{eq:last_problem} is given by 
+	\begin{equation*}
+		\begin{split}
+			\max_\lambda \;\; &q(\lambda) = \max_\lambda \min_{x\in C} L(x,\lambda)\\
+			\st& \lambda\in \text{dom}(q).
+		\end{split}
+	\end{equation*}
+\end{remark}
+ 
+%\bibliographystyle{plain}
+%\bibliography{../biblio}
+\end{document}
