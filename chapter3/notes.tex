@@ -7,10 +7,10 @@
 \date{}
 \begin{document}
 	\maketitle
-	\section{Newton Method}
+	\section{Pure Newton Method}
 	In the previous chapter, we have studied optimization problems like $\min_{x\in\Rn} f(x)$ with $f\C(\Rn)$, in particular, we only used first order information to build our methods. In this chapter we assume that $f\Cii(\Rn)$, and we will present second-order methods, that is, in addition to the information on function values and gradients, we will employ evaluations of the Hessian matrices. We will start from the most famous second-order method, namely Newton's method, whose main idea is the following. Given an iterate $x_k$, the next iterate $x_{k+1}$ is chosen to minimize the quadratic approximation of the function around $x_k$:
 	\begin{equation*}
-		x_{k+1} = \argmin_{x \in \mathbb{R}^n} \left\{ f(x_k) + \grad(x_k)^T (x - x_k) + \frac{1}{2}(x - x_k)^T \hess(x_k)(x - x_k) \right\}.
+		x_{k+1} = \argmin_{x \in \mathbb{R}^n} q_k(x):= f(x_k) + \grad(x_k)^T (x - x_k) + \frac{1}{2}(x - x_k)^T \hess(x_k)(x - x_k).
 	\end{equation*}
 	The above update formula is not well-defined unless we further assume that $\hess(x_k)$ is positive definite. In that case, the unique minimizer of the minimization problem above is the unique stationary point:
 	\begin{equation*}
@@ -18,9 +18,9 @@
 	\end{equation*}
 	which is the same as
 	\begin{equation}\label{eq:newton}
-		x_{k+1} = x_k - (\hess(x_k))^{-1} \grad(x_k).
+		x_{k+1} = x_k - \hess(x_k)^{-1} \grad(x_k).
 	\end{equation}
-	The vector $-(\hess(x_k))^{-1} \grad(x_k)$ is called the Newton direction, and the algorithm induced by the update formula \eqref{eq:newton} is called the pure Newton's method. Note that when $\hess(x_k)$ is positive definite for any $k$, Newton's directions are descent directions (Exercise).
+	The vector $-(\hess(x_k))^{-1} \grad(x_k)$ is called the Newton direction, and the algorithm induced by the update formula \eqref{eq:newton} is called the pure Newton's method. 
 	
 	\begin{algorithm}[H]\label{alg:newton}
 		\caption{Pure Newton}
@@ -38,7 +38,15 @@
 			$k = k+1$
 		}
 	\end{algorithm}
-At the very least, Newton's method requires that $\hess(x)$ is positive definite for every $x \in \mathbb{R}^n$, which in particular implies that there exists a unique optimal solution $x^*$. However, this is not enough to guarantee convergence, as the following example illustrates.
+\noindent Note that when $\hess(x_k)$ is positive definite for any $k$, Newton's directions are descent directions.
+\begin{lemma}
+	Let $f\in \Cii(\Rn)$ and let $\hess(x)\succ0,$ then $d_k = - \hess(x_k)^{-1} \grad(x_k)$ is a descent direction.
+\end{lemma}
+\begin{proof}
+	That follows directly from the definition of $d_k$ and the fact that the inverse of a positive definite matrix is also positive definite, thus
+	$\grad(x_k)^Td_k = - \grad(x_k)^T \hess(x_k)^{-1} \grad(x_k)<0.$ 
+\end{proof}
+\noindent By assuming that $\hess(x)$ is positive definite for every $x \in \mathbb{R}^n$ we also have that there exists a unique optimal solution $x^*$. However, this is not enough to guarantee convergence, as the following example illustrates.
 
 \begin{example}
 	Consider the function $f(x) = \sqrt{1 + x^2}$ defined over the real line. The minimizer of $f$ over $\mathbb{R}$ is of course $x = 0$. The first and second derivatives of $f$ are
@@ -51,34 +59,34 @@ At the very least, Newton's method requires that $\hess(x)$ is positive definite
 	\end{equation*}
 	We therefore see that for $|x_0| \geq 1$ the method diverges and that for $|x_0| < 1$ the method converges very rapidly to the correct solution $x^* = 0$.
 \end{example}
-\noindent Despite the fact that a lot of assumptions are required to be made in order to guarantee the convergence of the method, Newton's method does have one very attractive feature: under certain assumptions one can prove local \emph{quadratic rate of convergence}, which means that near the optimal solution the errors $e_k = \|x_k - x^*\|$ (where $x^*$ is the unique optimal solution) satisfy the inequality $e_{k+1} \leq M e_k^2$ for some positive $M > 0$. This property essentially means that the number of accuracy digits is doubled at each iteration.
+\noindent Despite the fact that a lot of assumptions are required to be made in order to guarantee the convergence of the method, Newton's method does have one very attractive feature: one can prove local quadratic rate of convergence, which means that near the optimal solution the errors $e_k = \|x_k - x^*\|$ (where $x^*$ is the unique optimal solution) satisfy the inequality $e_{k+1} \leq M e_k^2$ for some positive $M > 0$. This property essentially means that the number of accuracy digits is doubled at each iteration.
 
-\begin{theorem}[Quadratic local convergence of Newton's method]
-	Let $f\in \Cii(\Rn)$ with $\hess$ Lipschitz continuous, i.e., $ \exists\, L > 0$ for which $\|\hess(x) - \hess(y)\| \leq L\|x - y\|$ for any $x, y \in \mathbb{R}^n$. Moreover, let $\hess(x)$ be positive definite for any $x \in \mathbb{R}^n$. Let $\{x_k\}_{k \geq 0}$ be the sequence generated by Newton's method, and let $x^*$ be the unique minimizer of $f$ over $\mathbb{R}^n$. Then for any $k = 0, 1, \ldots$ the inequality
-	\begin{equation*}
-		\|x_{k+1} - x^*\| \leq \frac{L}{2m}\|x_k - x^*\|^2 
-	\end{equation*}
+\begin{theorem}[Quadratic local convergence of Newton's method]\label{thm:newton}
+	Let $f\in \Cii(\Rn)$ with $\hess$ Lipschitz continuous, i.e., $ \exists\, L > 0$ for which $\|\hess(x) - \hess(y)\| \leq L\|x - y\|$ for any $x, y \in \mathbb{R}^n$. Moreover, let $\hess(x)$ be positive definite for any $x \in \mathbb{R}^n$. Let $\{x_k\}_{k \geq 0}$ be the sequence generated by Algorithm \ref{alg:newton}, and let $x^*$ be the unique minimizer of $f$ over $\mathbb{R}^n$. Then, we have 
+	\begin{equation}\label{eq:newton_contraction}
+		\|x_{k+1} - x^*\| \leq \frac{L}{2m}\|x_k - x^*\|^2 \quad \forall k = 0, 1, \ldots
+	\end{equation}
 	holds. In addition, if $\|x_0 - x^*\| \leq \frac{m}{L}$, then
-	\begin{equation*}
+	\begin{equation}\label{eq:local_newton}
 		\|x_k - x^*\| \leq \frac{2m}{L} \left(\frac{1}{2}\right)^{2^k}.
-	\end{equation*}
+	\end{equation}
 \end{theorem}
 \begin{proof}
-	Let $k$ be a nonnegative integer. Then
+	Let $k$ be a nonnegative integer. Then, from  $\grad(x^*)=0$ and the fundamental Theorem of Calculus, we have
 	\begin{align*}
 		x_{k+1} - x^* &= x_k - (\hess(x_k))^{-1} \grad(x_k) - x^* \nonumber \\
-		&\stackrel{\grad(x^*) = \mathbf{0}}{=} x_k - x^* + (\hess(x_k))^{-1}(\grad(x^*) - \grad(x_k)) \nonumber \\
+		&= x_k - x^* + (\hess(x_k))^{-1}(\grad(x^*) - \grad(x_k)) \nonumber \\
 		&= x_k - x^* + (\hess(x_k))^{-1} \int_0^1 [\hess(x_k + t(x^* - x_k))](x^* - x_k) dt \nonumber \\
 		&= (\hess(x_k))^{-1} \int_0^1 [\hess(x_k + t(x^* - x_k)) - \hess(x_k)](x^* - x_k) dt. \nonumber
 	\end{align*}
-	Combining the latter equality with the fact that $\hess(x_k) \succeq mI$ implies that $\|(\hess(x_k))^{-1}\| \leq \frac{1}{m}$. Hence,
+	Combining the latter equality with the fact that $\hess(x)\succ 0 \forall x,$ i.e., $\exists m>0: \hess(x_k) \succeq mI$, implies that $\|(\hess(x_k))^{-1}\| \leq \frac{1}{m}$. Hence,
 	\begin{align*}
 		\|x_{k+1} - x^*\| &\leq \|(\hess(x_k))^{-1}\| \left\| \int_0^1 [\hess(x_k + t(x^* - x_k)) - \hess(x_k)](x^* - x_k) dt \right\| \nonumber \\
 		&\leq \|(\hess(x_k))^{-1}\| \int_0^1 \left\| [\hess(x_k + t(x^* - x_k)) - \hess(x_k)](x^* - x_k) \right\| dt \nonumber \\
 		&\leq \|(\hess(x_k))^{-1}\| \int_0^1 \|\hess(x_k + t(x^* - x_k)) - \hess(x_k)\| \cdot \|x^* - x_k\| dt \nonumber \\
-		&\leq \frac{L}{m} \int_0^1 t \|x_k - x^*\|^2 dt = \frac{L}{2m} \|x_k - x^*\|^2. \nonumber
+		&\leq \frac{L}{m} \int_0^1 t \|x_k - x^*\|^2 dt = \frac{L}{2m} \|x_k - x^*\|^2, \nonumber
 	\end{align*}
-	We will prove inequality (5.4) by induction on $k$. Note that for $k = 0$, we assumed that
+where the last inequality follows from the Lipschitz continuity of the Hessian.	Now, we will prove inequality \eqref{eq:local_newton} by induction on $k$. Note that for $k = 0$, we assumed that
 	\begin{equation*}
 		\|x_0 - x^*\| \leq \frac{m}{L},
 	\end{equation*}	
@@ -86,10 +94,95 @@ At the very least, Newton's method requires that $\hess(x)$ is positive definite
 	\begin{equation*}
 		\|x_0 - x^*\| \leq \frac{2m}{L} \left(\frac{1}{2}\right)^{2^0},
 	\end{equation*}
-	establishing the basis of the induction. Assume that (5.4) holds for an integer $k$, that is, $\|x_k - x^*\| \leq \frac{2m}{L} \left(\frac{1}{2}\right)^{2^k}$, we will show it holds for $k + 1$. Indeed, by (5.3) we have
+	establishing the basis of the induction. Assuming that \eqref{eq:local_newton} holds for an integer $k$, that is, $\|x_k - x^*\| \leq \frac{2m}{L} \left(\frac{1}{2}\right)^{2^k}$, we will show it holds for $k + 1$. Indeed, by \eqref{eq:newton_contraction} we have
 	\begin{equation*}
 		\|x_{k+1} - x^*\| \leq \frac{L}{2m} \|x_k - x^*\|^2 \leq \frac{L}{2m} \left(\frac{2m}{L} \left(\frac{1}{2}\right)^{2^k}\right)^2 = \frac{2m}{L} \left(\frac{1}{2}\right)^{2^{k+1}},
 	\end{equation*}
 	proving the desired result.
 \end{proof}
+\noindent Now, in order to ensure \textbf{global convergence} and maintain this local property, we can employ one of the following globalization techniques:
+\begin{itemize}
+	\item \textbf{Line search} techniques applied to a descent direction constructed from Newton's direction;
+	\item \textbf{Trust region} methods, where $s_k$ is chosen as the optimal solution (with a certain degree of approximation) of
+	\begin{equation*}
+		\min_{\|s_k\| \leq \Delta_k} q_k(s_k), \quad \with s_k:=x-x_k
+	\end{equation*}
+	appropriately updating the trust region radius $\Delta_k$ along the iterations (approximations of $\nabla^2 f(x_k)$ can be used);
+	\item \textbf{Regularized} methods, where $s_k$ is chosen as the optimal solution (with a certain degree of approximation) of
+	\begin{equation*}
+		\min_{s \in \mathbb{R}^n} q_k(s) + \sigma_k \|s\|^3
+	\end{equation*}
+	appropriately updating $\sigma_k$ along the iterations (approximations of $\nabla^2 f(x_k)$ can be used).
+\end{itemize}
+
+\section{Truncated Newton with Conjugate Gradient}
+The Theorem \ref{thm:newton} above can be relaxed as follows. In particular, we can inexactly solve the Newton equation.
+\begin{proposition}[Local Convergence of Inexact Newton]
+	Let $f\in \Cii(\mathcal{D})$ where $\mathcal{D} \subseteq \mathbb{R}^n$ is an open set. Suppose that the following conditions hold:
+	\begin{itemize}
+		\item[(i)] there exists a point $x^* \in \mathcal{D}$ such that $\nabla f(x^*) = 0$;
+		\item[(ii)] the Hessian matrix $\nabla^2 f(x^*)$ is non singular.
+	\end{itemize}
+	Then, there exist an open ball $\mathcal{B}(x^*; r) \subset \mathcal{D}$, and a value $\bar{\eta}$ such that, if $x_0 \in \mathcal{B}(x^*; r)$ and $\eta_k \in [0, \bar{\eta}]$ for all $k$, then the sequence $\{x_k\}$ generated by the inexact Newton method and defined by the iteration $x_{k+1} = x_k + d_k$, where $d_k$ satisfies the condition
+	\begin{equation*}
+		\| \nabla q_k(d_k)\|=\|\nabla^2 f(x_k) d_k + \nabla f(x_k)\| \leq \eta_k \|\nabla f(x_k)\|,
+	\end{equation*}
+	converges to $x^*$ with (at least) linear convergence rate. Moreover 
+	\begin{itemize}
+		\item[(a)] if $\eta_k \to 0$ then $\{x_k\}$ converges with superlinear convergence rate, i.e., 
+		$$ \lim_{k\to \infty} \frac{||x_{k+1}-x^*||}{||x_k-x^*||}=0;$$
+		\item[(b)] if the Hessian matrix $\nabla^2 f$ is Lipschitz-continuous on $\mathcal{D}$, and there exists a constant $C > 0$ such that $\eta_k \leq C \|\nabla f(x_k)\|$ for all $k$, then $\{x_k\}$ converges with (at least) quadratic convergence rate.
+	\end{itemize}
+\end{proposition}
+In case the solution of the Newton equation is constructed via an iterative procedure, the "premature" interruption is called "truncation". \\
+\begin{algorithm}[H]\label{alg:tn}
+\caption{Truncated Newton with Conjugate Gradient (TNCG)}
+
+\KwIn{Pick $x_0\in \Rn$ arbitrarly, $\eta > 0$, $\epsilon_1 > 0$, $\epsilon_2 > 0$}
+
+$k=0$
+
+\While{$||\grad(x_k)|| > \epsilon_1$}{
+	
+	$i = 0$, $d_0 = 0$, $s_0 = -\nabla q_0 = -\nabla f(x_k)$
+	
+	\While{True}{
+		
+		\If{$s_i^T \nabla^2 f(x_k) s_i \leq \epsilon_2 \|s_i\|^2$}{		
+		
+			$d_k = \begin{cases}
+				-\nabla f(x_k), & \text{if } i = 0, \\
+				d_i, & \text{if } i > 0
+			\end{cases}$
+	
+			\textbf{break}
+		}
+	
+		$\alpha_i = -\frac{\nabla q_i^T s_i}{s_i^T \nabla^2 f(x_k) s_i}$
+		
+		$d_{i+1} = d_i + \alpha_i s_i$
+		
+		$\nabla q_{i+1} = \nabla q_i + \alpha_i \nabla^2 f(x_k) s_i.$
+		
+		\If{$\|\nabla q_i\| \leq \eta \|\nabla f(x_k)\| \min\left\{\frac{1}{k+1}, \|\nabla f(x_k)\|\right\}$}{
+			
+			$d_k = d_i$
+			
+			\textbf{break}
+		}
+	
+		$\beta_{i+1} = \frac{\nabla q_{i+1}^T \nabla^2 f(x_k) s_i}{s_i^T \nabla^2 f(x_k) s_i}$
+		
+		$s_{i+1} = -\nabla q_{i+1} + \beta_{i+1} s_i,$
+		
+		$i= i+1$
+	}
+	
+	$t_k \leftarrow$ Line Search along $d_k$ with 1 as initial step.
+	
+	$x_{k+1} = x_k +t_k d_k$
+	
+	$k = k+1$
+}
+\end{algorithm}
 \end{document}
