@@ -329,4 +329,28 @@ Once we have Proposition \ref{prop:truncated_newton}, we can achieve global conv
 \begin{remark}
 	The relaxation proposed in Proposition \ref{prop:truncated_newton}, obviously does not solve the slow convergence proved in Theorem \ref{thm:slow_newton} for the pure Newton method. In fact, when the directions have a negative curvature, the solution proposed by Algorithm \ref{alg:tncg} is to fall back on a gradient-like direction, which also have a $\BigO(\epsilon^{-2})$ iteration complexity. 
 \end{remark}
+
+\begin{example}
+	Algorithm \ref{alg:tncg} (TNCG) is the current state-of-the-art method to train linear support vector machine and logistic regression models. In particular, given a sample $S=((x_i, y_i))_{i=1}^M$ of $M$ examples, with $x_i\in \Rn$ and $y_i\in\{-1,1\}$ we define the training problem as follows
+	$$ \min_{w\in\Rn} f(w) = \frac{1}{2}||w||^2 + \lambda \sum_{i=1}^{M} \ell(y_i w^Tx_i),$$
+	with  $\lambda>0$ the regularization parameter and the loss $\ell$ that is either
+	\begin{itemize}
+		\item the logistic loss $\ell(y w^Tx):= \log(1+\exp(-yw^Tx))$ or
+		\item the squared hinge loss $\ell(y w^Tx):= (\max\{0, -yw^Tx\})^2$
+	\end{itemize}
+In the first case $f\in \Cii(\Rn)$ and in the second case $f\in \LC(\Rn)$, but TNCG can be still applied by generalizing the concept of Hessian with the use of Clarke's subdifferentials (left and right sub-differentials). 
+Let us compute the gradient and the Hessian of $f$:
+\begin{equation*}
+	\begin{split}
+		\grad (w) &= w+ \lambda\sum_{i=1}^{M} \ell'(y_i w^Tx_i)y_ix_i\\
+		\hess(w) &= \Id + \lambda X^T D(w) X ,
+	\end{split}
+\end{equation*}
+with $X= (x_1, \dots, x_M)^T$ and $D(w)$ a diagonal matrix such that $D(w)_{ii}= \ell''(y_iw^Tx_i)$, where $\ell''$ is the generalized second derivative of $\ell$.\\
+As you can see from above, thanks to the $\ell_2$ regularization, the Hessian is always positive definite and consequently $f$ is a strongly convex function. In particular, we can apply TNCG without worrying for negative curvature directions (basically removing the control in Step 5).
+The Newton inequality is solved with a truncation, because the amount of features $n$ is usually very large (e.g., text data with millions of tokens) making it not viable load the Hessian in a RAM. In fact, let's say $n=50 \cdot 10^6$, then the matrix would need $n^2=2.5\cdot 10^{15}$ float which are each 32 bits = 4 bytes, for a total of $10 \cdot 10^{16}$ bytes= 10000 Terabytes (divided by 2 because the Hessian is symmetric).
+On the other hand, the hessian can be computed by loading a single example (or a mini-batch of them) at the time, i.e., 
+$$ \hess(w) = \Id + \lambda\sum_{i=1}^{M} D_{ii}(w) x_ix_i^T.$$
+Moreover, CG only requires Hessian-vector products meaning that the whole Hessian is never explicitly formed (nor stored), only the $n$-dimensional vector $\hess(w)s$ (and their partial computations) are.
+\end{example}
 \end{document}
