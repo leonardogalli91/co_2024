@@ -87,7 +87,7 @@
 	\end{equation*}
 	with the last equality resulting from \eqref{eq:newton}. As a consequence, this Newton iteration would require at least $k_\epsilon$ iterations (and evaluations of $f_k$, $g_k$, and $H_k$) before terminating. In addition,
 	\begin{equation*}
-		x_0 = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \quad \text{and } x_k = \sum_{j=0}^{k-1} s_j. 
+		x_0 = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \quad \text{and } x_k = \sum_{j=0}^{k-1} d_j. 
 	\end{equation*}
 	The next step in our construction is to build a smooth function with bounded second and third derivatives (which implies that its gradient and Hessian are Lipschitz continuous) interpolating \eqref{eq:def_fk} at $x_k$ as defined above. The idea is that $f(x)$ should behave exactly like its quadratic approximation $q_k$ around $x_k$. In particular, given 
 	\begin{equation*}
@@ -592,10 +592,10 @@ As a consequence, \eqref{eq:deltamin} is also violated at iteration $k - 1$. But
 \begin{proof}
 First recall that if $j\in \mathcal{U}$, we have $f(x_j) = f(x_{j+1})$ and $\grad(x_j)=\grad(x_{j+1})$. As $k_\epsilon+1$ is the first iteration for which $\|\grad(x_{k_\epsilon+1})\| \leq \epsilon$, we have $\|\grad(x_k)\|>\epsilon \; \forall \, k <k_\epsilon+1$. This, together with the fact that $f(x)\geq f^*$ and Lemma \ref{lemma:model_decrease2}, by telescoping sum brings to 
 \begin{align*}
-	f(x_0)-f^* &\geq f(x_0) - f(x_{k+1})\\
-	& =\sum_{j\in S_k} f(x_j) - f(x_{j+1})\\
+	f(x_0)-f^* &\geq f(x_0) - f(x_{k_\epsilon+1})\\
+	& =\sum_{j\in S_{k_\epsilon}} f(x_j) - f(x_{j+1})\\
 	& \geq \eta_1 (m_j(0)- m_j(s_j))\\
-	& \geq \eta_1 c_2 |S_k| \epsilon^2,
+	& \geq \eta_1 c_2 |S_{k_\epsilon}| \epsilon^2,
 \end{align*}
 where the second inequality follows from Step 5 of Algorithm \ref{alg:trust-region_C}. Thus, $|S_k|\leq c_2 \frac{f(x_0) - f_{\text{low}}}{\epsilon^2}.$
 \end{proof}
@@ -604,9 +604,23 @@ where the second inequality follows from Step 5 of Algorithm \ref{alg:trust-regi
 	Assume that $f\in \LC$, $f$ be lower bounded by $f^*$, that $\exists\, L_B>0: \|B_k\| \leq L_B$ and that $\Delta_0\geq \gamma_1 \delta \|\grad(x_0)\|$. Algorithm \ref{alg:trust-region_C} has a iteration complexity of $\BigO(\epsilon^{-2})$.
 \end{theorem}
 \begin{proof}
-	Exercise, computing all the constants involved.
+	Exercise, by computing the precise constants.
 \end{proof}
+Now that we have the convergence rate of Algorithm \ref{alg:trust-region_C}, let us move back to the convergence analysis of Algorithm \ref{alg:trust-region} and see whether employing directly the Hessian, instead of $B_k$ will allow us to achieve a better rate. Unfortunately, the Trust-Region algorithm (Algorithm \ref{alg:trust-region}) inherits the same slow convergence of Newton. In fact, we have the following lower bound.
 
+\begin{theorem}\label{thm:slow_trust_region}
+	Algorithm \ref{alg:trust-region} applied to minimize a function $f\in \LC(\Rn)$ bounded from below may require as many as $\epsilon^{-2}$ evaluations of $f$ and $\grad$ to produce an iterate $x\in \Rn$ such that $||\grad (x)\|\leq \epsilon.$
+\end{theorem}
+\begin{proof}
+	Exercise, one needs to prove that the sequence of iterates in Theorem \ref{thm:slow_newton} can be generated also by Algorithm \ref{alg:trust-region}. In particular, the function defined in Theorem \ref{thm:slow_newton} behaves quadratically around the iterates, yielding decreases in $f$ that fully align ($\rho_k=1$) with those of the quadratic model employed by the trust-region method.
+\end{proof}
+Given this result, there is no need to solve $q_k(s)$ to higher precision than that achieved by the Cauchy step (at least when concerned with the global speed of convergence). In particular, we can accept a step $s_k$ such that 
+\begin{equation*}
+	q_k(s_k) \leq q_k(s_k^C), \quad \with s_k^C:= -t_k^C\grad(x_k), \quad s_k^C \in \argmin_{0\leq t\leq \frac{\Delta_k}{\|\grad(x_k)\|}} m_k(-t\grad(x_k)),
+\end{equation*}
+where the only difference with \eqref{eq:cauchy_point} is that we use $\hess(x_k)$ instead of $B_k$. For this algorithm, and consequently also for Algorithm \ref{alg:trust-region} the convergence speed can be inherited from that of Algorithm \ref{alg:trust-region_C} when we notice that $\hess(x_k)$ is a special case of $B_k$. For this result, the assumption that $\|B_k\|\leq L_B$ is not needed, as the Hessian is upper bounded if and only if $f\in \LC(\Rn)$, which was already a requirement of the results above. 
+
+Concerning the local convergence, if $\{x_k\}$ converges towards $x^*$ and $\hess(x^*)\succ0$, Algorithm \ref{alg:trust-region} will achieve local quadratic convergence, as the resulting steps around $x^*$ will be the same of pure Newton. In fact, similarly to the line search-based globalization of Newton, the quadratic model will be accurate and the trust-region radius will be always doubled (multiplied by $\gamma_2$).
 \bibliographystyle{plain}
 \bibliography{../biblio}
 \end{document}
