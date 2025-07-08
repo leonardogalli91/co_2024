@@ -891,7 +891,7 @@ where the first inequality is the Armijo condition. The second condition implies
 \end{proposition}
 \noindent In particular, the above proposition follows from the fact that if $B_k\succ 0$, thanks to the Wolfe condition we have
 $$ \grad(x_{k+1})^Td_k \geq \sigma \grad(x_k)^Td_k > \grad(x_k)^Td_k,$$
-which also means that $y_k^Ts_k>0$. In particular, together with 
+which also means that $y_k^Ts_k>0$. In particular, together with $B_k \succ 0$, the Wolfe condition ensures the following. 
 \begin{lemma}
 	For the BFGS update, if $B_k \succ 0$ and $y_k^T s_k > 0$, then $B_{k+1} \succ 0$.
 \end{lemma}
