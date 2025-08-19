@@ -97,6 +97,7 @@
 \def\Mcal{{\mathcal M}}
 \def\Ocal{{\mathcal O}}
 \def\Pcal{{\mathcal P}}
+\def\Scal{{\mathcal S}}
 \def\Ucal{{\mathcal U}}
 \def\Wcal{{\mathcal W}}
 \def\Xcal{{\mathcal X}}
@@ -150,6 +151,7 @@
 \newtheorem{alemma}{Lemma}
 \newtheorem{exm}{Example}
 \newtheorem{pb}{Exercise}
+\theoremstyle{definition}
 \newtheorem*{solution}{Solution}
 %\if@hidesolution\excludecomment{solution}\fi
 
@@ -173,13 +175,13 @@
 \noindent
 \begin{minipage}[t]{18 em}
 \begin{flushleft}
-Dr. Leonardo Galli,\\ Wiebke Bartolomaeus, M.Sc., \\ Maxime Nguegnang, M.Sc.
+Dr. Leonardo Galli,\\ Arinze Folarin, M.Sc., \\ Garam Kim, M.Sc.
 
 \end{flushleft}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushright}%
-Summer semester 2024
+Summer semester 2025
 \end{flushright}%
 \end{minipage}
 
@@ -190,7 +192,7 @@ Summer semester 2024
 \hrule
 \begin{center}
 \begin{huge}
-Continuous Optimization\\
+Optimization Methods\\
 \vskip 0.2cm
  Exercise sheet \getExerciseSheetNumber   \ifsolutions \ - Solutions\fi
 \end{huge}
@@ -200,9 +202,9 @@ Continuous Optimization\\
 \begin{large}
 \ifsolutions
 \else
-The exercise sheet consists of two parts. You should submit the solutions to the Problems via Moodle. We will correct them and give you feedback.\\
-The solution to the Exercises will be constructed interactively in the tutorial session, so you are encouraged to read/solve them, but there is no need to submit them.
-\vskip 0.3cm
+% The exercise sheet consists of two parts. You should submit the solutions to the Problems via Moodle. We will correct them and give you feedback.\\
+% The solution to the Exercises will be constructed interactively in the tutorial session, so you are encouraged to read/solve them, but there is no need to submit them.
+% \vskip 0.3cm
 \fi
  \end{large}
 \end{center}

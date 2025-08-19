@@ -7,7 +7,7 @@
 %boolean variable to determine whether the solutions should be included
 \newif\ifsolutions
 \solutionstrue
-\solutionsfalse
+%\solutionsfalse
 
 %We have a figure in this sheet
 \usepackage{graphicx}
@@ -20,103 +20,116 @@
 
 
 %\subsection*{Notation}
-\vskip 0.5cm 
+% \vskip 0.5cm 
 %-----------------------------------------------------------------------%
 \begin{problem}
 Recall the definition of the Rayleigh quotient for a symmetric matrix $A\in \R^{n \times n}$:
 \begin{equation*}
     R_A: \R^n\backslash \{0\} \longrightarrow \R, \quad x \mapsto  \frac{x^T A x}{\|x\|^2}.
 \end{equation*}
-Then show: 
-\begin{itemize}
-    \item $\lambda_n(A) \leq R_A(x) \leq \lambda_1(A)$, $\forall x\neq 0$.
-\end{itemize}
+Then show that for all $ x\neq 0$:
+\begin{align*}
+    \lambda_n(A) \leq R_A(x) \leq \lambda_1(A)
+\end{align*}
 And deduce: 
-\begin{itemize}
-    \item $\min_{x\neq 0} R_A(x)=\lambda_n(A)$
-    \item  $\max_{x\neq 0} R_A(x)=\lambda_1(A)$
-\end{itemize}
+\begin{align*}
+    \min_{x\neq 0} R_A(x)=\lambda_n(A)\quad \text{ and }\quad \max_{x\neq 0} R_A(x)=\lambda_1(A).
+\end{align*}
 \end{problem}
 
 \ifsolutions
 \vskip 0.3cm
 
 \begin{solution}
-By the spectral decomposition theorem we can write $A$ as $A=U^TDU$, where $U$ is an orthogonal matrix (consisting of the eigenvectors) and $D$ is a diagonal matrix, consisting of the eigenvalues. Without loss of generality, we can assume, the eigenvalues are ordered, i.e. $D=\text{diag}(\lambda_1(A), ..., \lambda_n(A))$ and $\lambda_i(A) \geq \lambda_{i+1}(A)$ for $i=1,...,n-1$.
+By the spectral decomposition theorem, we write $A$ as $A=UDU^T$, where $U$ is an orthogonal matrix (consisting of the eigenvectors) and $D$ is a diagonal matrix, consisting of the eigenvalues. Without loss of generality, we assume that the eigenvalues are ordered, i.e., $D=\text{diag}(\lambda_1(A), ..., \lambda_n(A))$ and $\lambda_i(A) \geq \lambda_{i+1}(A)$ for $i=1,...,n-1$. Then, we have
 
+\begin{align}
+    \frac{x^TA x}{x^Tx} \overset{A=UDU^T}{=} \frac{x^TUDU^Tx}{x^Tx}\overset{UU^T=Id}{=} \frac{x^TUDU^Tx}{x^TUU^Tx} \overset{y:=U^Tx}{=} \frac{y^TDy}{y^Ty} = \frac{\sum_{i=1}^n y_i^2 \lambda_i(A)} {\sum_{i=1}^n y_i^2}\label{eq: equivalence} .
+\end{align}
+Thus, it holds that
 \begin{align*}
-    \frac{x^TA x}{x^Tx} \overset{U^TU=Id}{=} \frac{x^TU^TDUx}{x^tU^TUx} \overset{y=Ux}{=} \frac{y^TDy}{y^Ty} = \frac{\sum_{i=1}^n y_i^2 \lambda_i(A)} {\sum_{i=1}^n y_i^2} \geq \frac{\sum_{i=1}^n y_i^2 \lambda_n(A)} {\sum_{i=1}^n y_i^2} = \lambda_n(A)
+    R_A(x)=\frac{\sum_{i=1}^n y_i^2 \lambda_i(A)} {\sum_{i=1}^n y_i^2}  \leq \frac{\sum_{i=1}^n y_i^2 \lambda_1(A)}{\sum_{i=1}^n y_i^2}=\lambda_1(A)
 \end{align*}
+and 
 \begin{align*}
-    \frac{x^TA x}{x^Tx} \overset{U^TU=Id}{=} \frac{x^TU^TDUx}{x^tU^TUx} \overset{y=Ux}{=} \frac{y^TDy}{y^Ty} = \frac{\sum_{i=1}^n y_i^2 \lambda_i(A)} {\sum_{i=1}^n y_i^2} \leq \frac{\sum_{i=1}^n y_i^2 \lambda_1(A)} {\sum_{i=1}^n y_i^2} = \lambda_1(A)
+    R_A(x)=\frac{\sum_{i=1}^n y_i^2 \lambda_i(A)} {\sum_{i=1}^n y_i^2}  \geq \frac{\sum_{i=1}^n y_i^2 \lambda_n(A)}{\sum_{i=1}^n y_i^2}=\lambda_n(A).
 \end{align*}
-
-As we have already shown the bounds on the Rayleigh quotient, we just need to show that the minimum and maximum are actually obtained. Choosing corresponding eigenvectors to the minimal respectively maximal eigenvalue does the trick. 
-As let $x$ be the eigenvector corresponding to $\lambda_i$, then $$R_A(x)=\frac{x^TAX}{x^Tx}=\frac{x^T\lambda_i x}{x^Tx}= \lambda_i$$
-
+From \eqref{eq: equivalence}, we have $\frac{x^TA x}{x^Tx} =\frac{y^TDy}{y^Ty}$. Taking the maximum on both sides yields
+\begin{align*}
+    \max_{x\not=0} \frac{x^TA x}{x^Tx} =\max_{y\not=0} \frac{y^TDy}{y^Ty}=\lambda_1(A)
+\end{align*}
+where the last equality holds when choosing $y=e_1$, i.e., $U^Tx=e_1$ thus $x=u_1$. (Note that $u_i^Tu_i=1$ for all $i=1,\ldots,n.)$ The argument for the minimum is identical.
 \end{solution}
 
 \fi
-%-----------------------------------------------------------------------%
 \vskip 0.5cm
-\begin{problem}
-Show that for all $x,y,z \in \R^n$
-\begin{equation*}
-    \|x-y\| \leq \|x-z\| + \|z-y\|.
-\end{equation*}
-\end{problem}
 
-\ifsolutions
-\vskip 0.3cm
+%-----------------------------------------------------------------------%
+% \vskip 0.5cm
+% \begin{problem}
+% Show that for all $x,y,z \in \R^n$
+% \begin{equation*}
+%     \|x-y\| \leq \|x-z\| + \|z-y\|.
+% \end{equation*}
+% \end{problem}
 
-\begin{solution}
-We simply use the triangle inequality 
-\begin{equation*}
-    \|x-y\| = \|x-z+z-y\| \leq \|x-z\| + \|z-y\|.
-\end{equation*}
-\end{solution}
-\fi
+% \ifsolutions
+% \vskip 0.3cm
+
+% \begin{solution}
+% We simply use the triangle inequality 
+% \begin{equation*}
+%     \|x-y\| = \|x-z+z-y\| \leq \|x-z\| + \|z-y\|.
+% \end{equation*}
+% \end{solution}
+% \fi
 %-----------------------------------------------------------------------%
 
-\begin{exo}
-Prove that for all $x\in \R^n$ one has
+\begin{problem}
+Prove that for all $x\in \R^n$, one has
 \begin{equation*}
     \|x\|_\infty = \lim_{p\rightarrow \infty} \|x\|_p.
 \end{equation*}
-\end{exo}
+\end{problem}
 
 \ifsolutions
 \vskip 0.3cm
 \begin{solution}
-Consider
+We want to show that $\lVert x\rVert_p\rightarrow\lVert x\rVert_\infty$ as $p\rightarrow\infty$, i.e., 
 \begin{align*}
-    \lim_{p\rightarrow \infty} \|x\|_p &= \lim_{p\rightarrow \infty} \left(\sum_{i=1}^ n |x_i|^ p\right)^{1/p} = \lim_{p\rightarrow \infty} \left(\sum_{i=1}^n \|x\|^p_\infty\frac{|x_i|^p}{\|x\|^p_\infty}\right)^{1/p} \\
-    &= \|x\|_\infty \lim_{p\rightarrow \infty} \left(\sum_{i=1}^n \frac{|x_i|^p}{\|x\|^p_\infty}\right)^{1/p}
+    \frac{\lVert x\rVert_p}{\lVert x\rVert_\infty}\rightarrow 1 \quad \text{  as }p\rightarrow\infty.
 \end{align*}
-Now, as all the summands are bounded by one, we have that the $p-$th root converges to one. 
+It holds that 
+\begin{align*}
+    \frac{\lVert x\rVert_p}{\lVert x\rVert_\infty}=\frac{\left(\sum_{i=1}^n|x_i|^p\right)^\frac{1}{p}}{\max\{|x_1|,\ldots,|x_n|\}}\leq \frac{\left(n\cdot\max\{|x_1|^p,\ldots,|x_n|^p\}\right)^\frac{1}{p}}{\max\{|x_1|,\ldots,|x_n|\}}=n^{\frac{1}{p}}\rightarrow 1
+\end{align*}
+as $p\rightarrow \infty$. Moreover, it holds that
+\begin{align*}
+    \lVert x\rVert_p = \left(\sum_{i=1}^n|x_i|^p\right)^\frac{1}{p} \geq \left(\max\{|x_1|^p,\ldots,|x_n|^p\}\right)^\frac{1}{p}=\max\{|x_1|,\ldots,|x_n|\}=\lVert x\rVert_\infty,
+\end{align*}
+which implies $\frac{\lVert x\rVert_p}{\lVert x\rVert_\infty}\geq 1$. Combining the upper bound and the lower bound together, we claim the proof. 
 \end{solution}
 
 \fi
 %-----------------------------------------------------------------------%
 \vskip 0.5cm
 
-\begin{exo}
+\begin{problem}
 Prove the Cauchy-Schwarz inequality, i.e. for any $x,y \in \R^n$:
 \begin{equation*}
     |\langle x, y \rangle | \leq \|x\| \|y\|.
 \end{equation*}
-And show we have equality iff $x$ and $y$ are linearly dependent. 
-\end{exo} 
+And show that the equality holds if and only if $x$ and $y$ are linearly dependent. 
+\end{problem} 
 
 \ifsolutions
 \vskip 0.3cm
 \begin{solution}
-If $y=0$ then the statement is clear as both sides of the inequality are zero. \\
-Otherwise we set $z:=x - \frac{\inner{y}{x}}{\inner{y}{y}}$. Then 
+If $y=0$, then the statement is clear. Hence we assume $y\not=0$. Let $z:=x - \frac{\inner{y}{x}}{\inner{y}{y}}y$. Then 
 \begin{equation*}
-    \inner{z}{y} = \inner{x}{y} - \frac{\inner{y}{x}}{\inner{y}{y} }\inner{y}{y} = 0.
+    \inner{z}{y} = \inner{x}{y} - \frac{\inner{y}{x}}{\inner{y}{y} }\inner{y}{y} = 0,
 \end{equation*}
-Which yields 
+therefore $z$ is orthogonal to $y$. Then, it holds that
 \begin{align*}
     \|x\|_2^2 &= \left\|\frac{\inner{y}{x}}{\inner{y}{y} } y + z \right\|_2^2 \\
     &= \inner{\frac{\inner{y}{x}}{\inner{y}{y} } y + z }{\frac{\inner{y}{x}}{\inner{y}{y} } y + z } \\
@@ -124,49 +137,45 @@ Which yields
     &= \frac{\left|\inner{y}{x}\right|^2}{\|y\|_2^2 }+ \|z\|_2^2 \\
     &\geq \frac{\left|\inner{y}{x}\right|^2}{\|y\|_2^2 }.
 \end{align*}
-Multiplying both sides with $\|y\|_2^2$ and taking the square root yields the result. \\
-
-Notice that we have equality iff $z=0$, which is the case if $x,y$ are linearly dependent. 
+Multiplying both sides by $\|y\|_2^2$ and taking the square root yields the result. Notice that we have equality iff $z=0$, which is the case if $x,y$ are linearly dependent. 
 \end{solution}
 
 \fi
 %-----------------------------------------------------------------------%
 \vskip 0.5cm
 
-\begin{exo}[On matrix norm]
-Recall the following definition from the lecture. Given a matrix $A\in \R^{m\times n}$ and two norms $\| .\|_p$ and $\|.\|_q$ on $\R^n$ and $\R^m$, respectively. Then the induced matrix-norm is  $\|A\|_{p\rightarrow q} $ is defined by 
+\begin{problem}
+Recall the following definition from the lecture. Given a matrix $A\in \R^{m\times n}$ and two norms $\| .\|_p$ and $\|.\|_q$ on $\R^n$ and $\R^m$, respectively. Then the induced matrix-norm $\|A\|_{p\rightarrow q} $ is defined as 
 \begin{equation*}
     \|A\|_{p\rightarrow q} = \max_{\|x\|_p=1} \|Ax\|_q.
 \end{equation*}
 \begin{itemize}
  \item Show the definition is equivalent to $\|A\|_{p\rightarrow q} = \max_{x\neq 0} \frac{\|Ax\|_q}{\|x\|_p}$.
 \item Show that the induced matrix norm is submultiplicative, i.e. $\|Ax\|_q \leq \|A\|_{p\rightarrow q} \|x\|_p$.
-    \item Show that the maximum is actually obtained. 
+    \item Show that the maximum in the definition of the induced norm is attained, i.e., demonstrate that there exists a vector $x \in \R^n$ such that $\|A\|_{p\rightarrow q} =  \|Ax\|_q$.
    
     
 \end{itemize}
-\end{exo}
+\end{problem}
 
 \ifsolutions
 \vskip 0.3cm
 \begin{solution}
+$.$
 \begin{itemize}
-    \item By  
-    By positive homogeneity we have for any $x\neq 0$
+    \item   
+    By the absolute homogeneity, i.e., for $a\in\mathbb{R}$ and $z\in\mathbb{R}^n$: $|a|\lVert z\rVert=\lVert az\rVert$, it holds that 
     \begin{equation*}
-        \frac{\|Ax\|_q}{\|x\|_p} = \left\| A \frac{x}{\|x\|_p} \right\|_q \leq \max_{\|y\|_p=1} \|Ay\|_q, 
+         \max_{x\not=0}\frac{\left\lVert Ax\right\rVert_q}{\lVert x\rVert_p}= \max_{x\not=0}\frac{\left\lVert A\frac{x}{\lVert x\rVert_p}\lVert x\rVert_p\right\rVert_q}{\lVert x\rVert_p}= \max_{\lVert y\rVert_p=1}\lVert Ay\rVert_q
     \end{equation*}
-    so we can take the maximum over all $x\neq 0$ on the right hand side. \\
-   On the other hand, because of set inclusion we also have
+    where the last follows from $\frac{x}{\lVert x\rVert_p}=:y$.
+    \item Trivial for $x=0$. Assume $x\neq 0$. Then, we have
     \begin{equation*}
-         \max_{\|y\|_p=1} \|Ay\|_q \leq \max_{x\neq 0} \frac{\|Ax\|_q}{\|x\|_p},
+        \|Ax\|_q = \|x\|_p \frac{\|Ax\|_q}{\|x\|_p} \leq \|x\|_p \max_{x\neq 0} \frac{\|Ax\|_q}{\|x\|_p} \leq \|x\|_p \|A\|_{p\rightarrow q}.
     \end{equation*}
-    hence have equality.
-    \item Trivial for $x=0$. So let $x\neq 0$, then
-    \begin{equation*}
-        \|Ax\|_q = \|x\|_p \frac{\|Ax\|_q}{\|x\|_p} \leq \|x\|_p \max_{y\neq 0} \frac{\|Ay\|_q}{\|y\|_p} \leq \|x\|_p \|A\|_{p\rightarrow q}
-    \end{equation*}
-    \item We have that the map $f:\{x\in \R^n| \|x\|_p\}\rightarrow \R, \quad f(x)=\|Ax\|_q$ is continuous, by using the submultiplicativity. And the set $\{x\in \R^n| \|x\|_p\}\subset \R^n$ is compact (bounded and closed). Hence $f$ obtains it's minimum and maximum on the domain. 
+    \item we need to prove that this maximum is not just a supremum, but is actually attained by some vector $x\in\mathbb{R}^n$ with $\lVert x\rVert_p=1$. 
+    
+    We will use compactness and continuity. We define $f:\{x\in \R^n\mid \|x\|_p=1\}\rightarrow \R$, with $ x \mapsto f(x)=\|Ax\|_q$. The map $f$ is continuous, as $x\mapsto Ax$ is linear, and the norm is continuous. And the set $\{x\in \R^n| \|x\|_p=1\}$ is a compact (bounded and closed) subset of $\R^n$. Hence, $f$ obtains its maximum in the domain. In other words, $\max \|Ax\|_q$ is attained for some $x\in\R^n$ with $\lVert x\rVert_p=1$.
 \end{itemize}
 \end{solution}
 
@@ -175,18 +184,32 @@ Recall the following definition from the lecture. Given a matrix $A\in \R^{m\tim
 %-----------------------------------------------------------------------%
 \vskip 0.5cm
 
-\begin{exo}[On specific matrix norm]
-We show the following norm mentioned in the lecture.
-\begin{itemize}
-    \item Show that the $\|A\|_1=\max_{j=1,..,n} \sum_{i=1}^m|A_{i,j}|$ .
-  
-\end{itemize}
-\end{exo}
+\begin{problem}
+Let $A \in \R^{m\times n}$. Show that the following holds:
+\begin{align*}
+    \|A\|_1=\max_{j=1,..,n} \sum_{i=1}^m|A_{i,j}|.
+\end{align*}
+
+\end{problem}
 
 \ifsolutions
 \vskip 0.3cm
 \begin{solution}
-
+    By the definition, it holds that
+    \begin{align}\label{eq: RHS}
+        \lVert A\rVert_1=\max_{\lVert x\rVert_1=1}\lVert Ax\rVert_1 = \max_{\lVert x\rVert_1=1} \sum_{i=1}^m\left\rvert\sum_{j=1}^n A_{ij}x_j\right\rvert \leq \max_{\lVert x\rVert_1=1} \sum_{i=1}^m\sum_{j=1}^n\left\rvert A_{ij}x_j\right\rvert= \max_{\lVert x\rVert_1=1}\sum_{j=1}^n |x_j|\sum_{i=1}^m|A_{ij}|\leq \max_{j=1,\ldots,n}\sum_{i=1}^m|A_{ij}|
+    \end{align}
+    where the third inequality holds due to the triangle inequality, and the last holds because the expression $\sum_{j=1}^n |x_j|\sum_{i=1}^m|A_{ij}|$ is a convex combination of the column sums $\sum_{i=1}^m|A_{ij}|$, since $\sum_{j=1}^n |x_j|=\lVert x\rVert_1=1$.
+    
+    Now, we consider the maximum column sum, i.e., $\max_{j=1,..,n} \sum_{i=1}^m|A_{i,j}|$. Let $k$ be an index where this maximum is attained. Define the standard basis vector $e_j\in\R^n$. Then, it holds that
+    \begin{align}\label{eq: LHS}
+        \max_{j=1,..,n} \sum_{i=1}^m|A_{i,j}|= \sum_{i=1}^m|A_{i,k}| = \lVert Ae_k\rVert_1\leq \lVert A\rVert_1\lVert e_k\rVert_\infty = \lVert A\rVert_1
+    \end{align}
+    where the third inequality holds due to Hölder's inequality, i.e., let $Q\in \R^{m\times n}, v \in \R^n$ and $p,q \in[1,\infty]$ with $\frac{1}{p}+\frac{1}{q}=1$, then we have
+    \begin{align*}
+        \lVert Qv\lVert_1 \leq \lVert Q\rVert_p\lVert v\rVert_q.
+    \end{align*}
+    Combining \eqref{eq: RHS} and \eqref{eq: LHS} completes the proof.
 \end{solution}
 
 \fi

@@ -520,7 +520,7 @@ where $\lambda_1, \dots, \lambda_m$ are the nonnegative Lagrange multipliers ass
 	Let $x^*$ be a local minimum of the problem \eqref{eq:last_problem}, with $f, g_1,\dots, g_m\in \C(\Rn)$. Let $I(x^*)$ be the set of active constraints and suppose that the gradients of the active constraints $\{\nabla g_i(x^*)\}_{i\in I(x^*)}$ are linearly independent. Then there exists multipliers $\lambda_1, \dots, \lambda_m\geq 0$ such that 
 	\begin{equation}\label{eq:kkt}
 		\begin{split}
-			\nabla_x L(x,\lambda) = \grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*) &= 0,\\
+			\nabla_x L(x^*,\lambda) = \grad(x^*)+ \sum_{i=1}^{m} \lambda_i \nabla g_i(x^*) &= 0,\\
 			\lambda_ig_i(x^*)&=0 \quad i=1, \dots, m.
 		\end{split}
 	\end{equation}

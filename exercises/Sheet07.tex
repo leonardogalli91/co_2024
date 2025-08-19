@@ -4,13 +4,17 @@
 \setExerciseSheetNumber{7}
 \setSubmissionDate{xx.xx.2024}
 
+
+
 %boolean variable to determine whether the solutions should be included
 \newif\ifsolutions
 \solutionstrue
-\solutionsfalse
+%\solutionsfalse
 
 %We have a figure in this sheet
 \usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \begin{document}
 
@@ -18,154 +22,320 @@
 %Start with exercises
 %-----------------------------------------------------------------------%
 
+
+%\subsection*{Notation}
+%\vskip 0.5cm 
 %-----------------------------------------------------------------------%
 \begin{problem}
-The goal of this exercise is to prove Proposition 2.2 of the lecture. \\
-That is we consider the function 
-\begin{equation*}
-f(x)= \frac{1}{2} x^TQx + c^Tx +b,    
-\end{equation*}
-where $Q$ is positive definite and symmetric and the sequence ${x_k}$ is derived in the following way:
-\begin{align*}
-    x_{k+1}=x_k-\frac{1}{\mu_k^{BB1}} \nabla f(x_k),
-\end{align*}
-and $\mu_k^{BB1}:=R_Q(s_k)=\frac{s_k^TQs_k}{\|s_k\|_2^2}$ is the Rayleigh quotient at point $s_k=x_k-x_{k-1}$.
-\begin{enumerate}
-    \item Prove that for $\lambda_i < \mu_k^{BB1}$ 
-    $$\frac{\lambda_i}{\mu_k^{BB1}}-1\geq 1 - \frac{\lambda_1}{\lambda_n}$$ holds.
-    \item Let $(\lambda_i, u_i),$ i=1,...,n be a set of eigenvalue and eigenvector pairs (and assume the eigenvectors are orthonormal). \\
-    And let $d_i^k$ be the coefficient $$\nabla f(x_k)=\sum_{i=1}^n d_i^k u_i.$$\\
-    Find a closed form for each $d_i^k$, in terms of $d_i^1, \lambda_i, \mu_k^{BB1}$
-    \item Prove $$\left(d_i^{k+1}\right)^2\leq \delta^2 \left(d_i^k\right)^2,$$
-    where $\delta=\frac{\lambda_1}{\lambda_n}-1$
-    \item Conclude $$\|\nabla f(x_k)\|_2\leq \delta^k \|\nabla f(x_0)\|_2$$
-    \item Follows as the $u_i$ are orthogonal and iteration. 
-\end{enumerate}
+
+Let $A$ be an $m \times n$ matrix and let $b \in \mathbb{R}^m$. The problem
+\[
+\min_{x \in \mathbb{R}^n} f(x) \equiv \|Ax - b\|_a^q
+\]
+where $\|\cdot\|_a$ is any norm on $\mathbb{R}^m$ and $q > 0$, admits a global optimal solution in $\mathbb{R}^n$.
 \end{problem}
 
 \ifsolutions
 \vskip 0.3cm
 
 \begin{solution}
-\begin{enumerate}
-    \item We have $\lambda_n \leq \lambda_i < \mu_k^{BB1}\leq \lambda_1$, this implies
-    \begin{align*}
-        \frac{\mu_k^{BB1}}{\lambda_i} \leq \frac{\lambda_1}{\lambda_n}
-    \end{align*}
-    \item We have $\nabla f(x)= Qx + c$, hence $$\nabla f(x_{k+1}) = Q x_{k+1}+ c = Q x_k - Q \frac{1}{\mu_k^{BB1}} \nabla f(x_k) + c = (I - \frac{1}{\mu_k^{BB1}}Q)\nabla f(x_k)$$
-    Inductively we get
-    \begin{align*}
-        \nabla f(x_{k+1})&=\prod_{j=1}^k (I-\frac{1}{\mu_j^{BB1}}Q) \nabla f(x_1) \\
-        &=\prod_{j=1}^k (I-\frac{1}{\mu_j^{BB1}}Q)\sum_{i=1}^n d_i^0 u_i \\
-        &= \sum_{i=1}^n d_i^1 \prod_{j=1}^k (1-\frac{\lambda_i}{\mu_j^{BB1}})
-    \end{align*}
-    Therefore $d_i^k = \prod_{j=1}^k (1-\frac{\lambda_i}{\mu_j^{BB1}}) $.
-    \item We have the relation 
-    $d_i^{k+1}=(1-\frac{\lambda_i}{\mu_k^{BB1}})d_i^k$\\
-    As $(1-\frac{\lambda_i}{\mu_k^{BB1}})<\delta$ the claim follows. 
-\end{enumerate}
-   
+We suppose that $\mathrm{rank}(A) < n$, for, otherwise, the result follows from the preceding examples (when $f$ is continuous and a coercive function on $\mathbb{R}^n$. Then there exists a global minimum
+point of f on $\mathbb{R}^n$).
+
+Then, after a reordering, if needed, we can partition the matrix in the form
+\[
+A = (B \; C)
+\]
+where $B$ is a sub-matrix $m \times n_1$ of rank $n_1 < n$, and the columns of $C$ of dimension $m \times n_2$ can be expressed as linear combinations of the columns of $B$. If $C_i$ is the $i$-th column of $C$, we can write
+\[
+C_i = B \Gamma_i,
+\]
+where $\Gamma_i$ is a vector in $\mathbb{R}^{n_1}$. Thus, there exists a matrix $\Gamma \in \mathbb{R}^{n_1 \times n_2}$ such that
+\[
+C = B \Gamma.
+\]
+
+Given a vector $x \in \mathbb{R}^n$, we can partition it into the components $x(1) \in \mathbb{R}^{n_1}$, $x(2) \in \mathbb{R}^{n_2}$ and hence we can write:
+\[
+\|Ax - b\|_a^q = \|B x(1) + C x(2) - b\|_a^q = \|B (x(1) + \Gamma x(2)) - b\|_a^q.
+\]
+
+Letting
+\[
+y = x(1) + \Gamma x(2),
+\]
+we have
+\[
+\|Ax - b\|_a^q = \|By - b\|_a^q.
+\]
+
+Consider now the problem:
+\begin{equation}
+    \min_{y \in \mathbb{R}^{n_1}} \|By - b\|_a^q.
+\end{equation}
+As B has rank $n_1$, the function $\|By - b\|_a^q$ is coercive on $\mathbb{R}^n$ and hence it admits a global minimum $y^* \in \mathbb{R}^{n_1}$ such that 
+\begin{equation} \label{eqn 2}
+    \|By^* - b\|_a^q \leq \|By - b\|_a^q \quad \forall \  y \ \in \ \mathbb{R}^{n_1}
+\end{equation}
+We can define the point $x^* \in \mathbb{R}^n$ such that $x^*(1) = y^*, \ x^*(2) = 0 $ so we obtain
+\begin{equation}
+    \|Ax^* - b\|_a^q = \|By^* - b\|_a^q
+\end{equation}
+we claim that $x^*$ is a global minimizer of $\|Ax - b\|_a^q$\\
+
+Reasoning by contradiction, suppose there exists $\hat{x}\in \mathbb{R}^n$ with vector corresponding $\hat{x}(1), \hat{x}(2)$ such that 
+\begin{equation}
+    \|A\hat{x} - b\|_a^q < \|Ax^* - b\|_a^q 
+\end{equation}
+Then we can consider the point 
+$$\hat{y} = \hat{x}(1) + \Gamma \hat{x}(2)$$
+so that we can write 
+$$ \|A\hat{x} - b\|_a^q = \|B\hat{y} - b\|_a^q $$
+It follows that we must have 
+$$\|B\hat{y} - b\|_a^q  < \|Ax^* - b\|_a^q = \|By^* - b\|_a^q$$
+which contradicts (\ref{eqn 2})
 \end{solution}
 
 \fi
 
-
 %-----------------------------------------------------------------------%
 \vskip 0.5cm
+\begin{problem}
+Consider the problem
+\begin{equation} \label{problem}
+    \min_{x \in \mathbb{R}^n} f(x) = \frac{1}{2} x^T Q x - c^T x, 
+\end{equation}
 
-\begin{exo}
-Let $f:\R^n \longrightarrow \R$, $f(x)=\sqrt{1+\|x\|^2}$. Show that $f\in C^{1,1}_1$
-\end{exo}
+Let $Q$ be a symmetric positive semidefinite matrix and assume that problem (\ref{problem}) admits a solution. Then the conjugate gradient method converges in at most $n$ iterations to a solution of (\ref{problem}).
+\end{problem}
 
 \ifsolutions
 \vskip 0.3cm
+
 \begin{solution}
-First we calculate the gradient of $f$
-\begin{equation*}
-    \nabla f(x) = \frac{x}{\sqrt{1+\|x\|^2}}.
-\end{equation*}
-And now we calculate the Hessian of $f$
-\begin{align*}
-   \partial x_j \partial x_j f(x) &= \partial x_j \frac{x_i}{\sqrt{1+\|x\|^2}} = \delta_{i,j} \frac{1}{\sqrt{1+\|x\|^2}} - \frac{x_ix_j}{\sqrt{1+\|x\|^2}^3} \\
-   \nabla^2 f(x) &= \text{diag}(\frac{1}{\sqrt{1+\|x\|^2}}) - xx^T \frac{1}{\sqrt{1+\|x\|^2}^3}
-\end{align*}
-Now we calculate the norm of $\nabla^2 f(x)$
-\begin{align*}
-    \|\nabla^2 f(x)\| &= \sup_{\|z\|=1} z^T\nabla^2 f(x) z \\
-    &= (\frac{1}{\sqrt{1+\|x\|^2}}) - z^Txx^Tz \frac{1}{\sqrt{1+\|x\|^2}^3} \\
-    &\leq (\frac{1}{\sqrt{1+\|x\|^2}})  \leq 1. 
-\end{align*}
-\end{solution}
+In order to prove this, it is sufficient to show that \begin{equation}\label{task}
+    d^T_kQd_{k} \implies g_k = 0
+\end{equation}
 
-\fi
-
-%-----------------------------------------------------------------------%
-\vskip 0.5cm
-\begin{exo}
-Give an example of a function $f\in C^{1,1}_L$ and a starting point $x_0$ s.t. the problem minimize $f(x)$ has an optimal solution and the gradient with constant step size $t=\frac{2}{L}$ diverges.
-\end{exo}
-
-
-\ifsolutions
-\vskip 0.3cm
-\begin{solution}
-For example $f(x):\R^2 \rightarrow \R, f(x)=0.5(10x_1^2 + x_2^2)$. Then
-\begin{equation*}
-    \nabla f(x) = \left(
-\begin{array}{c}
-10x_1\\
-x_2\\
-\end{array}
-\right), \quad L=10.
-\end{equation*}
-Choose for example $x_0 = (2, 0)$.
-\end{solution}
-\fi
-
-%-----------------------------------------------------------------------%
-\vskip 0.5cm
-\begin{exo}
-	Let $A\in \R^{n\times n}$, be a positive definite matrix. 
- Denote by $m=\lambda_{\text{min}}(A)$ and $M=\lambda_{\text{max}}(A)$ the smallest and largest eigenvalues of $A$ respectively. 
- \begin{itemize}
-     \item What are the eigenvalues of the matrix $A+MmA^{-1}$?
-     \item What is the maximum of $\varphi:[m,M]\longrightarrow \R, \varphi(t)=t+\frac{Mm}{t}$
-    \item Show for any $\alpha, \beta \in \R$ we have $\alpha \beta \leq \frac{1}{4}(\alpha+\beta)^2$
-    \item Show that for any $0\neq x \in \R^n$ the inequality \begin{equation*}
-        \frac{(x^Tx)^2}{(x^TAx)(x^TA^{-1}x)} \geq \frac{4 Mm}{(M+m)^2}
-    \end{equation*}
-    holds.
- \end{itemize}
-\end{exo}
-
-\ifsolutions
-\vskip 0.3cm
-\begin{solution}
+Let's define the following:
 \begin{itemize}
-    \item $$\lambda_i(A) + \frac{Mm}{\lambda_i(A)}$$ are the eigenvalues of the matrix. 
-    \item \begin{align*}
-        \varphi'(t) & = 1 - \frac{Mm}{t^2} \\
-        \varphi'(t) = 0 & \Leftrightarrow 1 = \frac{Mm}{t^2} \\
-        & \Leftrightarrow Mm = t^2 \\
-        & \Leftrightarrow \sqrt{Mm} = t. \\
-        \varphi''(t) & = 2 \frac{Mm}{t^3}>0,
-    \end{align*}
-    so this is a minimum. And the maximum is obtained at the end-point of the interval. 
-    \begin{equation*}
-        \varphi(m) =  m + \frac{Mm}{m} = m + M = \varphi(M).
-    \end{equation*}
-    \item Instead we show $(\alpha + \beta)^2 \geq 4 \alpha \beta.$ We have
-    \begin{equation*}
-        0 \leq (\alpha - \beta)^2 = \alpha^2 -2\alpha \beta + \beta^2 = \alpha^2 + \beta^2 + 2 \alpha \beta - 4 \alpha \beta = (\alpha + \beta)^2 - 4 \alpha \beta.
-    \end{equation*}
-    \item \begin{align*}
-        A + MmA^{-1} &\leq (M+m)I \\
-        x^TAx + x^TMmA^{-1}x &\leq (M+m)x^Tx\\
-        \Rightarrow (x^TAx)(x^TMmA^{-1}x) \leq \frac{1}{4} (x^TAx + x^TMmA^{-1}x)^2 &\leq \frac{1}{4}((M+m)x^Tx)^2 \\
-        \Leftrightarrow \frac{4Mm}{(M+m)^2} \leq \frac{(x^Tx)^2}{(x^TAx)(x^TA^{-1}x)}
-    \end{align*}
+    \item \underline{Range Space:} The range space of a matrix $Q$ is the linear subspace 
+    $$\mathcal{R}(Q) = \{x\in \mathbb{R}^n : x = Qy, \ y\in \mathbb{R}^n\}$$
+    \item \underline{Null Space:} The nullspace is the linear subspace
+    $$\mathcal{N}(Q) = \{x\in \mathbb{R}^n: Qx = 0\}$$
+    From known linear algebra results, we have
+    \begin{equation} \label{algebra}
+        \mathcal{R}(Q) \cap \mathcal{N}(Q) = 0
+    \end{equation}
 \end{itemize}
+
+Indeed, if $d_k^T Q d_k > 0$ for every $k \geq 0$, then we can repeat the reasonings used in the proof of Proposition $9.3$ in the lecture note by obtaining the same conclusions. \\
+
+First, by induction, we show that for every $k \geq 0$ we have
+\begin{equation} \label{condition}
+g_k, d_k \in \mathcal{R}(Q), 
+\end{equation}
+where $\mathcal{R}(Q)$ is the range space of $Q$. \\
+Condition (\ref{condition}) is true for $k = 0$. Indeed, problem (\ref{problem}) admits solution, therefore there exists a point $x^\star$ such that
+\[
+Q x^\star = c.
+\]
+Then $c \in \mathcal{R}(Q)$ and hence it follows that $g_0 = Q x_0 - c \in \mathcal{R}(Q)$. Moreover, as $d_0 = -g_0$, we have $d_0 \in \mathcal{R}(Q)$. \\
+
+Assume that (\ref{condition}) holds for $k - 1$ (with $k \geq 1$): we prove by induction that it holds for $k$. We have
+\[
+g_k = g_{k-1} + \alpha_{k-1} Q d_{k-1},
+\]
+from which it follows that $g_k \in \mathcal{R}(Q)$. Then, as
+\[
+d_k = -g_k + \beta_k d_{k-1},
+\]
+we have that $d_k \in \mathcal{R}(Q)$.
+
+To prove (\ref{task}) suppose $d_k^T Q d_k = 0$. We can prove that $d_k$ belongs to the null space of $Q$, i.e., $d_k \in \mathcal{N}(Q)$. Indeed, by using the spectral decomposition of $Q$, we can write
+\[
+d_k^T Q d_k = \sum_{i=1}^n \lambda_i d_k^T u_i u_i^T d_k = \sum_{i=1}^n \lambda_i (u_i^T d_k)^2 = 0,
+\]
+being $\lambda_i, u_i$, for $i = 1, \ldots, n$, the eigenvalues and the eigenvectors of $Q$, respectively. Since $\lambda_i \geq 0$, we must have $\lambda_i (u_i^T d_k) = 0$ for $i = 1, \ldots, n$. Then we have
+\[
+Q d_k = \sum_{i=1}^n u_i \lambda_i (u_i^T d_k) = 0,
+\]
+i.e., $d_k \in \mathcal{N}(Q)$. \\
+Using (\ref{condition}) it follows that
+\[
+d_k \in \mathcal{R}(Q) \cap \mathcal{N}(Q),
+\]
+and hence, from (\ref{algebra}), we obtain $d_k = 0$. \\
+Recalling that $g_k^T d_k = -\|g_k\|^2$ (remember that $g^T_kd_k = -g^T_kg_k$) we have that $g_k = 0$ and hence we can conclude that $x_k$ is a solution of (\ref{problem}). \qed
+
+
 \end{solution}
+
 \fi
 
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{problem} 
+We observe that the expression of $\beta_{k+1}$ in $ \beta_{k+1}  = \dfrac{g^T_{k+1}Qd_k}{d^T_kQd_k}$ can be simplified in a way that the Hessian matrix does not appear explicitly and this will be useful in the extension of the CGM to non-quadratic problems.
+Use
+\begin{equation}
+    Q d_k = \frac{g_{k+1} - g_k}{\alpha_k}.
+\end{equation} and the fact that $g^T_{k+1}d_k = 0, \ g^T_k d_k = -g^T_kg_k$ to get \begin{equation}
+    \beta_{k+1} = \dfrac{\|g_{k+1}\|^2}{\|g_k\|^2}
+\end{equation}
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+
+ We can rewrite $ \beta_{k+1}  = \dfrac{g^T_{k+1}Qd_k}{d^T_kQd_k}$ as
+\begin{equation} \label{beta-k}
+    \beta_{k+1} = \frac{g_{k+1}^T (g_{k+1} - g_k)/\alpha_k}{d_k^T (g_{k+1} - g_k)/\alpha_k} 
+    = \frac{g_{k+1}^T (g_{k+1} - g_k)}{d_k^T (g_{k+1} - g_k)}.
+\end{equation}
+
+From (\ref{beta-k}), taking into account ($g^T_{k+1}d_k = 0$), we have:
+\begin{equation} \label{newbeta}
+    \beta_{k+1} = \frac{g_{k+1}^T (g_{k+1} - g_k)}{d_k^T g_k}.
+\end{equation}
+
+Using ($g^T_kd_k = -g^T_kg_k$), from ($\ref{newbeta}$) we get
+\begin{equation}\label{beta_next}
+    \beta_{k+1} = \frac{g_{k+1}^T (g_{k+1} - g_k)}{\|g_k\|^2}.
+\end{equation}
+
+From (\ref{beta_next}), as $ g_{k+1}^T g_k = 0 $, by ($g^T_ig_j = 0$), we have also:
+\begin{equation}
+    \beta_{k+1} = \frac{\|g_{k+1}\|^2}{\|g_k\|^2}.
+\end{equation}
+
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+\vskip 0.3cm
+
+
+\begin{algorithm}[H]
+\caption{Preconditioned Conjugate Gradient Method (PCGM)}
+\begin{algorithmic}[1]
+\STATE \textbf{Input:} Starting point $x_0 \in \mathbb{R}^n$, symmetric positive definite matrix $M$
+\STATE Compute $g_0 = Qx_0 - c$, $d_0 = -Mg_0$, set $k = 0$
+\WHILE{ $g_k \neq 0$ }
+    \STATE $z_k = M g_k$, \quad $\tau_k = z_k^T g_k$ \hfill
+    \STATE $\alpha_k = \frac{\tau_k}{d_k^T Q d_k}$ \hfill 
+    \STATE $x_{k+1} = x_k + \alpha_k d_k$ \hfill 
+    \STATE $g_{k+1} = g_k + \alpha_k Q d_k$ \hfill 
+    \STATE $z_{k+1} = M g_{k+1}$, \quad $\tau_{k+1} = z_{k+1}^T g_{k+1}$ \hfill 
+    \STATE $\beta_k = \frac{\tau_{k+1}}{\tau_k}$ \hfill
+    \STATE $d_{k+1} = -g_{k+1} + \beta_k d_k$ \hfill 
+    \STATE $k = k + 1$
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+\begin{problem}
+Consider the linear system
+\[
+A^TAx = A^Tb,
+\]
+and its equivalent form
+\[
+MQx = Mc,
+\]
+where $Q = A^TA$, $c = A^Tb$, and $M$ is a symmetric positive definite matrix that approximates $Q^{-1}$, but the product $MQ$ is not necessarily symmetric. To restore symmetry and improve conditioning, suppose we define a preconditioner $S \approx B^{-1}$, where $Q = B^2$, and perform a change of variables $y = S^{-1}x$. This yields the transformed symmetric system:
+\begin{equation} \label{symmetrics}
+SQSy = Sc 
+\end{equation}
+where $SQS$ is symmetric positive definite and approximates the identity.
+Write out the explicit iterative formulae for computing $d_{k+1}, \alpha_k, \beta_{k+1}$ in algorithm (1) above.
+
+Hint: From equation (\ref{symmetrics}), we can write
+\[
+y_{k+1} = y_k + \alpha_k \tilde{d}_k,
+\]
+where
+\[
+\alpha_k = \frac{\tilde{g}_k^T \tilde{g}_k}{\tilde{d}_k^T SQS \tilde{d}_k},
+\quad \text{and} \quad
+\tilde{g}_k = SQS y_k - Sc = S(QSy_k - c)
+\] where $\tilde{d}_k $ and $\tilde{g}_k$ are the search direction and the residual in the CGM for system (\ref{symmetrics})
+%\begin{itemize}
+ %   \item[(a)] Derive the Conjugate Gradient Method (CGM) for solving the transformed system (3), and write out the explicit iterative formulae for computing $y_k$, $r_k$, and $p_k$.
+  %  \item[(b)] Express how to recover the original variable $x$ from the solution $y$.
+%\end{itemize}
+\end{problem}
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}
+    Let us write the formulae of the CGM method applied to (\ref{symmetrics}). For $ k \geq 0 $, denoting by $\tilde{d}_k $ and $ \tilde{g}_k $ the search direction and the residual in the CGM for system (\ref{symmetrics}), we can write
+
+\begin{equation} \label{update}
+    y_{k+1} = y_k + \alpha_k \tilde{d}_k,
+\end{equation}
+
+where
+\begin{equation}\label{stepsize}
+    \alpha_k = \frac{\tilde{g}_k^T \tilde{g}_k}{\tilde{d}_k^T S Q S \tilde{d}_k},
+\end{equation}
+
+\begin{equation} \label{gradient}
+    \tilde{g}_k = S Q S y_k - S c = S(Q S y_k - c) 
+\end{equation}
+
+Pre-multiplying both members of (\ref{update}) by $S$ and using the transformation $ x = S y $, we have
+\begin{equation}
+    x_{k+1} = x_k + \alpha_k S \tilde{d}_k,
+\end{equation}
+
+whence, letting
+\begin{equation} \label{direction}
+    d_k = S \tilde{d}_k, 
+\end{equation}
+
+we obtain
+\begin{equation}
+    x_{k+1} = x_k + \alpha_k d_k.
+\end{equation}
+
+Equation (\ref{gradient}) can be rewritten as
+\begin{equation}
+    \tilde{g}_k = S(Q x_k - c) = S g_k. 
+\end{equation}
+and then, from (\ref{stepsize}), using (\ref{direction}) and letting $ M = S^2 $, we can write:
+
+\begin{equation} \label{newstepsize}
+    \alpha_k = \frac{g_k^T SS g_k}{d_k^T Q d_k} = \frac{g_k^T M g_k}{d_k^T Q d_k}. 
+\end{equation}
+
+We have also
+\begin{equation} \label{d_0}
+    \tilde{d}_0 = -\tilde{g}_0, 
+\end{equation}
+\begin{equation} \label{tilde_d_k}
+    \tilde{d}_k = -\tilde{g}_k + \beta_k \tilde{d}_{k-1} \quad \text{for } k \geq 1,
+\end{equation}
+
+where
+\begin{equation} \label{direction1}
+    \beta_k = \frac{\|\tilde{g}_k\|^2}{\|\tilde{g}_{k-1}\|^2} = \frac{g_k^T SS g_k}{g_{k-1}^T SS g_{k-1}} = \frac{g_k^T M g_k}{g_{k-1}^T M g_{k-1}}.
+\end{equation}
+
+From (\ref{d_0}) and (\ref{tilde_d_k}), multiplying by $ S$, we get
+\begin{equation}
+    d_0 = -S \tilde{g}_0 = -S S g_0 = -M g_0 
+\end{equation}
+\begin{equation}
+    d_k = -SSg_k + \beta_k d_{k-1} \quad \text{for } k \geq 1. 
+\end{equation}
+
+Now, by defining the vector $ z_k = M g_k $ and the scalar $ \tau_k = z_k^T g_k $, from (\ref{stepsize}) and (\ref{direction1}) we obtain the expressions
+
+\begin{equation}
+    \alpha_k = \frac{\tau_k}{d_k^T Q d_k}, \quad 
+    \beta_{k+1} = \frac{\tau_{k+1}}{\tau_k}.
+\end{equation}
+\end{solution}
 \end{document}

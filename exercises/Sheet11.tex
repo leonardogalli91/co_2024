@@ -7,7 +7,7 @@
 %boolean variable to determine whether the solutions should be included
 \newif\ifsolutions
 \solutionstrue
-%\solutionsfalse
+% \solutionsfalse
 
 %We have a figure in this sheet
 \usepackage{graphicx}
@@ -18,118 +18,144 @@
 %Start with exercises
 %-----------------------------------------------------------------------%
 
+
+
 \begin{problem}
-\begin{enumerate}[1.]
-	\item Find all the points that satisfy the KKT conditions then solve the following constrained optimisation problem:
-	    \begin{equation}\label{ConstOptI}
-        \min_{(x,y)\in\mathbb{R}^2} x^2+y^2 \quad \text{subject to} \quad x\leq -1,\, y\leq -1, \, y+2x\geq 5
-    \end{equation}
-    \item We consider now the following problem:
-		\begin{equation}\label{eq:ConstOptII}
-    \max_{(x,y)\in\mathbb{R}^2} x^2+y^2 \quad \text{subject to} \quad x\geq -1,\, y\geq -1, \, y+2x\leq 5
-		\end{equation}
-		\begin{enumerate}[a.] 
-		\item Find all the points that satisfy the KKT conditions for \eqref{eq:ConstOptII}.
-    	\item Draw the feasability region $\{(x,y)\in\mathbb{R}^2:x\geq -1,\, y\geq -1, \, y+2x\leq 5\}$ and label all the points found in the previous question. Draw some level curves of the objective function $(x,y)\mapsto x^2+y^2$. Give a geometric interpretation of these points.
-   	 	\item What is the solution to \eqref{eq:ConstOptII}? 
-   	 	    % \footnotesize{\textbf{Note:} For this question, if your proposed solution is too long, you may explain the main steps of the proof while skipping the details of your computations.}
-\normalsize
-		\end{enumerate}
-\end{enumerate}
+	For the BFGS update, if $B_k \succ 0$ and $y_k^T s_k > 0$, then $B_{k+1} \succ 0$.
+
+
 \end{problem}
 
 \ifsolutions
 \vskip 0.3cm
 
-\begin{solution}
-\begin{enumerate}[1.]
-	\item We are considering the problem:
-	\begin{equation}\label{ConstOptI}
-        \min_{(x,y)\in\mathbb{R}^2} x^2+y^2 \quad \text{subject to} \quad x\leq -1,\, y\leq -1, \, y+2x\geq 5.
-    \end{equation}
-	One of the requirements for $(x,y)$ to satisfy the KKT conditions is be a feasible point (i.e., to satisfy the constraints). In this case, no point is feasible since the conditions:
-	\[x\leq -1,\, y\leq -1\]
-	cannot hold at the same time as $y+2x\geq 5$. Consequently, there are no KKT points for the problem (\ref{ConstOptI}) and no solution. 
-    \item 
-    Let us put first the problem into a more familiar form, i.e., as a minimisation problem with ``negative'' constraints:
-    \begin{equation}\label{ConstOptII}
-    \min_{(x,y)\in\mathbb{R}^2} -x^2-y^2 \quad \text{subject to} \quad -1-x\leq 0,\, -1-y\leq 0, \, y+2x-5\leq 0
-		\end{equation}
+\begin{proof}
+    Since 
+    \begin{equation*}
+	B_{k+1} = (I - \rho_k y_k s_k^T) B_k (I - \rho_k s_k y_k^T) + \rho_k y_k y_k^T
+	\end{equation*}
+	where $\rho_k = \frac{1}{y_k^T s_k} > 0$ using Woodbury formula, for any $z \neq 0$, we have:
+	\begin{equation*}
+		z^T B_{k+1} z = \tilde{z}^T B_k \tilde{z} + \rho_k (z^T y_k)^2
+	\end{equation*}
+	where $\tilde{z} = (I - \rho_k s_k y_k^T) z$. We consider two cases:
+
     
-		\begin{enumerate}[a.] 
-		\item We first write the Langrange function associated to the problem (\ref{ConstOptII}):
-		\[\mathcal{L}(x,y,\alpha,\beta,\gamma)=
-		-x^2-y^2
-		-\alpha(1+x)
-		-\beta(1+y)
-		+\gamma(y+2x-5)
-		\]
-		The pair $(x,y)$ satisfies the KKT conditions (for this problem) if and only if there exist non-negative numbers $\alpha,\beta$ and $\gamma$ such that:
-		\[
-		\left\{
-		\begin{array}{l}
-		(x,y)\textrm { is a feasible point (i.e., satisfies the constraints.)}\\
-		\nabla_{(x,y)}\mathcal{L}(x,y,\alpha,\beta,\gamma)=0\\
-		\alpha(1+x)=0 ,\, \beta(1+y)=0 ,\, \gamma(y+2x-5)=0\\
-		\end{array}
-		\right.
-		\]
-		Explicitly, this reads:
-		\[
-		\left\{
-		\begin{array}{l}
-		-2x-\alpha+2\gamma=0\\
-		-2y-\beta+\gamma=0\\
-		\alpha(1+x)=0 ,\, \beta(1+y)=0 ,\, \gamma(y+2x-5)=0\\
-		x\geq -1,\, y\geq -1, \, y+2x\leq 5\\
-		\end{array}
-		\right.
-		\]
-		We are going to separate the cases according to the manner in which the constraints at the border ($\alpha(1+x)=0$, $\beta(1+y)=0$ and $\gamma(y+2x-5)=0$) are satisfied.
-		\begin{enumerate}
-		\item \underline{Case 1:} $\alpha=\beta=\gamma=0$. Then $(x,y)=(0,0)$ (which is a feasible point.)
-		\item \underline{Case 2:} $\alpha=\beta=0$ and $y+2x=5$. Then 
-		\begin{equation}
-			\begin{cases}
-				y-5 +2\gamma= 0\\
-				-2y+\gamma=0
-			\end{cases}
-		\end{equation}
-		from which we get $\gamma=2$ (which is non-negative) and $(x,y)=(2,1)$.
-		\item \underline{Case 3:} $\alpha=\gamma=0$ and $y=-1$. Then $x=0$ and $\beta=2$.
-		\item \underline{Case 4:} $\beta=\gamma=0$ and $x=-1$. Then $y=0$ and $\alpha=2$.
-		\item \underline{Case 5:} $\alpha=0$, $y=-1$ and $y+2x=5$. Then $x=3$, $\gamma=3$ and $\beta=5$.
-		\item \underline{Case 6:} $\beta=0$, $x=-1$ and $y+2x=5$. Then $y=7$, $\gamma=14$ and $\alpha=30$.
-		\item \underline{Case 7:} $\gamma=0$ and $x=y=-1$. Then $\alpha=\beta=2$.
-		\item \underline{Case 8:} $x=y= -1$ and $y+2x= 5$. This case is impossible.
-		\end{enumerate}
-		To summarise, 7 points satisfy the KKT condition in the optimisation problem (\ref{ConstOptII}):
-		\[(0,0),\;\;
-		(2,1),\;\;
-		(0,-1),\;\;
-		(-1,0),\;\;
-		(3,-1),\;\;
-		(-1,7),\;\;
-		(-1,-1)\]
-    	\item 	\begin{figure}[h]
-	\includegraphics[scale=0.35]{ExoSheet7CurveLines}
-	\centering
-	\end{figure}
-    	
-    	
-		The quantity $x^2+y^2$ measures the (square of the) distance of points in the plane from the origin $O=(0,0)$. The KKT approach has detected local extrema for this distance function in the triangle defined by the points
-		\[A=(3,-1),\;\;B=(-1,7),\;\;C=(-1,-1)\] 
-		 $O$ is obviously a minimiser of the quantity $x^2+y^2$. On the one hand, on each side of the triangle, the furthest points from $O$ are the vertices $A$, $B$ and $C$. On the other hand, the closest points to the origin on the edges of the triangle are the orthogonal projections of $O$ on each one of these edges. These are given by:
-		 \[(2,1),\;\;
-		(0,-1),\;\;
-		(-1,0),\]
-		which are also 3 of the stationary points of the constrained problem \eqref{eq:ConstOptII}.
-		The KKT approach has detected exactly these 7 points.
-   	 	\item Based either on the analytical or the geometric study above, the solution to (\ref{ConstOptII}) is one of the detected KKT points. By checking the value of the objective function for each one of these points, we conclude that (\ref{ConstOptII}) has a unique solution at the point $(-1,7)$.
-		\end{enumerate}
-	
-\end{enumerate}
+	\noindent \textbf{Case 1:} If $\tilde{z} \neq 0$, then $z^T B_{k+1} z > 0$ since $B_k \succ 0$ and $\rho_k (z^T y_k)^2 \geq 0$.
 
+    
+	\noindent \textbf{Case 2:} If $\tilde{z} = 0$, then $(I - \rho_k s_k y_k^T) z = 0$, which implies:
+	\begin{equation*}
+		z = \rho_k s_k y_k^T z
+	\end{equation*}
+	In this case:
+	\begin{equation*}
+		z^T B_{k+1} z = \rho_k (z^T y_k)^2 > 0
+	\end{equation*}
+	unless $z^T y_k = 0$, which would imply $z = 0$ from $z = \rho_k s_k y_k^T z$.
+	Therefore, for any $z \neq 0$, we have $z^T B_{k+1} z > 0$, which means $B_{k+1} \succ 0$.
+\end{proof}
+
+\fi
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+
+\begin{problem}
+  Let $f\in \mathcal{C}^1(C)$, where $C$ is closed convex and $f$ is convex. Let $x^*$ be a local minimum of 
+  \begin{align}
+      \min_{x\in C} f(x) \label{min}.
+  \end{align}
+  Then, $x^*$ is a stationary point of \eqref{min} if and only if $x^*$ is a global minimum of \eqref{min}.
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+    $(\Rightarrow)$ Since $x^*$ is a stationary point of a convex constrained problem, we have
+    \begin{align*}
+        \nabla f(x^*)^T(x-x^*) \geq 0
+    \end{align*}
+    for all $x\in C$. Using the convexity of $f,$ it holds that
+    \begin{align*}
+        f(x)-f(x^*)\geq \nabla f(x^*)^T(x-x^*),
+    \end{align*}
+    and thus, $f(x)\geq f(x^*)$ for all $x \in C$.
+
+    $(\Leftarrow)$ Since $x^*$ is a global minimum, it implies a stationary point by Theorem 1.3.
+\end{solution}
+
+\fi
+
+%-----------------------------------------------------------------------%
+
+
+\vskip 0.5cm
+
+\begin{problem}
+
+For a set $K\subset \R^n$ and $p\in \N$, let 
+$x_i \in K$ for $1\leq i\leq p$, and let $\lambda_i \geq 0$ for $1\leq i\leq p$ with $ \displaystyle\sum_{i=1}^{p}{\lambda_i}=1$. Then, the expression $ \displaystyle\sum_{i=1}^{p}{\lambda_i x_i}$ is called a convex combination of elements from $K$. 
+
+\begin{enumerate}
+ \item Prove that a set $K \subset \R^n$ is convex if and only if every convex combination of elements from $K$ is contained in $K$.
+
+ \item Let $f$ be convex and $D = \left\{\displaystyle\sum_{i=0}^{n}\lambda_ix_i ~|~ \lambda_i\geq0, \sum_{i=0}^{n}\lambda_i=1\right\}$. Prove that  $\forall x\in D ~~ f(x) \leq \displaystyle\max_{i\in\{0,\dots,n\}}f(x_i).$
+         %\item [(ii)] Set $\displaystyle\max_{i\in\{0,\dots,n\}}f(x_i):= C$ and show that $f(x)\le C$ for all $x\in\Delta$ 
+  %\end{enumerate}
+ \end{enumerate}
+
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+\begin{enumerate}
+    \item ($\Leftarrow$) Let assume every convex combination of elements from $K$ is contained in $K$ and prove $K$ is convex.\\
+    Let $x,y\in K$ and $\lambda\in [0, 1],$ given that every convex combination of element of $K$ belong to $K$ then particularly $(1-\lambda)x+\lambda y\in K.$\\
+    ($\Rightarrow$) Now let us assume $K\subset \R^n$ is convex and show that every convex combination of elements from $K$ is contained in $K$ i.e. $\displaystyle \sum_{i=1}^{p}\lambda_ix_i\in K.$ We will show this by induction.\\
+    Induction start:  $p=1,$ is trivial and for $p=2,$~ $\lambda_1x_1+\lambda_2x_2\in K$ by definition as $K$ is convex.\\
+    Let assume $\displaystyle \sum_{i=1}^{p}\lambda_ix_i\in K$ with $x_i\in K$ and $\displaystyle \sum_{i=1}^{p}\lambda_i=1$. For $x_i \in K$ and $\displaystyle\sum_{i=1}^{p+1}\lambda_i=1$, we will prove that $ \displaystyle\sum_{i=1}^{p+1}\lambda_ix_i \in K.$
+    We have
+      \begin{align}
+          \sum_{i=1}^{p+1}\lambda_ix_i&= \sum_{i=1}^{p}\lambda_ix_i+\lambda_{p+1}x_{p+1}\nonumber\\
+                           &=(1-\lambda_{p+1})\sum_{i=1}^{p}\frac{\lambda_i}{1-\lambda_{p+1}}x_i+\lambda_{p+1}x_{p+1} \label{ induction step}
+      \end{align}
+    From now on, we will show that $\displaystyle(1-\lambda_{p+1})\sum_{i=1}^{p}\frac{\lambda_i}{1-\lambda_{p+1}}x_i \in K$. 
+
+Due to $0\leq \lambda_{p+1}\leq 1$, it holds that $\frac{\lambda_i}{1-\lambda_{p+1}}\geq0$ . Since, $\displaystyle \sum_{i=1}^{p+1}\lambda_i=1$, it holds that  $\displaystyle \sum_{i=1}^{p}\lambda_i+ \lambda_{p+1}=1$ and thus, $\sum_{i=1}^{p}\lambda_i=1-\lambda_{p+1}.$
+      Therefore, we obtain
+   \begin{align*}
+        \sum_{i=1}^{p}\frac{\lambda_i}{1-\lambda_{p+1}}=\frac{1-\lambda_{p+1}}{1-\lambda_{p+1}}=1
+    \end{align*}
+ which means $\displaystyle \sum_{i=1}^{p}\frac{\lambda_i}{1-\lambda_{p+1}}x_i\in K$ by induction hypothesis. Finally, by using the convexity of $K$, we get 
+  \begin{align*}
+      (1-\lambda_{p+1})\sum_{i=1}^{p}\frac{\lambda_i}{1-\lambda_{p+1}}x_i+\lambda_{p+1}x_{p+1}\in K.
+  \end{align*}
+ 
+
+
+
+
+    \item Let $x\in D$ and prove 
+       \begin{align*}
+           f(x)\leq \max_{i\in \{0,\dots,n\}}f(x_i).
+       \end{align*}
+ For $x\in D,$ means $\displaystyle x=\sum_{i=0}^{n}\lambda_ix_i$ with $\displaystyle \lambda_i\geq 0,~\sum_{i=0}^{n}\lambda_i=1.$ Therefore,
+   \begin{align*}
+       f(x)&=f\left(\sum_{i=0}^{n}\lambda_ix_i\right)  \\
+           &\leq \sum_{i=0}^{n}\lambda_if(x_i)  \text{ since $f$ in convex}\\
+           &\leq  \left(\max_{i\in \{0,\dots,n\}}f(x_i)\right)\sum_{i=0}^{n}\lambda_i \\
+           &=\max_{i\in \{0,\dots,n\}}f(x_i).
+   \end{align*}
+
+
+
+
+
+       
+\end{enumerate}
 \end{solution}
 
 \fi
@@ -137,97 +163,91 @@
 %-----------------------------------------------------------------------%
 \vskip 0.5cm
 \begin{problem}
- Solve the following constrained optimisation problem:
-			\begin{equation}\label{ConstOptIII}
-    \min_{(x,y)\in\mathbb{R}^2} x-y \quad \text{subject to} \quad x^2+y^2-2\sqrt{2}x-2y\leq 1.
-			\end{equation}
-   It helps to proceed similarly to Problem 1, part 2. 
+
+  
+ Let $f:\R^n\rightarrow\R$ be strictly convex. Prove that
+ \begin{enumerate}
+  \item Let $a\in\R$. The lower level set 
+  \begin{align*}
+   U(f,a):=\{x \in\R^n\,\mid\,f(x)\leq a\}
+  \end{align*}
+is convex.
+\item Let $x^*\in\R^n$ be a minimizer of $f$. Prove that $U(f,f(x^*))=\{x^*\}$. 
+\item Is $f$ necessarily convex if all lower level sets of $f$ are convex? Justify your answer.
+ \end{enumerate}
+ 
+
+
 \end{problem}
 
 \ifsolutions
 \vskip 0.3cm
 
 \begin{solution}
-Since the objective map 
-	\[(x,y)\longmapsto x-y\]
-	and the constraint map 
-	\[(x,y)\longmapsto x^2+y^2-2\sqrt{2}x-2y- 1\]
-	are both convex and that there exist feasible points satisfying:
-	\[x^2+y^2-2\sqrt{2}x-2y\leq 1\]
-	(which is simply the disk of center $(\sqrt{2},1)$ and radius $2$), then finding the KKT points will give us the solution to the problem:
-			\begin{equation}\label{ConstOptIII}
-    \min_{(x,y)\in\mathbb{R}^2} x-y \quad \text{subject to} \quad x^2+y^2-2\sqrt{2}x-2y\leq 1.
-			\end{equation}
-			We start by defining the appropriate Lagrange function:
-			\[\mathcal{L}(x,y,\alpha)=x-y+\alpha (x^2+y^2-2\sqrt{2}x-2y- 1).\]
-			Recalling the definition of a KKT point as before, a point $(x,y)$ satisfies the KKT conditions if and only if there exists $\alpha\geq 0$ such that:
-		\[
-		\left\{
-		\begin{array}{l}
-		1+2\alpha(x-\sqrt{2})=0\\
-		-1+2\alpha(y-1)=0\\
-		\alpha (x^2+y^2-2\sqrt{2}x-2y- 1)=0\\
-		x^2+y^2-2\sqrt{2}x-2y\leq 1\\
-		\end{array}
-		\right.
-		\]
-		The case $\alpha=0$ being impossible, then $x^2+y^2-2\sqrt{2}x-2y=1$. Using the identities
-		\[x=\sqrt{2}-\frac{1}{2\alpha}\quad,\quad y=1+\frac{1}{2\alpha}\]
-		we get that $\alpha=\frac{1}{2\sqrt{2}}$ then that:
-		\[x=0 \quad \textrm{and} \quad y=1+\sqrt{2}.\]
-		We check that this is indeed a feasible point and thus the unique solution to (\ref{ConstOptIII}).
+\begin{enumerate}
+    \item Let $x,y\in  U(f,a)$ and $\lambda\in [0,~1]$ let us show $(1-\lambda)x+\lambda y\in  U(f,a).$\\
+    For $\lambda=0,1$ we have  $(1-\lambda)x+\lambda y\in  U(f,a).$ 
+  Now let $\lambda\in (0,1)$ the strictly convexity of $f$ yields
+  \begin{align*}
+      f( (1-\lambda)x+\lambda y) &< (1-\lambda)f(x)                                 +\lambda f(y)\\
+                                &\leq(1-\lambda)a+\lambda a\\
+                                &=a
+  \end{align*}
+where we get the second inequality by using the fact that $x,~y\in U(f,a)$ means $f(x)\leq a$ and $f(y)\leq a.$ It follows from the last inequality that $(1-\lambda)x+\lambda y\in U(f,a).$
+ \item Let $x^*\in\R^n$ be a minimizer of $f$ and let us prove $U\left(f,f(x^*)\right)=\{x^*\}.$\\
+ Let $y\in U\left(f,f(x^*)\right)$ and assume by contradiction that $y\neq x^*.$ For $\lambda\in [0,~1]$ applying the strictly convexity of $f$ to $y$ and $x^*$ yields  
+   \begin{align*}
+       f( (1-\lambda)x^*+\lambda y) < (1-\lambda)f(x*) +\lambda f(y)< (1-\lambda)f(x^*) +\lambda f(x^*)=f(x^*)
+   \end{align*}
+   which contradicts the fact that $x^*$ is a minimizer, therefore, $y=x^*.$ 
+ \item The Statement is not true in general. For instance,
+ Consider \begin{align*}
+         f: \R_+\to \R\\
+         x \mapsto \sqrt{x}
+ \end{align*}
+  $f$ is concave and its lower level set $U(f,a)$ given by
+    \begin{align*}
+        U(f,a)=\begin{cases}
+            (-\infty, a^2] &if ~a\geq 0\\
+            \emptyset    &~~otherwise
+        \end{cases}
+    \end{align*}
+    is convex.
+\end{enumerate}
+\end{solution}
+
+\fi
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{problem}Let $C\subset \R^n$ be a convex closed subset. The distance function $d_C:\R^n\rightarrow \R_{\geq 0}$ of a point to the set $C$ is given as 
+\begin{equation*}
+    d_C(x):=\inf_{y\in C} \|x-y\|_2.
+\end{equation*}
+\begin{enumerate}
+    \item Show that $d_C(x)= \|x-P_C(x)\|$.
+    \item Show that $d_C$ is a convex function. 
+\end{enumerate}
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+\begin{enumerate}
+    \item Since $C$ is convex and $\lVert x-y\rVert^2$ is coercive, $P_C(x)$ admits at least one solution. Moreover, $\lVert x-y\rVert^2$ is strictly convex, and thus $P_C(x)$ has a unique solution. Finally, since norm and norm squared have the same minimizer, we conclude the claim.
+    \item Let $x, y \in \R^n$ and $\lambda \in (0,1)$, define $v:= P_C(x)$ and $w:=P_C(y)$. Because $C$ is convex also $\lambda v + (1-\lambda )w \in C.$ 
+    \begin{align*}
+        d_C(\lambda x + (1-\lambda) y) &= \inf_{c \in C} \|\lambda x + (1-\lambda) y - c\|_2 \\
+        & \leq \|\lambda x + (1-\lambda) y - \left( \lambda v + (1-\lambda )w\right)\|_2 \\
+        & = \|\lambda (x-v) + (1-\lambda) (y-w) \|_2 \|\\
+        &\leq \lambda \|x-v\|_2 + (1-\lambda) \|y-w\|_2 \\
+        &= \lambda d_c(x) + (1-\lambda) d_c(y).
+    \end{align*}
+\end{enumerate}
+
 \end{solution}
 
 \fi
 
 %-----------------------------------------------------------------------%
-\vskip 0.5cm
-
-\begin{exo}[On Convex Cones]
-A cone is a set $S$ such that for every $x\in S$ and $\lambda \geq 0$ we have $\lambda x \in S$.
-
-\begin{enumerate}
-    \item A set $S$ is a convex cone iff the following properties hold:
-    \begin{itemize}
-        \item $x,y \in S \Rightarrow x+y \in S$.
-        \item $x\in S, \lambda \geq 0 \Rightarrow \lambda x \in S$.
-    \end{itemize}
-    \item Give an example of two convex sets $S_1, S_2$ s.t. there union is not convex. 
-\end{enumerate}
-\end{exo}
-
-\ifsolutions
-\vskip 0.3cm
-\begin{solution}
-\begin{enumerate}
-    \item 
-\end{enumerate}
-\end{solution}
-
-\fi
-
-%-----------------------------------------------------------------------%
-\vskip 0.5cm
-\begin{exo}[On Conic Hulls]
-\begin{enumerate}
-    \item Take any $a_1, \dots a_l \in \R^n$, then $\text{cone}(\{a_1, \dots, a_l\})$ is a closed and convex set.
-     To show that the set is closed, consider the following steps:
-     \begin{itemize}
-         \item Show cone$(\{a_1,...,a_l\})= \bigcup_{i=1}^N cone(S_i)$, where the $S_i$ are all possible sets of linearly independent combinations of the points $a_1,...,a_l$.
-         \item Show for such an $S_i$ cone$(S_i)=\{By | y\in \R^m_{\geq 0}\}$ for some suitable matrix $B$.
-         \item Show each $cone(S_i)$ is closed. 
-     \end{itemize}
-    \item Let $S\subset \R^n$, if $S\subset T$ for some convex cone $T$, then $cone(S)\subset T$.
-   
-    \item Let $S=\{(x_1, x_2) | (x_1-1)^2 +x_2^2 = 1\}$, what is cone($S$)?
-\end{enumerate}
-\end{exo}
-
-
-\ifsolutions
-\vskip 0.3cm
-\begin{solution}
-\end{solution}
-\fi
-
 \end{document}

@@ -7,7 +7,7 @@
 %boolean variable to determine whether the solutions should be included
 \newif\ifsolutions
 \solutionstrue
-\solutionsfalse
+% \solutionsfalse
 
 %We have a figure in this sheet
 \usepackage{graphicx}
@@ -21,128 +21,155 @@
 
 
 %-----------------------------------------------------------------------%
-\vskip 0.5cm
-\begin{problem}
-  Consider the following one-dimensional function over the interval $I=[0, 8].$
-    \begin{align*}    
-      \begin{cases}
-       (x-2)^2+0.5,  &0\leq x \leq 1, \\
-           \quad   0.5,& 1\leq x \leq 2, \\
-       -(x-3)^2+0.5, & 2\leq x \leq 2.5, \\
-        (x-4)^2, & 2.5\leq x \leq 4, \\
-       -(x-6)^2+ 2, &4\leq x \leq 6, \\
-         -2x + 15, & 6\leq x \leq 6.5, \\
-          2x - 12 & 6.5\leq x \leq 8.
-      \end{cases}
-   \end{align*}
-   Determine all   minima and maxima of $f$ on $I.$
-\end{problem}
+% \vskip 0.5cm
+% \begin{problem}
+%   Consider the following one-dimensional function over the interval $I=[0, 8].$
+%     \begin{align*}    
+%       \begin{cases}
+%        (x-2)^2+0.5,  &0\leq x \leq 1, \\
+%            \quad   0.5,& 1\leq x \leq 2, \\
+%        -(x-3)^2+0.5, & 2\leq x \leq 2.5, \\
+%         (x-4)^2, & 2.5\leq x \leq 4, \\
+%        -(x-6)^2+ 2, &4\leq x \leq 6, \\
+%          -2x + 15, & 6\leq x \leq 6.5, \\
+%           2x - 12 & 6.5\leq x \leq 8.
+%       \end{cases}
+%    \end{align*}
+%    Determine all   minima and maxima of $f$ on $I.$
+% \end{problem}
 
 
 
-\ifsolutions
-\vskip 0.3cm
-\begin{solution}
-\end{solution}
-\fi
+% \ifsolutions
+% \vskip 0.3cm
+% \begin{solution}
+% \end{solution}
+% \fi
 
 
-%-----------------------------------------------------------------------%
-\vskip 0.5cm
-\begin{problem}
-    Prove that if $\Abf,~\Bbf\in \R^{n\times n}$ are positive semidefinite matrices, then their sum $\Abf+\Bbf$ is also positive semidefinite matrices.
+% %-----------------------------------------------------------------------%
+% \vskip 0.5cm
+% \begin{problem}
+%     Prove that if $\Abf,~\Bbf\in \R^{n\times n}$ are positive semidefinite matrices, then their sum $\Abf+\Bbf$ is also positive semidefinite matrices.
     
+% \end{problem}
+
+
+
+% \ifsolutions
+% \vskip 0.3cm
+% \begin{solution}
+%  Assume $\Abf,~\Bbf\in \R^{n\times n}$ are positive semidefinite and let $\xbf\in \R^n\backslash\{0\}.$ Since $\Abf$ and $\Bbf$ are positive semidefinite we have
+%     \begin{align}\label{positive semidefinite}
+%         \begin{cases}
+%             \xbf^T\Abf\xbf\geq 0 \\
+%             \xbf^T\Bbf\xbf\geq 0
+%         \end{cases}
+%     \end{align}
+%  On the other hand
+%  \begin{align*}
+%      \xbf^T(\Abf+\Bbf)\xbf = \xbf^T\Abf\xbf+ \xbf^T\Bbf\xbf
+%  \end{align*}
+%  substituting $\eqref{positive semidefinite}$ into the above yields
+%     \begin{align*}
+%      \xbf^T(\Abf+\Bbf)\xbf \geq 0
+%  \end{align*}
+% \end{solution}
+% \fi
+
+
+
+
+
+
+
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{problem}[Eigenvalue Characterization Theorem]
+
+Let $A\in \R^{n\times n}$ be a symmetric matrix. Prove that the following hold:
+\begin{enumerate}
+    \item $A$ is positive definite if and only if all its eigenvalues are positive.
+    \item $A$ is positive semidefinite if and only if all its eigenvalues are non-negative.
+    \item $A$ is indefinite if and only if it has at least one positive and one negative eigenvalue.
+\end{enumerate}
 \end{problem}
 
 
-
 \ifsolutions
 \vskip 0.3cm
-\begin{solution}
- Assume $\Abf,~\Bbf\in \R^{n\times n}$ are positive semidefinite and let $\xbf\in \R^n\backslash\{0\}.$ Since $\Abf$ and $\Bbf$ are positive semidefinite we have
-    \begin{align}\label{positive semidefinite}
-        \begin{cases}
-            \xbf^T\Abf\xbf\geq 0 \\
-            \xbf^T\Bbf\xbf\geq 0
-        \end{cases}
-    \end{align}
- On the other hand
- \begin{align*}
-     \xbf^T(\Abf+\Bbf)\xbf = \xbf^T\Abf\xbf+ \xbf^T\Bbf\xbf
- \end{align*}
- substituting $\eqref{positive semidefinite}$ into the above yields
+\begin{solution}.
+
+\begin{enumerate}
+    \item Since $A$ is symmetric, it follows by the spectral decomposition theorem that there exists an orthogonal matrix $U$ and a diagonal matrix $D=\text{diag}(\lambda_1,\ldots,\lambda_n)$ whose diagonal elements are the eigenvalues of $A$, for which $A=UDU^T$. Then, it holds that
     \begin{align*}
-     \xbf^T(\Abf+\Bbf)\xbf \geq 0
- \end{align*}
-\end{solution}
-\fi
-
-
-
-
-
-
-
-%-----------------------------------------------------------------------%
-\vskip 0.5cm
-\begin{exo}
-%Let us 
-Prove the Eigenvalue characterisation theorem from the lecture. Let $A\in \R^{n\times n}$ be a symmetric matrix. Then
-\begin{enumerate}
-    \item A is positive definite iff all eigenvalues are positive.
-    \item A is positive semidefinite iff all eigenvalues are non-negative.
-    \item A is indefinite iff A has at least one positive and one negative eigenvalue.
-\end{enumerate}
-\end{exo}
-
-
-\ifsolutions
-\vskip 0.3cm
-\begin{solution}
-\begin{enumerate}
-    \item Suppose $A$ is positive definite, and let $(\lambda, x)\in \R \times \R^n$ be any eigenvalue, eigenvector pair. Then as $A$ is positive definite and $x\neq 0$ $$0< x^TAx = x^T\lambda x = \lambda \|x\|^2,$$ which implies $\lambda>0$.  \\
-    Suppose now all eigenvalues are positive. Choose any $x\in \R^n\backslash\{0\}$. As $A$ is symmetric we can use the spectral decomposition theorem and write $A = U^TDU$, let $y=Ux\neq 0$, as $U$ is invertible. Then
-    \begin{equation*}
-        x^TAx = x^TU^T D Ux = y^T D y = \sum_{i=1}^n y_i^2 d_i >0, 
-    \end{equation*}
-    because all the $d_i>0$ and $y\neq0$.
+        x^TAx=x^TUDU^Tx=y^TDy=\sum_{i=1}^n\lambda_iy_i^2,
+    \end{align*}
+    where the second equality holds by making the linear transformation of variables $x=Uy$. Since $U$ is invertible, $y\not=0$ if $x\not=0$. Thus, from the fact that $A$ is positive definite and $U$, all $\lambda_i>0$ for any $x\not=0$.
+    
+    On the other hand, if $\lambda_i>0$ for all $i=1,\ldots,n$ then surely for any nonzero $y\in\R^n$, one has $\sum_{i=1}^n\lambda_iy_i^2>0$, meaning that $x^TAx>0$
     \item Basically the same argument only with $\geq$ instead of $>$
-    \item Suppose $A$ is indefinite. We can again use the spectral decomposition %them
-    and write $A=U^TDU$, let $x,y \in \R^n$ be such that $0< x^TAx$ and $0>y^TAy$. Then setting $v:=Ux$
+    \item Suppose $A$ is indefinite. We can again use the spectral decomposition theorem to write $A=UDU^T$. Let $v,w \in \R^n$ be such that $v^TAv>0$ and $w^TAw<0$. Setting $v:=Ux$ yields
     \begin{equation*}
-        0 < x^TAx = x^T U^T D U X = v^TD v = \sum_{i=1}^n v_i^2 d_i,
+        0 < v^TAv = x^T  D  x =  \sum_{i=1}^n \lambda_ix_i^2,
     \end{equation*}
-    which implies at least one of the $d_i$ (the eigenvalues) is positive. \\
-    On the other hand, setting $w:=Uy$ 
-    \begin{equation*}
-        0 > y^TAy = y^T U^T D U y = w^TDw = \sum_{i=1}^n w_i^2 d_i,
-    \end{equation*}
-    which implies at least one of the $d_i$ is negative. \\
-    The converse is clear, as the corresponding eigenvectors to the negative and positive eigenvalues fullfill the definition of indefinite. 
+    which implies that at least one of $\lambda_i$ is positive. Again, setting $w=Uy$ gives
+    \begin{align*}
+        0>w^TAw = y^TDy=\sum_{i=1}^n\lambda_iy_i^2,
+    \end{align*}
+    which implies that at least one of $\lambda_i$ is negative.
+    
+    On the other hand, the converse is clear, as the corresponding eigenvectors to the positive and negative eigenvalues fulfill the definition of indefinite. 
 \end{enumerate}
 \end{solution}
 \fi
-
-%-----------------------------------------------------------------------%
+%-----------------------------------------------------------------------% (This was taken from the exercises of chapter 2, # 2.6 [Beck 2014])
 \vskip 0.5cm
-\begin{exo}
-	Prove the Sufficient Second Order Optimality Condition, that is:
-Let $f: S \longrightarrow \R$ be a function defined on the open set $S\subset \R^n$. Suppose that $f \in C^2(S)$ and that $x^*$ is a stationary point. Then the following hold:
-\begin{enumerate}
-    \item If $\nabla^2 f(x^*) \succ 0$, then $x^*$ is a strict local minimizer of $f$.
-    \item  If $\nabla^2 f(x^*) \prec 0$, then $x^*$ is a strict local maximiser of $f$.
-\end{enumerate}
-\end{exo}
+\begin{problem}
+    Let $B\in\R^{m\times n}$ and let $A=BB^T$. Prove that the following hold:
+    \begin{enumerate}
+        \item $A$ is positive semidefinite.
+        \item $A$ is positive definite if and only if $B$ has a full row rank.
+    \end{enumerate}
+\end{problem}
 
 \ifsolutions
 \vskip 0.3cm
-\begin{solution}
+\begin{solution}.
+\begin{enumerate}
+    \item For any $x\in\R^m$, it holds that $x^TAx = x^TBB^Tx=(B^Tx)^T(B^Tx)=\lVert B^Tx\rVert^2\geq 0$. Hence $A\succcurlyeq 0$.
+
+    \item 
+    Suppose that $A$ is positive definite. Then, for any nonzero $x\in\R^m$, it holds that 
+    \begin{align*}
+        0<x^TAx= x^TBB^Tx=\lVert B^Tx\rVert^2
+    \end{align*}
+    which implies that $\text{ker}(B^T)=\{0\}$. Then, $B^T$ is injective and thus $\text{rank}(B^T)=m$. Since transpose dose not change rank, it holds $\text{rank}(B)=m$.
+    % Since $\text{ker}(B^T)^\perp=\text{Im}(B)$ and $\text{dim}(\text{ker}(B^T)^\perp)+\text{dim}(\text{ker}(B^T))=m$, we obtain $\text{dim}(\text{Im}(B))=\text{rank}(B)=m$.
+
+    Now, suppose $B$ has a full row-rank, i.e., $B^T$ is injective. Therefore $\text{ker}(B^T)=\{0\}$. For any non‑zero $x\in\mathbb R^{m}$ one therefore has $B^Tx\neq 0$, thus, $x^TAx=\lVert B^Tx\rVert^2>0$.
+\end{enumerate}
+\end{solution}
+\fi
+%-----------------------------------------------------------------------%
+\vskip 0.5cm
+\begin{problem}[Sufficient Second Order Optimality Condition]
+Let $f: S \longrightarrow \R$ be a function defined on an open set $S\subseteq \R^n$. Suppose that $f \in C^2(S)$ and that $x^*$ is a stationary point. Prove that the following hold:
+\begin{enumerate}
+    \item If $\nabla^2 f(x^*) \succ 0$, then $x^*$ is a strict local minimizer of $f$ in $S$.
+    \item  If $\nabla^2 f(x^*) \prec 0$, then $x^*$ is a strict local maximizer of $f$ in $S$.
+\end{enumerate}
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+\begin{solution}.
 \begin{enumerate}
     \item Let $x^*\neq x\in S,$ assume $\nabla^2 f(x^*) \succ 0.$ Let us prove that $x^*$ is a strict local minimizer of $f$ over $S$ that is 
 \begin{align*}
     f(x)>f(x^*) \text{ for all $x\in S$ and $x\neq x^*$}.
 \end{align*}
-There exists $r>0,$ such that $B(x^*, r)\subseteq S$ for which $\nabla^2 f(x) \succ 0$ for all $x\in B(x^*, r)$   as the Hessian is continuous since $f \in C^2(S).$ Moreover, applying the linear approximation theorem yields for all $x\in B(x^*, r)$ there exists $z\in [x^* , x]$ such that %  $f$ over $[x^* , x]$ 
+Since the Hessian is continuous as $f \in C^2(S),$ there exists $r>0,$ such that $B(x^*, r)\subseteq S$ for which $\nabla^2 f(x) \succ 0$ for all $x\in B(x^*, r)$. By the linear approximation theorem, it follows that for any $x\in B(x^*, r)$ there exists $z\in [x^* , x]$ such that %  $f$ over $[x^* , x]$ 
 \begin{align*}
     f(x) = f(x^*) + \nabla f(x^*)^T(x-x^*) + \frac{1}{2}(x-x^*)^T\nabla^2 f(z)(x-x^*)
 \end{align*}
@@ -151,7 +178,7 @@ Since $x^*$ is a stationary point of $f,$ then $\nabla f(x^*)=0,$ it follows tha
   \begin{align*}
     f(x) - f(x^*) =  \frac{1}{2}(x-x^*)^T\nabla^2 f(z)(x-x^*).
 \end{align*}
-in addition, $z\in [x^* , x]\subseteq B(x^*, r)$ hence, $\nabla^2 f(z) \succ 0.$ Since $x\neq x^*,$ it follows  $$(x-x^*)^T\nabla^2 f(z)(x-x^*)>0$$
+Moreover, since $\nabla^2 f(z) \succ 0,$ as $z\in [x^* , x]\subseteq B(x^*, r)$, and $x\neq x^*,$ it follows  $$(x-x^*)^T\nabla^2 f(z)(x-x^*)>0$$
 therefore,
   \begin{align*}
       f(x) > f(x^*) \text{ for all $x\in B(x^*, r)$}.
@@ -161,4 +188,90 @@ therefore,
 \end{solution} 
 \fi
 
+
+%-----------------------------------------------------------------------% (This was taken from sheet 4, problem 2)
+\vskip 0.5cm
+\begin{problem}[Sufficient Condition for a Saddle Point]
+Let $f: S \rightarrow \R$ be a function defined on an open set $S \subseteq \R^n$. Suppose that $f\in C^2(S)$ and that $x^*$ is a stationary point. 
+If $\nabla^2f(x^*)$ is an indefinite matrix, then $x^*$ is a saddle point for $f$ over $S$.
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+Since $\nabla^2f(x^*)$ is indefinite, it has at least one positive eigenvalue $\lambda >0$. Let $v$ be a corresponding normalized eigenvector. As $S$ is an open set, there exists $r>0$ s.t. $x^*+\alpha v \in S$ for all $\alpha \in (0, r)$. 
+
+By the quadratic approximation theorem, we have for any $\alpha \in (0,r)$ 
+\begin{align*}
+    f(x^*+\alpha v) &= f(x^*) + \nabla f(x^*)^T(\alpha v)+\frac{1}{2}(\alpha v)^T \nabla^2f(x^*)(\alpha v) + g(\alpha^2 \|v\|^2)
+\end{align*}
+where the remainder term $g: \R_+ \rightarrow \R$ is defined as 
+\begin{equation}\label{eq: gt}
+    \frac{g(t)}{t} \rightarrow 0, \text{as } t\rightarrow 0. 
+\end{equation}
+Since $x^*$ is a stationary point, it follows that
+\begin{align*}
+    f(x^*+\alpha v) &= f(x^*) + \frac{\alpha^2}{2}v^T \nabla^2f(x^*)v + g(\alpha^2 \|v\|^2) \\
+    &=f(x^*) + \frac{\lambda \alpha^2}{2} \|v\|^2 + g(\alpha^2\|v\|^2) \\
+    &= f(x^*) + \frac{\lambda \alpha^2}{2} + g(\alpha^2).
+\end{align*}
+Since $\lim_{t\rightarrow0}\frac{g(t)}{t} = 0$, for any small $\epsilon>0$, there exists $\delta>0$ such that for all $t$ satisfying $0<|t|<\delta$, it holds that 
+\begin{equation*}
+    \left\lvert \frac{g(t)}{t}\right\rvert<\epsilon.
+\end{equation*}
+We choose $\epsilon = \frac{\lambda}{2}$ and for small enough $t = \alpha^2$, we get
+\begin{equation*}
+    \frac{g(\alpha^2)}{\alpha^2}>-\frac{\lambda}{2}.
+\end{equation*}
+Thus, for all $\alpha \in (0, \delta)$, we have $g(\alpha^2)/\alpha^2>-\frac{\lambda}{2}$ and hence $f(x^*+\alpha v) > f(x)$. Therefore, $x^*$ cannot be a local maximum point of f over $S$.
+
+Repeat the same argument with a negative eigenvalue and a corresponding eigenvector to also show $x^*$ cannot be a local minimum. 
+\end{solution}
+
+\fi
+% %-----------------------------------------------------------------------% (This was taken from the exercises of chapter 2, # 2.18 [Beck 2014])
+% \vskip 0.5cm
+
+% \begin{problem}
+%     Let $f$ be a twice continuously differentiable function over $\R^n$. Suppose that $\nabla^2f(x)\succ0$ for any $x\in\R^n$. Prove that a stationary point of $f$ is necessarily a strict global minimum point.
+% \end{problem}
+
+
+%-----------------------------------------------------------------------% (This was taken from Lemma 2.42 of chapter 2 [Beck 2014])
+\vskip 0.5cm
+\begin{problem}[Coerciveness of Quadratic Functions]
+    Let $f(x)=x^TAx+2b^Tx+c$, where $A\in\R^{n\times n}$ is symmetric, $b\in\R^n$ and $c\in\R$. Then $f$ is coercive if and only if $A \succ0$.
+\end{problem}
+
+\ifsolutions
+\vskip 0.3cm
+
+\begin{solution}
+$(\Leftarrow)$ Suppose $A\succ0$. By Lemma 2.2, i.e., for any $x\not=0$,
+\begin{align*}
+    \lambda_n\leq R_A(x)=\frac{x^TAx}{\lVert x\rVert^2}\leq \lambda_1,
+\end{align*}
+if follows that $x^TAx\geq \lambda_n\lVert x\rVert^2$ for $x\not=0$. We can thus write
+\begin{align*}
+    f(x)&=x^TAx+2b^Tx+c\\
+    &\geq \lambda_n\lVert x\rVert^2+2b^Tx+c \\
+    &\geq \lambda_n\lVert x\rVert^2-2\lVert b\rVert\lVert x\rVert +c \\
+    & = \lambda_n\lVert x\rVert\left(\lVert x\rVert-2\frac{\lVert b\rVert}{\lambda_n}\right)+c
+\end{align*}
+where the third inequality holds due to the Cauchy-Schwarz inequality. It is obvious that $\lambda_n\lVert x\rVert\left(\lVert x\rVert-2\frac{\lVert b\rVert}{\lambda_n}\right)\rightarrow\infty$ as $\lVert x\rVert\rightarrow \infty$, thus it follows that $f(x)\rightarrow\infty$ as $\lVert x\rVert\rightarrow \infty$.
+
+$(\Leftarrow)$ Assume that $f$ is coercive. We need to prove that all eigenvalues of $A$ are positive. We begin by showing that there does not exist a negative eigenvalue. Suppose in contradiction that there exists such a negative eigenvalue, that is, there exists a nonzero vector $v\in\R^n$ and $\lambda<0$ such that $Av=\lambda v$. Then,
+\begin{align*}
+    f(\alpha v)=\alpha^2 v^TAv+2\alpha b^Tv+c = \lambda\alpha^2\lVert v\rVert^2+2(b^Tv)\alpha+c \rightarrow -\infty
+\end{align*}
+as $\lVert \alpha\rVert\rightarrow\infty$, thus contradicting the assumption that $f$ is coercive. We thus conclude that all the eigenvalues of $A$ are nonnegative. Next, we will show that $0$ cannot be the eigenvalue of $A$. By contradiction, assume that there exists $v\not=0$ such that $Av=0$. Then, for any $\alpha \in\R$, 
+\begin{align*}
+    f(\alpha v)= 2(b^Tv)\alpha+c.
+\end{align*}
+If $b^Tv=0$, then $f(\alpha v)\rightarrow c$ as $\alpha \rightarrow\infty$. If $b^Tv>0$, then $f(\alpha v)\rightarrow -\infty$ as $\alpha \rightarrow-\infty$. If $b^Tv<0$, then $f(\alpha v)\rightarrow -\infty$ as $\alpha \rightarrow\infty$, contradicting the coerciveness of the function. We have thus proven that $A$ is positive definite.
+
+
+\end{solution}
+\fi
 \end{document}
