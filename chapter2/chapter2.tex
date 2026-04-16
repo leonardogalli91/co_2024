@@ -1,9 +1,11 @@
 \documentclass[10pt,a4paper]{article}
 \include{../packages}
+\newcommand{\chapter}{2}
 \include{../macros}
 \title{Optimization Methods}
 \author{Chapter 2: First-Order Methods for Unconstrained Optimization}
 \date{}
+
 \begin{document}
 	\maketitle
 	\section{Descent Direction Methods}
@@ -39,7 +41,7 @@ Therefore, there exists an $\epsilon>0$ such that
 \begin{equation*}
 	\frac{f(x+td)-f(x)}{t}<0,
 \end{equation*}
-for any $t\in(0,\epsilon)$
+for any $t\in(0,\epsilon)$.
 \end{proof}
 \begin{algorithm}[H]\label{alg}
 	\caption{Schematic Descent Directions Method}
