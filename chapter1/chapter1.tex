@@ -1,0 +1,736 @@
+\documentclass[10pt,a4paper]{article}
+\include{../packages}
+\include{../macros}
+\title{Optimization Methods}
+\author{Chapter 1: Basics of Optimization}
+\renewcommand{\theexample}{1.\arabic{example}}
+\renewcommand{\thedefinition}{1.\arabic{definition}}
+\renewcommand{\thelemma}{1.\arabic{lemma}}
+\renewcommand{\theproposition}{1.\arabic{proposition}}
+\renewcommand{\thetheorem}{1.\arabic{theorem}}
+\renewcommand{\thecorollary}{1.\arabic{corollary}}
+\renewcommand{\theremark}{1.\arabic{remark}}
+%\renewcommand{\thesection}{1.\arabic{section}}
+%\renewcommand{\thesubsection}{1.\arabic{section}.\arabic{subsection}}
+\counterwithout*{example}{section}
+\counterwithout*{definition}{section}
+\counterwithout*{lemma}{section}
+\counterwithout*{proposition}{section}
+\counterwithout*{theorem}{section}
+\counterwithout*{corollary}{section}
+\counterwithout*{remark}{section}
+
+\date{}
+\begin{document}
+	\maketitle
+	\section{Optimization problems}
+	In this course we will focus on finite-dimensional continuous optimization problems
+	\begin{equation}\label{eq:problem}
+	\begin{split}
+		\min \;\; &f(x)\\
+		\st&g_i(x) \leq 0 \quad i=1, \dots, m\\
+		& h_j(x) = 0 \quad j=1, \dots, p
+	\end{split}
+	\end{equation}
+\begin{itemize}
+	\item $x \in \Rn$: $n$ variables to be chosen;
+	\item $f: \Rn\to \R$: objective function to be minimized;
+	\item $g_1,\dots, g_m: \Rn \to \R$: inequality constraint functions to be satisfied;
+	\item $h_1,\dots, h_p: \Rn \to \R$ equality constraint functions to be satisfied.
+\end{itemize}
+The feasible set can also be denoted by $S=\{x \in \Rn: g_i(x) \leq 0 \; i=1, \dots, m, \;\; h_j(x) = 0 \; j=1, \dots, p\}$. Notice this is the most general shape of optimization problems, but there are problems in which there are no inequality constraints (m=0) or no equality constraints (p=0).
+\subsection{Taxonomy}
+Concerning the dimensionality, optimization problems can be 
+\begin{itemize}
+	\item finite-dimensional: when the space of variables is finite-dimensional, e.g., as in our case $x\in\Rn$;
+	\item infinite-dimensional: in principle, optimization problems can also be infinite dimensional  dimensional, e.g., $x\in \mathcal{H}:=\{h:\Xcal\to \Ycal\}$ where the variable $x$ is now a function from the space $\Xcal$ to $\Ycal$.
+\end{itemize}
+Concerning the granularity of the space, optimization problems can be 
+\begin{itemize}
+	\item continuous: when all variables involved are continuous;
+	\item discrete: when at least one variable is an integer, e.g., $x\in \mathbb{Z}^n, x\in \{0,1\}^n.$
+\end{itemize}
+Concerning the feasibility region, optimization can be 
+\begin{itemize}
+\item unconstrained: when there are no constraints, e.g., $S=\Rn$;
+\item constrained: when there is at least one constraint, e.g., $S\subset\Rn$.
+\end{itemize}
+Concerning the hypothesis of linearity, optimization problems are also called
+\begin{itemize}
+\item linear programming: when the objective function is linear and the
+feasible set is defined by a system of linear equalities and inequalities;
+\item nonlinear problems: when the objective function is nonlinear
+and/or at least one constraint is defined by a nonlinear function.
+\end{itemize}
+Concerning the hypothesis of differentiability, we can distinguish between
+\begin{itemize}
+\item smooth optimization: when the functions defining the objective
+and the constraints are continuously differentiable;
+\item nonsmooth optimization problems: when the functions defining the objective and the constraints are continuous, but typically not differentiable in all points of the feasible set. Weaker notions of derivatives are used to solve this problem.
+\item derivative-free optimization (more recently called zeroth-order optimization, in contrast to first- and second-order): this branch of optimization consider cases in which evaluating the objective function/constraints is very costly and the derivatives are unavailable (noisy, unreliable, too expensive). In this field, it is sometimes possible to assume that the underlying function is continuously differentiable. On the other hand, for black-box optimization one assumes to not have any information on the objective function or on the constraints.
+\end{itemize}
+Concerning the hypothesis of convexity, we can distinguish between
+\begin{itemize}
+	\item convex optimization, when the functions defining the objective and the constraints are all convex;
+	\item nonconvex optimization, when the functions defining the objective and the constraints might be nonconvex.
+\end{itemize}
+Concerning the uncertainties in the model, we can distinguish between
+\begin{itemize}
+	\item stochastic optimization, when the uncertainties (i.e., random variables) are maintained in the model and their quantification (e.g., expectation, variance) is exploited in optimization algorithm;
+	\item deterministic optimization, when there are no uncertainties, or we assume that this is the case.
+\end{itemize}
+
+\begin{example}[The transportation problem (Linear Programming)]
+Consider a company producing and selling a certain commodity. The company has a set of $N$ sources, where the commodity is produced and a set of $M$ demand centers where the commodity is sold. At each source $i \in \{1, \dots, N\}$, a given quantity $q_i$ of commodity is available. Each demand center $j \in \{1, \dots, M\}$ requires a given quantity $d_j$. We indicate by $c_{ij}$ the cost per unit of transporting the commodity from source $i$ to demand center $j$.
+
+\par The problem is to determine the quantity to be transported from each source to
+each demand center in such a way that
+\begin{itemize}
+	\item the availability constraints at the sources are satisfied;
+	\item the requirements of the demand centers are satisfied;
+	\item the total transportation cost is minimized.
+\end{itemize}
+To formulate the problem, we indicate by $x_{ij}$ the quantity of the commodity transported from source $i$ to demand center $j$. Then the optimization problem is
+
+\begin{equation*}
+	\begin{split}
+		\min \;\; &\sum_{i=1}^{N}\sum_{j=1}^{M}c_{ij}x_{ij}\\
+		\st&\sum_{j=1}^{M}x_{ij} \leq q_i\quad i=1, \dots, N\\
+		\st&\sum_{j=1}^{M}x_{ij} = d_j\quad j=1, \dots, M\\
+		& x_{ij} \geq 0 \quad \quad i=1, \dots, N\;\;j=1, \dots, M.
+	\end{split}
+\end{equation*}
+%TODO: remark for myself, draw the network
+\end{example}
+\begin{example}[Training of Neural Networks (Unconstrained Optimization)] Let us start from describing the supervised learning task. We want to approximate as well as possible an unknown function $h^*:\Xcal\to\Ycal$, for instance the value of a certain asset in the stock market at a certain time $t$. So $\Ycal$ is the value of the asset and the space $\Xcal$ is the Cartesian product of time, politicians' statements/tweets, price of raw materials, revenue of the last quarter, etc. Let $h^*$ be the true function, then the optimization problem becomes
+	\begin{equation*}
+		\begin{split}
+			\min_{h} \;\; &\E_{x\sim \Dcal} \ell(h(x),h^*(x))=:R(h)\\
+			\st& h \in \mathcal{H}:=\{\Xcal\to \Ycal\}
+		\end{split}
+	\end{equation*}
+where $\ell:\Ycal\times\Ycal\to \R$ is the loss function that measures how far is a certain output from the true label, e.g., $\ell(h(x),h^*(x)):=(h(x)-h^*(x))^2$ and $\mathcal{H}$ is also called the hypothesis class. This is a stochastic, infinite dimensional problem for which we don't know $\Dcal$ and there might not be a true function, e.g., the space $\Xcal$ does not contain all the useful information to predict $\Ycal$. In practice, we are given a set of $M$ training examples, $S=\{(x_i, y_i)\}_{i=1}^{M}$
+\begin{itemize}
+	\item $x_i \in \mathbb{R}^{d}$ $d$ is the amount of features describing an instance (e.g., as above, or the pixels of an image)
+	\item $y_i\in\mathbb{R}$ (e.g., value of an asset), $y_i\in\{1,\dots C\}$ (e.g., classification, one of the $C$ classes),
+\end{itemize}
+ and what we can do is to minimize the empirical risk $\hat{R}(h)$. In fact, the following problem is called Empirical Risk Minimization:
+\begin{equation*}
+	\begin{split}
+		\min_{h} \;\; &\sum_{i=1}^M \ell(h(x_i),y_i)=:\hat{R}(h)\\
+		\st& h \in \{\Xcal\to \Ycal\}.
+	\end{split}
+\end{equation*}
+Now, this is a deterministic optimization problem, but it is still infinite dimensional, because we minimize over the set of all possible functions. What we can try to do is to parameterize our function $h$. In particular, the most widely used class of functions in modern machine learning is that of neural networks. Let us start from the biological motivation: real neurons in the brain propagate their output only if the weighted sum of its inputs (potential differences) is over a certain threshold. The artificial neuron takes as an input a vector and performs a scalar product with the weights of the neuron. In a second step, inspired by the real neurons, this value passes through a thresholding function $\sigma$ called activation function. Neural networks stack various neurons in parallel to build a layer and, in turn, concatenate various layer (deep networks). This model is very expressive, in fact already a wide-enough 2-layer neural network is able to approximate any possible function of the input (Universal Approximation Theorem). Formal definition
+	\begin{itemize}
+		\item the $j$-th layer applied on a generic input $n_{j-1}$-dimensional input $x$:\\
+		$g_j(x) := \sigma (W_j x +b_j )$, $W_j \in \R^{n_{j-1}\times n_j}$, $b_j \in \R^{n_j}$, $\sigma$ is applied component-wise,\\ e.g., ReLU $\sigma(x)= \begin{cases} 0 & \text{if} \;\;x<0\\ x &\text{otherwise} \end{cases}$ %(ReLU)
+		\item the weights: $w = \begin{pmatrix}
+			\text{vec}(W_1)\\
+			b_1\\
+			\vdots\\
+			\text{vec}(W_L)\\
+			b_L
+		\end{pmatrix}\in \mathbb{R}^{n}$
+		\item the network applied on the $i$-th instance: $h(w, x_i):=g_L \circ \dots \circ g_1(x_i)$. If we now think of the infinite dimensional function $h$ from before, the weights $w$ are the parameters of this hypothesis function.
+		\item the losses: $f_i(w):=\mathcal{L}(h_i(w),y_i)$, e.g., $\mathcal{L}(h_i(w),y_i)= (h_i(w)-y_i)^2$%(sofmax)
+	\end{itemize}
+	
+	\begin{equation*}
+		\min_{w\in \mathbb{R}^n} f(w) = \frac{1}{M}\sum_{i=1}^{M} f_i(w).
+	\end{equation*}
+%TODO: remark for myself, draw the network
+\end{example}
+\begin{example}[Portfolio Optimization (Convex Quadratic Programming)] Portfolio selection theory studies how to allocate an investor’s available capital into a prefixed set of assets with the aims of maximizing the expected return and minimizing the investment risk. Let $n$ be the number of available assets, let $\mu\in \Rn$ be the vector of expected returns of the assets, and let $Q \in \Rnn$ be a symmetric positive semidefinite matrix whose generic element $q_{ij}$ is the similarity between the asset i and j, more precisely the covariance of returns of assets i and j. We assume that the available (normalized) capital is fully invested. Then, let $x \in \Rn$ be the vector of decision variables, where $x_i$ is the fraction of the available capital to be invested into asset $i$, with $i = 1, \dots, n$. 
+\par By this notation, $\mu^T x$ is the expected return of the portfolio and $x^TQx$ is the covariance of the portfolio which
+can be used as a measure of the risk connected with the investment (diversification of the portfolio). 
+In the traditional Markowitz portfolio selection model \cite{markowits52a}, the optimization problem is stated as the following convex quadratic programming problem
+\begin{equation*}
+	\begin{split}
+		\min \;\; &x^TQx\\
+		\st& \mu^Tx\geq \beta \\
+		& e^Tx =1\\
+		& x\geq 0,
+	\end{split}
+\end{equation*}
+where $\beta$ is the desired expected return of the portfolio and $e\in \Rn$ denotes the column vector of all ones.
+\end{example}
+\begin{example}[Shortest Path (Discrete Optimization, not covered by this course)] Let $G=(V,E)$ be a graph with $V$ the set of vertices and $E$ the set of edges (directed, $(i,j)\neq(j,i)$, with $i,j$ being two vertices) with $n=|E|$. Let $c_{ij}\geq0$ be the cost of choosing the edge $(i,j)$, e.g., travel time, travel fee, difference in hight, and let $x_{ij}\in \{0,1\}^{n}$ be the variable telling if we select or not the edge $(i,j)$. Also, let $s$ be the starting node and $d$ the destination, then the optimization problem can be stated as
+\begin{equation*}
+	\begin{split}
+		\min \;\; &c^Tx\\
+		\st& x\geq 0\\
+		& \sum_{j} x_{ij} - \sum_{j} x_{ji} = \begin{cases}1 \quad & i=s\\
+			0 & i\neq s,d\\
+			-1 & i=d
+		\end{cases} \qquad \forall i \in V.
+	\end{split}
+\end{equation*}
+%TODO: remark for myself, draw the network
+\end{example}
+
+\section{Mathematical Preliminaries}
+
+\subsection{The Vector Space $\Rn$}
+The vector space $\Rn$  is the set of $n$-dimensional column vectors with real components endowed with the component-wise addition operator
+\begin{equation*}
+	\begin{pmatrix}
+		x_1\\
+		x_2\\
+		\vdots\\
+		x_n
+	\end{pmatrix}
++
+\begin{pmatrix}
+	y_1\\
+	y_2\\
+	\vdots\\
+	y_n
+\end{pmatrix}
+= 
+\begin{pmatrix}
+	x_1+y_1\\
+	x_2+y_2\\
+	\vdots\\
+	x_n + y_n
+\end{pmatrix}
+\end{equation*}
+and the scalar product
+\begin{equation*}
+	\lambda \begin{pmatrix}
+		x_1\\
+		x_2\\
+		\vdots\\
+		x_n
+	\end{pmatrix}
+= 
+\begin{pmatrix}
+	\lambda x_1\\
+	\lambda x_2\\
+	\vdots\\
+	\lambda x_n
+\end{pmatrix}
+\end{equation*}
+The standard basis of $\Rn$ is $e_1, e_2, \dots, e_n$, where $e_i$ is the $n$-length column vector whose $i$th component is 1 while all the others are 0.\\
+The nonnegative orthant $\Rn_+:=\{(x_1,x_2, \dots, x_n)^T: x_1, x_2,\dots,x_n\geq 0\}$.\\
+The positive orthant $\Rn_{++}:=\{(x_1,x_2, \dots, x_n)^T: x_1, x_2,\dots,x_n> 0\}$.\\
+The set of all real-valued matrices of order $m \times n$ is denoted by $\R^{m\times n}$.\\
+For given $x, y \in \Rn$, the closed line segment between $x$ and $y$ is a subset of $\Rn$ denoted by $[x, y]$ and defined as 
+\begin{equation*}
+	[x,y]:= \{x+a(y-x): \alpha \in[0,1]\}.
+\end{equation*}
+The open line segment $(x,y)$ is similarly defined as  
+\begin{equation*}
+	(x,y):= \{x+a(y-x): \alpha \in(0,1)\}.
+\end{equation*}
+The identity matrix will be denoted by $\Id$, where its dimension will be clear from the context.
+\subsection{Inner Products}
+\begin{definition}[Inner product] An inner product on $\Rn$ is a map $\inprod{\cdot}{\cdot}: \Rn \times \Rn \to \R$
+	with the following properties
+	\begin{enumerate}
+\item Symmetry: $\inprod{x}{y} = \inprod{y}{x} \quad \forall x, y \in \Rn$;
+\item Additivity: $\inprod{x}{y+z} = \inprod{x}{y} + \inprod{x}{z}  \quad \forall x, y,z \in \Rn$;
+\item Homogeneity: $\inprod{\lambda x}{y} = \lambda \inprod{x}{y}\quad \forall x, y \in \Rn$;
+\item Positive definiteness: $\inprod{x}{x} \geq 0 \quad \forall x \in \Rn$ and $\inprod{x}{x} = 0 \Leftrightarrow x =0.$
+	\end{enumerate}
+\end{definition}
+In this course the inner product we will use is the standard dot product:
+\begin{equation*}
+	\inprod{x}{y} = x^T y = \sum_{i=1}^{n}x_i y_i \quad \forall x,y\in \Rn
+\end{equation*}
+Notice that the dot product is not the only inner product in $\Rn$, for instance let $w\in \Rn_{++},$ it is easy to show that the following weighted dot product is also an inner product
+\begin{equation*}
+\langle x, y\rangle_w = \sum_{i=1}^{n}w_i x_i y_i.
+\end{equation*}
+\subsection{Vector norms}
+\begin{definition}[Vector Norm]
+	A norm $||.||$ on $\Rn$ is a function $||.||:\Rn \to \R$ satisfying the following:
+	\begin{enumerate}
+		\item Nonnegativity: $||x|| \geq 0 \quad \forall x \in \Rn$ and $||x|| = 0 \Leftrightarrow x =0$;
+		\item Positive Homogeneity:  $||\lambda x|| = |\lambda| ||x|| \quad \forall x \in \Rn$ and $\lambda\in \R$;
+		\item Triangle Inequality: $||x+y|| \leq ||x|| + ||y|| \quad \forall x,y \in \Rn$.
+	\end{enumerate}
+\end{definition}
+One natural way to generate a norm on $\Rn$ is to take any inner product $\inprod{\cdot}{\cdot}$ on $\Rn$ and define the associated norm
+\begin{equation*}
+	||x||:= \sqrt{\inprod{x}{x}} \quad \forall x \in \Rn
+\end{equation*}
+which can be proved to be a norm. If the inner product is the dot product, then the associated norm is the Euclidean norm or $l_2$ norm, i.e., $||\cdot||_2$. In the rest of the course, the default norm will be the Euclidean norm and the subscript $2$ will be omitted. This norm belongs to the class of $l_p$ norms (for $p\geq 1$, with $0\leq p<1$ these are quasi-norms) defined by 
+\begin{equation*}
+	||x||_p:= \sqrt[p]{\sum_{i=1}^{n}|x_i|^p}.
+\end{equation*}
+By computing the limit of the $l_p$-norm with $p\to\infty$ we achieve the $l_{\infty}$ norm, i.e.,
+\begin{equation*}
+	||x||_{\infty} := \max_{i\in[n]} |x_i|.
+\end{equation*}
+where $[n]:=\{1, \dots,n\}$ for any $n \in \N$.
+\par An important inequality connecting the dot product of two vectors and their norms is the Cauchy–Schwarz inequality, which will be used frequently throughout the book.
+\begin{lemma}[Cauchy–Schwarz inequality]
+	For any $x,y \in \Rn$,
+	\begin{equation*}
+		|x^Ty| \leq ||x||\cdot||y||.
+	\end{equation*}
+Equality is satisfied if and only if $x$ and $y$ are linearly dependent.
+\end{lemma}
+\subsection{Matrix norms}
+Similarly to vector norms, we can define the concept of a matrix norm.
+\begin{definition}[Operator/Matrix Norm]
+	A norm $||.||$ on $\Rmn$ is a function $||.||:\Rmn \to \R$ satisfying the following:
+	\begin{enumerate}
+		\item Nonnegativity: $||A|| \geq 0 \quad \forall A \in \Rmn$ and $||A|| = 0 \Leftrightarrow A =0$;
+		\item Positive Homogeneity:  $||\lambda A|| = |\lambda| ||A|| \quad \forall A \in \Rmn$ and $\lambda\in \R$;
+		\item Triangle Inequality: $||A+B|| \leq ||A|| + ||B|| \quad \forall A,B \in \Rmn$.
+	\end{enumerate}
+\end{definition}
+Given a matrix $A\in \Rmn$ and two norms $||.||_p$ and $||.||_q$ on $\Rn$ and $\R^m$, respectively, the induced operator/matrix norm $||A||_{a\to b}$ is defined by
+\begin{equation*}
+	||A||_{p\to q} = \max_{||x||_p=1} ||Ax||_q. 
+\end{equation*}
+%TODO: remark for myself, point their attention to the concordance of the dimension between A and x
+It can be shown that the above definition implies that for any $x \in \Rn$ it holds the inequality
+\begin{equation*}
+	||Ax||_q \leq ||A||_{p\to q} ||x||_p.
+\end{equation*}
+An induced matrix norm is indeed a norm in the sense that it satisfies the three properties required above. We refer to the matrix norm $||\cdot||_{p,q}$s the $(p, q)$-norm. When $p=q$, we will simply refer to it as an $p$-norm and omit one of the subscripts in its notation.
+\par An important operator norm is the spectral norm, where $p=q=2$. In this case, it can be proved that the operator norm coincide with the maximum singular value of $A \in \Rmn$ (see below for more details on eigenvalues and singular values)
+\begin{equation*}
+	||A||_2 = ||A||_{2\to2} = \sqrt{\lambda_1 (A^TA)} =: \sigma_1 (A).
+\end{equation*}
+The default operator norm for this course will be the spectral norm, so when the subscript is omitted we will implicitly refer to this norm.
+\par When $p=q=1$, the operator norm reduces to 
+\begin{equation*}
+	||A||_1 = ||A||_{1\to1} = \max_{j\in[n]} \sum_{i=1}^{m} |A_{ij}|.
+\end{equation*}
+This norm is also called maximum absolute column sum norm.
+\par When $p=q=\infty$, the operator norm reduces to 
+\begin{equation*}
+	||A||_\infty = ||A||_{\infty\to\infty} = \max_{i\in[m]} \sum_{j=1}^{n} |A_{ij}|.
+\end{equation*}
+This norm is also called the maximum absolute row sum norm.
+\par An example of a matrix norm that is not induced by any norm is the Frobenius norm defined by
+\begin{equation*}
+	||A||_F = \sqrt{\sum_{i=1}^{m} \sum_{j=1}^{n} A^2_{ij}} = ||\text{vec}(A)||,
+\end{equation*}
+in fact, you can think of this norm as the Euclidean norm of the vector obtained by flattening the matrix $A$ into a vector.
+
+\subsection{Eigenvalues and Eigenvectors}
+Let $A \in \Rnn$. Then a nonzero vector $v \in \Rn$ is called an eigenvector of $A$ if there exists a $\lambda \in \Cx$ (the complex field) for which
+\begin{equation*}
+	A v = \lambda v
+\end{equation*}
+The scalar $\lambda$ is the eigenvalue corresponding to the eigenvector $v$. In general, real-valued matrices can have complex eigenvalues, but it is well known that all the eigenvalues of symmetric matrices are real. The eigenvalues of a symmetric $n \times n$ matrix $A$ are denoted by
+\begin{equation*}
+	\lambda_1(A)\geq \lambda_2(A) \geq \dots \geq \lambda_n(A),
+\end{equation*}
+where $\lambda_1(A)$ is the maximum eigenvalue and $\lambda_n(A)$ is the minimum.
+\begin{definition}
+	A matrix $U$ is said to be orthogonal when $U^TU =UU^T=\Id$.
+\end{definition}
+One of the most useful results related to eigenvalues is the spectral decomposition theorem, which states that any symmetric matrix $A$ has an orthonormal basis of eigenvectors.
+\begin{theorem}[Spectral Decomposition]
+	Let $A\in \Rnn$ be a symmetric matrix and let $v_1,\dots, v_n$ be the eigenvectors corresponding to the eigenvalues $\lambda_1(A), \dots, \lambda_n(A)$. Then $U= \left(v_1 | \dots | v_n\right)$ is an orthonormal matrix and A can be decomposed as follows 
+	\begin{equation*}
+		A = UDU^T, \quad \with D:=\diag(\lambda_1(A), \dots, \lambda_n(A)).
+	\end{equation*}
+\end{theorem}
+A direct result of the spectral decomposition theorem is that the trace and the determinant of a matrix $A$ can be expressed via its eigenvalues:
+\begin{equation*}
+	\begin{split}
+		\Tr(A) = \sum_{i=1}^n \lambda_i(A)\\
+		\det(A) = \prod_{i=1}^n \lambda_i(A)
+	\end{split}
+\end{equation*}
+Another important consequence of the spectral decomposition theorem is the bounding of the so-called Rayleigh quotient. For a symmetric matrix $A \in \Rnn$, the Rayleigh quotient is defined as
+\begin{equation*}
+	R_A(x) := \frac{x^TAx}{||x||^2} \quad \forall x\neq 0,
+\end{equation*}
+and its upper and lower bounds are given by the following lemma.
+\begin{lemma}
+	Let $A\in \Rnn$ be symmetric. Then
+	\begin{equation*}
+		\lambda_n(A) \leq R_A(x) \leq \lambda_1(A) \quad \forall x\neq 0.
+	\end{equation*}
+\end{lemma}
+%TODO: the proof is a possible exercise
+Moreover, we have the following corollary.
+\begin{corollary}
+	Let $A\in \Rnn$ be symmetric. Then
+	\begin{equation*}
+		\min_{x\neq0} R_A(x) = \lambda_n(A),
+	\end{equation*}
+and the eigenvector(s) of $A$ corresponding to the minimal eigenvalue are the minimizers of this problem. In addition,
+\begin{equation*}
+	\max_{x\neq0} R_A(x) = \lambda_1(A),
+\end{equation*}
+and the eigenvectors of $A$ corresponding to the maximal eigenvalue are maximizers of this problem.
+\end{corollary}
+%TODO: the proof is a possible exercise
+\subsection{Singular Values and Singular Vectors}
+Similar objects exist also for non-squared matrices $A \in \Rmn$.
+\begin{theorem}[Singular Value Decomposition] Let $A \in \Rmn$. Then there exist orthogonal matrices $U\in \R^{m\times m}$ and $V\in \Rnn$ and the uniquely defined real values
+\begin{equation*}
+	\sigma_1\geq \sigma_2 \geq \dots \geq \sigma_\ell \geq 0, \quad \with \ell=\min\{m,n\},
+\end{equation*}
+such that 
+\begin{equation*}
+	A = U \Sigma V^T \quad \with \Sigma=\diag(\sigma_1, \dots, \sigma_\ell) \in \Rmn.
+\end{equation*}
+%TODO: notice the dimension of $\Sigma$
+\end{theorem}
+The matrices $U = (u_1, \dots, u_m)$ and $V = (v_1, \dots, v_m)$ are composed respectively of the left and right singular vectors, thus we can decompose $A$ also as follows
+\begin{equation*}
+	A = \sum_{j=1}^{\ell} \sigma_j u_jv_j^T.
+\end{equation*}
+If rank$(A)=r$, then $\sigma_1, \geq \dots, \geq \sigma_r>0$ and $\sigma_{r+1}= \dots=\sigma_\ell=0$ so that the reduced singular value decomposition is
+\begin{equation*}
+	A = \sum_{j=1}^{r} \sigma_j u_jv_j^T.
+\end{equation*}
+Also, note that 
+\begin{equation*}
+	A^T A=(U\Sigma V^T)^T U \Sigma V^T = V \Sigma^T U^T U \Sigma V^T = V \Sigma^T \Sigma V^T = V\diag(\sigma_1^2, \dots, \sigma_\ell^2, 0, \dots, 0) V^T
+\end{equation*}
+and 
+\begin{equation*}
+	A A^T=U\Sigma V^T (U \Sigma V^T)^T = U \Sigma V^T V \Sigma^T U^T = U \Sigma \Sigma^T U^T = U\diag(\sigma_1^2, \dots, \sigma_\ell^2, 0, \dots, 0) U^T,
+\end{equation*}
+%TODO: notice the dimension of the zero padding
+which implies that $\sigma_1^2, \dots, \sigma_\ell^2$ are eigenvalues of $A^T A$ and $AA^T$, 
+$u_1, \dots, u_m$ are eigenvectors of $AA^T$ and $v_1, \dots, v_n$ are eigenvectors of $A^TA$. In other words the SVD can be obtained from the spectral decomposition of $AA^T$ and $A^TA$. In particular, 
+\begin{equation*}
+	\sigma_j = \sigma_j(A) = \sqrt{\lambda_j(A^TA)} = \sqrt{\lambda_j(AA^T)}
+\end{equation*}
+To conclude this section, the following function is called nuclear norm
+\begin{equation*}
+	||A||_* = \sum_{j=1}^{\ell} \sigma_j(A) \quad \with \ell =\min\{m,n\},
+\end{equation*}
+and can actually proved to be a norm for $\Rmn$.
+%TODO: possible exercise, prove that the nuclear norm is indeed a norm
+
+\subsection{Basic Topological Concepts}
+Let us start with the definition of a ball.
+\begin{definition}[Open/Closed Ball] The open ball with center $c\in \Rn$ and radius $r \in \R$ is denoted by $B(c,r)$ and defined by 
+\begin{equation*}
+	B(c,r) := \{x\in\Rn: ||x-c||< r\}
+\end{equation*}
+The closed ball with center $c\in \Rn$ and radius $r \in \R$ is denoted by $B[c,r]$ and defined by 
+\begin{equation*}
+B[c,r] := \{x\in\Rn: ||x-c||\leq r\}
+\end{equation*}
+\end{definition}
+\noindent The ball $B(c, r)$ for some arbitrary $r>0$ is also referred to as a neighborhood of $c$. The first topological notion we define is that of an interior point of a set. These points have their neighborhood contained in the set.
+\begin{definition}[Interior Points] Given a set $S \subseteq\Rn$, a point $c\in S$ is an interior point of $S$ if there exists $r>0$ for which $B(c,r) \subseteq S$.
+\end{definition}
+\noindent The set of all interior points of a given set $S$ is called the interior of the set and is denoted by $\interior(S)$:
+\begin{equation*}
+	\interior(S) :=\{x\in S: B(x,r)\subseteq S \text{ for some } r>0\}.
+\end{equation*}
+\begin{example}
+	Here are some examples 
+	\begin{equation*}
+		\begin{split}
+			\interior(\Rn_+) &= \Rn_{++},\\
+			\interior(B[c,r]) &= B(c,r) \quad \with c \in \Rn, r \in \R_{++},\\
+			\interior([x,y]) &= (x,y)\quad \with x,y \in \Rn, x\neq y.
+		\end{split}
+	\end{equation*}
+\end{example}
+\begin{definition}[Open Set]
+	An open set is a set that contains only interior points. In other words, $S\subseteq \Rn$ is an open set if $\,\forall x \in S$ there exists $r>0$ such that $B(x,r)\subseteq S$.
+\end{definition}
+\noindent Examples of open sets are $\Rn$, open balls, open line segments, and the positive orthant $\Rn_{++}$. A known result is that a union of any number of open sets is an open set and the intersection of a finite number of open sets is open.
+\begin{definition}[Closed Set]
+	A set $S\subseteq\Rn$ is said to be closed if it contains all the limits of convergent sequences of points in $S$, that is $S$ is closed if for every sequence of points $\{x_k\} \subseteq S$ satisfying $\displaystyle\lim_{k\to \infty} x_k\!=\! x^*$, it holds that $x^*\in S$.
+\end{definition}
+\noindent Examples of closed sets are the closed balls, closed lines segments and the nonnegative orthant $\R_+$. The space $\Rn$ is both closed and open. An important and useful result states that level sets, as well as contour sets, of
+continuous functions are closed.
+\begin{proposition}
+	Let $f$ be a continuous function over a closed set $S\in\Rn$. Then for any $\alpha \in \R$, the following sets are closed
+	\begin{equation*}
+		\begin{split}
+			Lev(f, \alpha) :=\{x\in S: f(x)\leq \alpha\}\\
+			Con(f, \alpha) :=\{x\in S: f(x)= \alpha\}.
+		\end{split}
+	\end{equation*}
+\end{proposition}
+\begin{definition}[Boundary Points]
+	Given a set $S\subseteq \Rn$, a boundary point of $S$ is a point $x\in \Rn$ such that any neighborhood of $x$ contains at least one point in $S$ and at least one point in its complement $S^c$.
+\end{definition}
+\noindent The set of all boundary points of a set $S$ is denoted by $\bd(S)$ and is called the boundary of $S$.
+\begin{example}
+	Some examples of boundary sets are 
+	\begin{equation*}
+		\begin{split}
+			\bd(B(c,r))&= \bd(B[c,r]) = \{x\in \Rn: ||x-c||=r\} \quad \with c \in \Rn, r \in \R_{++},\\
+			\bd(\Rn_{++}) &= \bd(\Rn_+) = \{x\in \Rn_+: \exists x_i = 0\},\\
+			\bd(\Rn) &= \emptyset.
+		\end{split}
+	\end{equation*}
+\end{example}
+\begin{definition}[Closure of a Set]
+	The closure of a set $S\in \Rn$ is denoted by $\cl(S)$ and it is the union of $S$ with its boundary
+	\begin{equation*}
+		\cl(S)=S \cup \bd(S).
+	\end{equation*}
+Another equivalent definition of $\cl(U)$ is given by the smallest closet set containing $S$, i.e.,
+	\begin{equation*}
+		\cl(S):= \bigcap \{T: S \subseteq T, T \text{is closed}\}.
+	\end{equation*} 
+\end{definition}
+\begin{example}
+	Some examples of closure are 
+	\begin{equation*}
+		\begin{split}
+			\cl(\Rn_{++}) &= \Rn_+,\\
+			\cl(B(c,r)) &= B[c,r] \quad \with c \in \Rn, r \in \R_{++},\\
+			\cl((x,y)) &= [x,y]\quad \with x,y \in \Rn, x\neq y.
+		\end{split}
+	\end{equation*}
+\end{example}
+%TODO: is the interior of a open set itself
+%TODO: is the closure of a closed set itself
+\begin{definition}[Boundedness]
+	A set $S$ is bounded when there exists a $M>0$ such that $S\subseteq B(0,M)$.
+\end{definition}
+\begin{definition}[Compactness]
+	A set $S$ is compact when it is bounded and closed.
+\end{definition}
+\noindent Examples of compact sets are closed balls and line segments. The positive orthant is not compact since it is unbounded, and open balls are not compact since they are not closed.
+\subsection{Differentiability}
+\begin{definition}[Directional Derivative]
+	Given a function $f$ defined on a set $S\subseteq \Rn$, a point $x\in \interior(S)$ and a direction $d\in \Rn$, with $d\neq0$, the directional derivative of $f$ at $x$ along $d$ is the below limit
+	\begin{equation*}
+		\lim_{t\to 0^+} \frac{f(x+td)-f(x)}{t},
+	\end{equation*}
+when it exists. In this case, the directional derivative is denoted by $f'(x,d)$.
+\end{definition}
+\begin{definition}[Partial Derivative]
+For any $i\in[n]$, the directional derivative of $f$ at $x$ along the direction $e_i$ is called the $i$-th partial derivative and it is denoted by 
+\begin{equation*}
+	\partiali(x):=\lim_{t\to 0^+} \frac{f(x+te_i)-f(x)}{t}.
+\end{equation*}
+\end{definition}
+\begin{definition}[Gradient]
+	If all partial derivatives of a function $f$ exist at a point $x\in\Rn$, then the gradient of $f$ at $x$ is defined by the column vector consisting of all partial derivatives of $f$:
+	\begin{equation*}
+		\grad (x) := \begin{pmatrix}
+			\frac{\partial f}{\partial x_1}(x)\\
+			\frac{\partial f}{\partial x_2}(x)\\
+			\vdots\\
+			\frac{\partial f}{\partial x_n}(x)
+		\end{pmatrix}
+	\end{equation*}
+\end{definition}
+\noindent A function $f$ defined on an open set $S \subseteq \Rn$ is called continuously differentiable (or smooth) over $S$, and we write $f\in \C(S)$, if all the partial derivatives exist and are continuous on $S$.
+%TODO: notice this definition can be extended to nonopen sets
+\par An important formula to compute the directional derivative is the following
+\begin{equation*}
+	f'(x,d) = \grad(x)^Td \quad \forall x \in S, d\in \Rn.
+\end{equation*}
+The partial derivatives $\partiali$ are themselves real-valued functions that can be partially differentiated. The second order $(i,j)$-th partial derivative of $f$ at $x\in S$ (if exists) is defined by
+\begin{equation*}
+	\frac{\partial^2 f}{\partial x_i \partial x_j}(x) := \frac{\partial \left(\frac{\partial f}{\partial x_j}\right)}{\partial x_i}.
+\end{equation*}
+A function $f$ defined on an open set $S \subseteq \Rn$ is called twice continuously differentiable over $S$, and we write $f\in \Cii(S)$, if all the second order partial derivatives exist and are continuous over $S$. When $f$ is twice continuously differentiable, the second order partial derivatives are symmetric, meaning that for any $i\neq j$ and any $x\in S$
+\begin{equation*}
+	\frac{\partial^2 f}{\partial x_i \partial x_j} (x) = \frac{\partial^2f}{\partial x_j \partial x_i} (x).
+\end{equation*}
+\begin{definition}[Hessian]
+	Assuming $f\in \Cii(S)$, we can compute the Hessian of $f$ at a point $x\in S$ as the symmetric $n\times n$ matrix
+	\begin{equation*}
+		\hess (x) = \begin{pmatrix}
+			\frac{\partial^2 f}{\partial x_1^2 } (x) & \dots & \frac{\partial^2 f}{\partial x_1 x_n } (x)\\
+			\vdots & \ddots & \vdots\\
+			\frac{\partial^2 f}{\partial x_n x_1 } (x) & \dots & \frac{\partial^2 f}{\partial x_n^2 } (x)
+		\end{pmatrix}
+	.
+	\end{equation*}
+\end{definition}
+\noindent In the following we list a few important theorems that are consequence of Taylor's approximation theorem and that might be useful in the rest of the course. 
+\begin{theorem}[Linear Approximation]\label{thm:linear_approx}
+	Let $f\in \C(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B(x,r)\subseteq S$. Then for any $y\in B(x,r)$, we have 
+	\begin{equation*}
+		f(y) = f(x)+ \grad (x)^T(y-x) + o(||y-x||),
+	\end{equation*}
+where $o(\cdot):\R_+\to \R_+$ is a one dimensional function satisfying $\frac{o(t)}{t} \to 0$ as $t\to0^+$.
+\end{theorem}
+\begin{theorem}[Quadratic Approximation]
+Let $f\in \Cii(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B(x,r)\subseteq S$. Then for any $y\in B(x,r)$, we have 
+\begin{equation*}
+	f(y) = f(x)+ \grad (x)^T(y-x) +\frac{1}{2}(y-x)^T\hess(x)(y-x) +  o(||y-x||^2).
+\end{equation*}
+\end{theorem}
+\begin{theorem}[Mean Value Theorem]\label{thm:mvt}
+	Let $f\in \C(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B(x,r)\subseteq S$. Then for any $y\in B(x,r)$, there exists a $c\in [x,y]$ such that 
+	\begin{equation*}
+		f(y) = f(x)+ \grad (c)^T(y-x).
+	\end{equation*}
+\end{theorem}
+%TODO: draw the one dimensiona MVT
+\begin{theorem}[Mean Value Theorem$^2$]\label{thm:mvt2}
+	Let $f\in \Cii(S)$, with $S\subseteq \Rn$ open, and let $x\in S, r>0$ satisfy $B(x,r)\subseteq S$. Then for any $y\in B(x,r)$, there exists a $c\in [x,y]$ such that 
+	\begin{equation*}
+		f(y) = f(x)+ \grad (x)^T(y-x) +\frac{1}{2}(y-x)^T\hess(c)(y-x).
+	\end{equation*}
+\end{theorem}
+\section{Optimality Condition for Unconstrained Optimization}
+\subsection{Global and Local Optima}
+
+Despite our main interest in this section is to discuss minimum and maximum points of a function over the entire space (unconstrained), we here still present the more general definition of global minimum and maximum points of a function over a given set. 
+\begin{definition}[Global Minimum and Maximum] 
+	Let $f:S\to \R$, then
+	\begin{enumerate}
+		\item $x^* \in S$ is a global minimum point of $f$ over $S$ if $f(x^*)\leq f(x) \;\forall x \in S$;
+		\item $x^* \in S$ is a strict global minimum point of $f$ over $S$ if $f(x^*)< f(x) \;\forall x \in S,\; x\neq x^*$;
+		\item $x^* \in S$ is a global maximum point of $f$ over $S$ if $f(x^*)\geq f(x) \;\forall x \in S$;
+		\item $x^* \in S$ is a strict global maximum point of $f$ over $S$ if $f(x^*)> f(x) \;\forall x \in S,\; x\neq x^*$.
+	\end{enumerate}
+\end{definition}
+The set $S$ on which the optimization of $f$ is performed is also called the \textbf{feasible set}, and any point $x \in S$ is called \textbf{feasible solution}. It is common to refer to a global minimum point as a \textbf{minimizer} or a global minimizer.
+\par Despite they might not be attained, the \textbf{minimal} and \textbf{maximal} value of $f$ over $S$ is the classical notation to refer to the infimum and supremum of $f$ over $S$. These values are always \textbf{unique}, while there might exist many global minima/maxima attaining the same value of $f$, i.e. $f(x^*)$. The sets of all global minimizers/maximizers of $f$ over $S$ are denoted by
+\begin{equation*}
+	\argmin \{f(x): x\in S\}\qquad \argmax \{f(x): x\in S\}.
+\end{equation*}
+A vector $x^* \in S$ is called a global \textbf{optimum} of $f$ over $S$ if it is either a global minimum or a global maximum.
+%\par Observe that maximization problems can be easily transformed in minimization problems
+%$$\min_x f(x) = -\max_x -f(x).$$
+%Thus from now on we will focus on the latter. 
+
+Our main task will usually be to find and study global minimum or maximum points; however, most of the theoretical results only characterize local minima and maxima which are optimal points with respect to a neighborhood of the point of interest. 
+\begin{definition}[Local Minima and Maxima] 
+	Let $f:S\to \R$, then
+	\begin{enumerate}
+		\item $x^* \in S$ is a local minimum point of $f$ over $S$ if there exists $r>0$ for which \\$f(x^*)\leq f(x) \;\;\forall x \in S\cup B(x^*,r)$;
+		\item $x^* \in S$ is a strict local minimum point of $f$ over $S$ if there exists $r>0$ for which \\$f(x^*)< f(x) \;\forall x \in S\cup B(x^*,r),\; x\neq x^*$;
+		\item $x^* \in S$ is a local maximum point of $f$ over $S$ if there exists $r>0$ for which \\ $f(x^*)\geq f(x) \;\forall x \in S\cup B(x^*,r)$;
+		\item $x^* \in S$ is a strict local maximum point of $f$ over $S$ if there exists $r>0$ for which \\ $f(x^*)> f(x) \;\forall x \in S\cup B(x^*,r),\; x\neq x^*$.
+	\end{enumerate}
+\end{definition}
+Notice that a global minimum (maximum) point is also a local minimum (maximum) point.
+
+\subsection{First Order Optimality Conditions}
+\par A well-known result (\textbf{Fermat's theorem}) is that for a one-dimensional function $f$ defined and differentiable over an interval $(a, b)$, if a point $x^*\in (a, b)$ is a local optimum, then $f'(x^*) = 0$. The multidimensional extension of this result states that the gradient is zero at local optima. We refer to such an optimality condition as a first order optimality condition, as it is expressed in terms of the first order derivatives.
+\begin{theorem}[First Order Optimality Condition]\label{thm:first_order_optimality}
+	Let $f:S\to \R$ be a function defined on $S\subseteq \Rn$. Suppose that $x^*\in\interior(S)$ is a local optimum and that all partial derivatives of $f$ exist at $x^*$. Then $\grad(x)=0$.
+\end{theorem}
+\begin{proof}
+	Let $i\in [n]$ and consider the one-dimensional function $g(t)=f(x^*+te_i)$. Note that $g$ is differentiable at $t=0$ and by definition $g'(0) = \partiali(x^*)$. Since $x^*$ is a local optimum of $f$, if follows that $t=0$ is a local optimum of $g$, which, by Fermat's Theorem, directly implies that $g'(0) = 0$ and thus also $\partiali(x^*)=0$. Now, since the argument can be repeated for all $i\in[n]$, the result $\nabla f(x^*) = 0$ follows.
+\end{proof}
+Theorem \ref{thm:first_order_optimality} presents a necessary optimality condition: the gradient vanishes at all local optimum points, which are interior points of the domain of the function. However, the \textbf{reverse claim is not true} as there could be points with zero gradient which are not local optima. The points in which the gradient vanishes are called \textbf{stationary points} and they are the only candidates for local optima among the points in the interior of the domain of the function.
+\begin{definition}[Stationary Points]
+	Let $f:S\to \R$ be a function defined on a set $S\subseteq \Rn$. Suppose that $x^* \in \interior(S)$ and that $f$ is differentiable in a neighborhood of $x^*$. Then $x^*$ is called stationary point of $f$ if $\grad(x^*)=0$.
+\end{definition}
+\subsection{Classification of Matrices}
+\begin{definition}[Positive Semidefiniteness]
+	A symmetric matrix $A\in \Rnn$ is positive semidefinite, denoted by $A \succcurlyeq0$, if $x^TAx\geq 0$ for every $x\in \Rn$.
+\end{definition}
+\begin{definition}[Positive Definiteness]
+	A symmetric matrix $A\in \Rnn$ is positive definite, denoted by $A \succ0$, if $x^TAx> 0$ for every $x\in \Rn, x\neq 0$.
+\end{definition}
+
+\noindent In this course, a positive definite or semidefinite matrix is always assumed to be symmetric. The same definitions can be given for negative (semi)definite matrices. Notice that a matrix $A$ is negative (semi)definite if and only if $-A$ is positive (semi)definite.
+\begin{definition}[Indefiniteness]
+	A symmetric matrix $A\in \Rnn$ is indefinite, if there exist $x,y \in \Rn$ such that $x^TAx> 0$ and $y^TAy<0$.
+\end{definition}
+Indefinite matrices are easier to recognize than positive (semi)definite ones, as matrices that contain positive and negative values on the diagonal are indefinite. %TODO: for me, you can simply extract that value by multiplying on the left and right by e_i
+To better characterize the latter, we need to look the eigenvalues of the matrix.
+\begin{theorem}[Eigenvalue characterization theorem]
+	Let $A\in \Rnn$ be a symmetric matrix. Then
+	\begin{enumerate}
+		\item $A$ is positive definite if and only if all its eigenvalues are positive,
+		\item $A$ is positive semidefinite if and only if all its eigenvalues are nonnegative,
+		\item $A$ is indefinite if and only if it has at least one positive eigenvalue and at least one
+		negative eigenvalue.
+	\end{enumerate}
+\end{theorem}
+\subsection{Second Order Optimality Conditions}
+\begin{theorem}[Necessary Second Order Optimality Condition]\label{thm:second_order_optimality}
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in\Cii(S)$ and that $x^*$ is a stationary point. Then the following hold:
+\begin{itemize}
+	\item[(a)] If $x^*$ is a local minimizer of $f$ over $S$, then $\hess (x^*)\succcurlyeq 0$;
+	\item[(b)] If $x^*$ is a local maximizer of $f$ over $S$, then $\hess (x^*)\preccurlyeq 0$ 	
+\end{itemize}
+\end{theorem}
+%TODO: notice that x^* needs to be a stationary point, everything builds on that 
+\begin{proof}
+	(a) Since $x^*$ is a local minimizer, there exists a ball $B(x^*,r)\subseteq S$ for which $f(x) \geq f(x^*)\; \forall x\in B(x^*,r)$. Let $d\in \Rn$ be a nonzero vector. For any $0<\alpha<\frac{r}{||d||}$ we have $x_\alpha^* :=x^* + \alpha d \in B(x^*, r)$, which means that for any such $\alpha$
+	\begin{equation}\label{eq:x_alpha}
+		f(x^*)\leq f(x_\alpha^*).
+	\end{equation}
+On the other hand from Theorem \ref{thm:mvt2} it follows that there exists a vector $z_\alpha \in [x^*,x_\alpha^*]$ such that 
+\begin{equation*}
+	f(x_\alpha^*)- f(x^*) =\grad (x^*)^T(x_\alpha^*-x^*) +\frac{1}{2}(x_\alpha^*-x^*)^T\hess(z_\alpha)(x_\alpha^*-x^*).
+\end{equation*}
+Since $x^*$ is a stationary point of $f$, and by the definition of $x_\alpha^*$, the latter equation reduces to 
+\begin{equation*}
+	f(x_\alpha^*)- f(x^*) = \frac{\alpha^2}{2} d^T\hess(z_\alpha) d,
+\end{equation*}
+which combined with \eqref{eq:x_alpha} yields that for any $\alpha \in (0, \frac{r}{||d||})$ the inequality $d^T \hess(z_\alpha) d\geq 0$ holds. Finally, using the fact that $z_\alpha \to x^*$ as $\alpha\to 0^+$, and the continuity of the Hessian, we obtain that $d^T \hess(x^*) d\geq 0$. Since the latter inequality holds for any $d \in\Rn$, the desired result is established. 
+\par The proof of (b) follows directly from employing the result of part $(a)$ on the function $-f$.
+\end{proof}
+
+\begin{theorem}[Sufficient Second Order Optimality Condition]\label{thm:suff_second_order_optimality}
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in\Cii(S)$ and that $x^*$ is a stationary point. Then the following hold:
+	\begin{itemize}
+		\item[(a)] If $\hess (x^*)\succ 0$, then $x^*$ is a strict local minimizer of $f$ over $S$;
+		\item[(b)] If  $\hess (x^*)\prec 0$, then $x^*$ is a strict local maximizer of $f$ over $S$.
+	\end{itemize}
+\end{theorem}
+%TODO: possible exercise
+%TODO: notice that x^* is strict in this case
+
+\begin{definition}[Saddle Points]
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in \C(S)$. A stationary point $x^*$ is a saddle point of $f$ over $S$ when it is neither a local minimizer nor a local maximizer of $f$ over $S$.
+\end{definition}
+
+\begin{theorem}[Sufficient Condition for a Saddle Point]
+	Let $f:S\to \R$ be a function defined on a open set $S\subseteq \Rn$. Suppose that $f\in\Cii(S)$ and that $x^*$ is a stationary point. If $\hess(x^*)$ is an indefinite matrix, then $x^*$ is a saddle point for $f$ over $S$.
+\end{theorem}
+%TODO: possible exercise
+Until now, the conditions described can only guarantee - at best - local optimality of stationary points since they exploit only local information: the values of the gradient and the Hessian at a given point. Conditions that ensure global optimality of points must use global information.
+
+\begin{theorem}[Sufficient Condition for a Global Minimizer]
+	Let $f:\Rn\to \R$ with $f\in\Cii(\Rn)$ and $\hess (x)\succcurlyeq0$ for any $x\in \Rn$. Let $x^*$ be a stationary point of $f$. Then $x^*$ is a global minimizer of $f$. 
+\end{theorem}
+\begin{proof}
+	By the Mean Value Theorem$^2$ (Theorem \ref{thm:mvt2}), it follows that for any $x\in\Rn$, there exists a vector $z_x\in[x^*,x]$ for which 
+	\begin{equation*}
+		f(x) - f(x^*) = \frac{1}{2}(x-x^*)^T\hess (z_x)(x-x^*),
+	\end{equation*}
+because $x^*$ is a stationary point. Since $\hess (x) \succcurlyeq 0$, we have that $f(x)\geq f(x^*)$, concluding the proof.
+\end{proof}
+
+\begin{remark}
+At a first sight, this result seems asymmetric, what about global maximizers? Maximization problems can be easily transformed in minimization problems
+$$\min_x f(x) = -\max_x -f(x).$$
+\end{remark}
+
+
+\subsection{Sufficient Conditions for Existence of Optima}
+Another important issue is the one of deciding on whether a function actually has a
+global minimizer or maximizer. This is the issue of \textbf{existence}. A very well known result is due to Weierstrass, stating that a continuous function attains its minimum and maximum over a compact set.
+
+\begin{theorem}[Weierstrass]
+	Let $f$ be a continuous function defined over a nonempty and compact set $C \subseteq \Rn$. Then there exists a global minimum point of $f$ over $C$ and a global maximum point of $f$ over $C$.
+\end{theorem}
+\noindent When the underlying set is not compact, the Weierstrass theorem does not guarantee
+the attainment of the solution, but certain properties of the function f can imply the existence of the solution even in the noncompact setting. One example of such a property is coerciveness.
+\begin{definition}[Coerciveness]
+	Let $f$ be a continuous function defined over $\Rn$. The function is said to be coercive when 
+	\begin{equation*}
+		\lim_{||x||\to \infty} f(x) = \infty.
+	\end{equation*}
+\end{definition}
+\begin{theorem}[Existence under Coerciveness]
+	Let $f: \Rn \to \R$ be a continuous and coercive function and let $S \subseteq \Rn$ be a nonempty closed set. Then $f$ has a global minimum point over $S$.
+\end{theorem}
+\begin{proof}
+	Let $x_0\in S$ be an arbitrary point. Since the function is coercive, it follows that there exists a $M>0$ such that
+	\begin{equation}\label{eq:any_x}
+		f(x)>f(x_0) \; \text{ for any $x$ such that } ||x||>M.
+	\end{equation}
+Since any global minimizer $x^*$ of $f$ over $S$ satisfies $f(x^*) \leq f(x_0)$, it follows from \eqref{eq:any_x} that  the set of global minimizers of $f$ over $S$ is the same as the set of global minimizers of $f$ over $S\cap B[0,M]$. The set $S\cap B[0,M]$ is compact and nonempty and thus by the Weierstrass theorem, there exists a global minimizer of $f$ over $S\cap B[0,M]$ and hence also over $S$.
+\end{proof}
+
+\bibliographystyle{plain}
+\bibliography{../biblio}
+\end{document}
